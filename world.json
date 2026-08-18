@@ -1,0 +1,74 @@
+{
+    "rooms": [
+        {
+            "id": "square",
+            "name": "Village Square",
+            "desc": "The center of town.",
+            "exits": {
+                "north": "bakery",
+                "east": "armory"
+            }
+        },
+        {
+            "id": "bakery",
+            "name": "Warm Bakery",
+            "desc": "Smells of bread.",
+            "exits": {
+                "south": "square",
+                "west": "alley"
+            }
+        },
+        {
+            "id": "alley",
+            "name": "Dark Alley",
+            "desc": "A suspicious place.",
+            "exits": {
+                "east": "bakery",
+                "south": "tavern"
+            }
+        },
+        {
+            "id": "tavern",
+            "name": "The Rusty Tankard",
+            "desc": "Loud music plays.",
+            "exits": {
+                "north": "alley",
+                "east": "square"
+            }
+        },
+        {
+            "id": "armory",
+            "name": "Royal Armory",
+            "desc": "Swords and shields.",
+            "exits": {
+                "west": "square",
+                "north": "gate"
+            }
+        },
+        {
+            "id": "gate",
+            "name": "City Gate",
+            "desc": "The exit to the wild.",
+            "exits": {
+                "south": "armory",
+                "east": "woods"
+            }
+        },
+        {
+            "id": "woods",
+            "name": "Deep Woods",
+            "desc": "Trees everywhere.",
+            "exits": {
+                "west": "gate"
+            }
+        },
+        {
+            "id": "shop",
+            "name": "General Store",
+            "desc": "Supplies for all.",
+            "exits": {
+                "west": "bakery"
+            }
+        }
+    ]
+}
