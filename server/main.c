@@ -6,16 +6,13 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/08 12:34:17 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/15 18:34:16 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/19 19:45:46 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
+
 #include <arpa/inet.h>
-#include <poll.h>
+#include "mud.h"
 
 #define MAX_CLIENTS 128
 #define PORT 4242
@@ -115,6 +112,7 @@ int	main(void)
 	int				server_fd;
 	struct pollfd	fds[MAX_CLIENTS];
 	int				i;
+	t_room			*world_map;
 
 	server_fd = init_server_socket();
 	if (server_fd < 0)
@@ -124,6 +122,14 @@ int	main(void)
 		fds[i++].fd = -1;
 	fds[0].fd = server_fd;
 	fds[0].events = POLLIN;
+	world_map = load_world("world.json");
+	if (!world_map)
+	{
+		fprintf(stderr, "Error: Failed to load world.json\n");
+		return (1);
+	}
+	debug_print_world(world_map);
+
 	while (1)
 	{
 		if (poll(fds, MAX_CLIENTS, -1) < 0)

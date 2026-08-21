@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/15 21:58:05 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/15 21:58:13 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/21 21:55:10 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,11 @@
 # define MUD_H
 
 # include <poll.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <stdio.h>
 
 # define MAX_CLIENTS 128
 # define MAX_EXITS 6
@@ -33,7 +38,9 @@ typedef struct s_room
 	char			*name;
 	char			*description;
 	struct s_room	*exits[MAX_EXITS];
-	char			*exit_names[MAX_EXITS];
+	// char			*exit_names[MAX_EXITS];
+	char			*target_ids[MAX_EXITS]; /* Temporary strings from JSON */
+	struct s_room	*next;
 	t_item			*items;
 }	t_room;
 
@@ -53,4 +60,15 @@ typedef struct s_world
 	t_player		players[MAX_CLIENTS];
 }	t_world;
 
+t_room	*load_world(char *filename);
+char	*read_world_file(char *filename);
+void	debug_print_world(t_room *head);
+void	resolve_all_exits(t_room *head);
+/* Prototypes for commands */
+void	handle_command(int fd, char *msg, t_world *world);
+void	cmd_look(t_player *player);
+void	init_player(t_player *player, int fd, char *name, t_room *start_room);
+
+/* Helper to find player by FD */
+t_player	*get_player_by_fd(t_world *world, int fd);
 #endif
