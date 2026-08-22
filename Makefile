@@ -1,6 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -I./shared
-SERVER_SRC = server/main.c server/world_loader.c server/world_linker.c
+SERVER_SRC = server/main.c server/world_loader.c server/world_linker.c \
+			server/cmd_look.c server/player.c
 SERVER_OBJ = $(SERVER_SRC:.c=.o)
 NAME = server_app
 

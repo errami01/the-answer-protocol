@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/08 12:34:17 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/19 19:45:46 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/22 20:50:20 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,11 @@ void	accept_new_client(int server_fd, struct pollfd *fds)
 /*
 ** Reads client message. For now, we only handle CONNECT and QUIT.
 */
-void	handle_client_msg(struct pollfd *fds, int i)
+void	handle_client_msg(struct pollfd *fds, int i, t_world *world)
 {
-	char	buf[BUFFER_SIZE];
-	int		bytes;
+	char		buf[BUFFER_SIZE];
+	int			bytes;
+	t_player	*p;
 
 	bytes = recv(fds[i].fd, buf, BUFFER_SIZE - 1, 0);
 	if (bytes <= 0)
@@ -72,13 +73,20 @@ void	handle_client_msg(struct pollfd *fds, int i)
 		return ;
 	}
 	buf[bytes] = '\0';
-	if (strncmp(buf, "QUIT", 4) == 0)
+	p = get_player_by_fd(world, fds[i].fd);
+	if (p && strncmp(buf, "QUIT", 4) == 0)
 	{
 		write(fds[i].fd, "OK bye\n", 7);
 		cleanup_client(fds, i);
 	}
-	else if (strncmp(buf, "CONNECT ", 8) == 0)
+	else if (!p && strncmp(buf, "CONNECT ", 8) == 0)
+	{
+		/* Find first empty player slot in world->players and init */
+		init_player(&world->players[i], fds[i].fd, buf + 8, world->rooms);
 		write(fds[i].fd, "OK connected\n", 13);
+	}
+	else if (p && strncmp(buf, "LOOK", 4) == 0)
+		cmd_look(p);
 	else
 		write(fds[i].fd, "OK command_received\n", 20);
 }
@@ -113,6 +121,7 @@ int	main(void)
 	struct pollfd	fds[MAX_CLIENTS];
 	int				i;
 	t_room			*world_map;
+	t_world			world;
 
 	server_fd = init_server_socket();
 	if (server_fd < 0)
@@ -123,12 +132,13 @@ int	main(void)
 	fds[0].fd = server_fd;
 	fds[0].events = POLLIN;
 	world_map = load_world("world.json");
+	fill_world(world_map, &world);
 	if (!world_map)
 	{
 		fprintf(stderr, "Error: Failed to load world.json\n");
 		return (1);
 	}
-	debug_print_world(world_map);
+	// debug_print_world(world_map);
 
 	while (1)
 	{
@@ -140,7 +150,7 @@ int	main(void)
 		while (i < MAX_CLIENTS)
 		{
 			if (fds[i].fd != -1 && (fds[i].revents & POLLIN))
-				handle_client_msg(fds, i);
+				handle_client_msg(fds, i, &world);
 			i++;
 		}
 	}

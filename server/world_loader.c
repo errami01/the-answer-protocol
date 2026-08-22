@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/16 15:14:42 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/20 22:17:47 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/22 20:52:50 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,6 @@ t_room	*load_world(char *filename)
 				i++;
 			}
 			// This is where you would link your t_room list
-			printf("head: %s\n",current->id);
 			resolve_all_exits(head);
 			/* Pass 2: Link the pointers */
 			return (head); // Returns first room for now
@@ -150,6 +149,29 @@ t_room	*load_world(char *filename)
 	return (NULL);
 }
 
+t_world	*fill_world(t_room *head, t_world *world)
+{
+	t_room	*current;
+	int		i;
+	
+	i = 0;
+	while(i < MAX_CLIENTS)
+	{
+		memset(&world->players[i], 0, sizeof(t_player));
+		i++;
+	}
+	current = head;
+	world->rooms = head;
+	world->room_count = 0;
+	
+	while(current != 0)
+	{
+		current = current->next;
+		world->room_count++;
+	}
+	return(world);
+	
+}
 int	get_dir_index(const char *dir)
 {
 	if (strcmp(dir, "north") == 0) return (0);
