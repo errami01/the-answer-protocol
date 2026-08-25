@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/16 15:14:42 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/22 20:52:50 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/25 20:10:47 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ t_room	*create_room(const char *js, jsmntok_t *t, int *i)
 	t_room	*room;
 	int		obj_end;
 	int		exit_size;
+	int		k;
 
 	room = malloc(sizeof(t_room));
 	if (!room)
@@ -86,9 +87,10 @@ t_room	*create_room(const char *js, jsmntok_t *t, int *i)
 		{
 			(*i)++;
 			exit_size = t[*i].size;
-			while(exit_size-- > 0){
+			while(exit_size-- >0){
 				(*i) += 2;
-				room->target_ids[exit_size] = strndup(js + t[*i].start, t[*i].end - t[*i].start);
+				k = get_dir_index(strndup(js + t[(*i)-1].start, t[(*i)-1].end - t[(*i)-1].start));
+				room->target_ids[k] = strndup(js + t[*i].start, t[*i].end - t[*i].start);
 			}
 			continue;
 		}
@@ -172,35 +174,35 @@ t_world	*fill_world(t_room *head, t_world *world)
 	return(world);
 	
 }
-int	get_dir_index(const char *dir)
-{
-	if (strcmp(dir, "north") == 0) return (0);
-	if (strcmp(dir, "south") == 0) return (1);
-	if (strcmp(dir, "east") == 0)  return (2);
-	if (strcmp(dir, "west") == 0)  return (3);
-	if (strcmp(dir, "up") == 0)    return (4);
-	if (strcmp(dir, "down") == 0)  return (5);
-	return (-1);
-}
+// int	get_dir_index(const char *dir)
+// {
+// 	if (strcmp(dir, "north") == 0) return (0);
+// 	if (strcmp(dir, "south") == 0) return (1);
+// 	if (strcmp(dir, "east") == 0)  return (2);
+// 	if (strcmp(dir, "west") == 0)  return (3);
+// 	if (strcmp(dir, "up") == 0)    return (4);
+// 	if (strcmp(dir, "down") == 0)  return (5);
+// 	return (-1);
+// }
 
-void	debug_print_world(t_room *head)
-{
-	t_room	*curr;
-	int		i;
+// void	debug_print_world(t_room *head)
+// {
+// 	t_room	*curr;
+// 	int		i;
 
-	curr = head;
-	printf("\n--- WORLD MAP DEBUG ---\n");
-	while (curr)
-	{
-		printf("Room: [%s] (%s)\n", curr->id, curr->name);
-		i = 0;
-		while (i < MAX_EXITS)
-		{
-			if (curr->exits[i])
-				printf("  -> Exit %d leads to: %s\n", i, curr->exits[i]->id);
-			i++;
-		}
-		curr = curr->next;
-	}
-	printf("-----------------------\n\n");
-}
+// 	curr = head;
+// 	printf("\n--- WORLD MAP DEBUG ---\n");
+// 	while (curr)
+// 	{
+// 		printf("Room: [%s] (%s)\n", curr->id, curr->name);
+// 		i = 0;
+// 		while (i < MAX_EXITS)
+// 		{
+// 			if (curr->exits[i])
+// 				printf("  -> Exit %d leads to: %s\n", i, curr->exits[i]->id);
+// 			i++;
+// 		}
+// 		curr = curr->next;
+// 	}
+// 	printf("-----------------------\n\n");
+// }

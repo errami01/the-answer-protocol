@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/08 12:34:17 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/22 20:50:20 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/25 17:30:23 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ void	handle_client_msg(struct pollfd *fds, int i, t_world *world)
 	}
 	else if (p && strncmp(buf, "LOOK", 4) == 0)
 		cmd_look(p);
+	else if (p && strncmp(buf, "MOVE ", 5) == 0)
+    	cmd_move(p, buf + 5, world);
 	else
 		write(fds[i].fd, "OK command_received\n", 20);
 }
@@ -138,7 +140,7 @@ int	main(void)
 		fprintf(stderr, "Error: Failed to load world.json\n");
 		return (1);
 	}
-	// debug_print_world(world_map);
+	debug_print_world(world_map);
 
 	while (1)
 	{

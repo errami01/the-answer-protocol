@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/21 22:13:46 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/21 22:13:56 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/25 18:50:35 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static void	format_exits(t_room *r, char *buf, size_t size)
 	strlcat(buf, "\"exits\": {", size);
 	i = 0;
 	first = 1;
-	while (i < 6)
+	while (i < MAX_EXITS)
 	{
 		if (r->exits[i])
 		{
