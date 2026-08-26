@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/08 12:34:17 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/25 21:21:56 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/26 23:25:09 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	handle_client_msg(struct pollfd *fds, int i, t_world *world)
 		cleanup_client(fds, i);
 		return ;
 	}
-	buf[bytes] = '\0';
+	buf[bytes-1] = '\0';
 	p = get_player_by_fd(world, fds[i].fd);
 	if (p && strncmp(buf, "QUIT", 4) == 0)
 	{
@@ -86,11 +86,17 @@ void	handle_client_msg(struct pollfd *fds, int i, t_world *world)
 		write(fds[i].fd, "OK connected\n", 13);
 	}
 	else if (p && strncmp(buf, "LOOK", 4) == 0)
-		cmd_look(p);
+		cmd_look(p, world);
 	else if (p && strncmp(buf, "MOVE ", 5) == 0)
     	cmd_move(p, buf + 5, world);
 	else if (p && strncmp(buf, "CHAT ", 5) == 0)
 		cmd_chat(p, buf + 5, world);
+	else if (p && strncmp(buf, "TAKE ", 5) == 0)
+		cmd_take(p, buf + 5, world);
+	else if (p && strncmp(buf, "DROP ", 5) == 0)
+		cmd_drop(p, buf + 5, world);
+	else if (p && strncmp(buf, "INVENTORY", 9) == 0)
+		cmd_inventory(p);
 	else
 		write(fds[i].fd, "OK command_received\n", 20);
 }

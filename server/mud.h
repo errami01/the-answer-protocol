@@ -6,15 +6,17 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/15 21:58:05 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/25 21:16:55 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/26 22:19:04 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #ifndef MUD_H
 # define MUD_H
+# define JSMN_HEADER
 
-# include <poll.h>
+#include "../libs/jsmn.h"
+#include <poll.h>
 #include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
@@ -68,7 +70,7 @@ void	resolve_all_exits(t_room *head);
 /* Prototypes for commands */
 t_world	*fill_world(t_room *head, t_world *world);
 void	handle_command(int fd, char *msg, t_world *world);
-void	cmd_look(t_player *player);
+void	cmd_look(t_player *player, t_world *world);
 void	init_player(t_player *player, int fd, char *name, t_room *start_room);
 
 /* Helper to find player by FD */
@@ -79,4 +81,14 @@ void	cmd_move(t_player *p, char *arg, t_world *world);
 int		get_dir_index(const char *dir);
 void	broadcast_global(t_world *world, char *msg, int exclude_fd);
 void	cmd_chat(t_player *p, char *arg, t_world *world);
+void	cmd_take(t_player *p, char *arg, t_world *w);
+void	cmd_drop(t_player *p, char *arg, t_world *w);
+void	cmd_inventory(t_player *p);
+
+/* Linked List Helpers */
+void	add_item(t_item **list, t_item *item);
+t_item	*remove_item(t_item **list, char *id_or_name);
+void	parse_room_items(const char *js, jsmntok_t *t, int *i, t_room *room);
+t_item	*spawn_item(const char *js, jsmntok_t *t, int count, char *id);
+int		jsoneq(const char *json, jsmntok_t *tok, const char *s);
 #endif

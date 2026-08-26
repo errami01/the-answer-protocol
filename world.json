@@ -1,4 +1,16 @@
 {
+    "item_templates": [
+        {
+            "id": "item.sword",
+            "name": "Rusty Sword",
+            "desc": "An old, chipped blade."
+        },
+        {
+            "id": "item.herb",
+            "name": "Healing Herb",
+            "desc": "A green leaf that smells of mint."
+        }
+    ],
     "rooms": [
         {
             "id": "square",
@@ -7,7 +19,11 @@
             "exits": {
                 "north": "bakery",
                 "east": "armory"
-            }
+            },
+            "items": [
+                "item.sword"
+            ]
+          
         },
         {
             "id": "bakery",
@@ -16,7 +32,11 @@
             "exits": {
                 "south": "square",
                 "west": "alley"
-            }
+            },
+            "items": [
+                "item.herb",
+                "item.herb"
+            ]
         },
         {
             "id": "alley",

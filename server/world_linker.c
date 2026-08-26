@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 12:18:07 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/20 14:43:55 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/26 16:07:46 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ static void	link_single_room(t_room *all_rooms, t_room *room)
 void	resolve_all_exits(t_room *head)
 {
 	t_room	*curr;
-
 	curr = head;
 	while (curr)
 	{

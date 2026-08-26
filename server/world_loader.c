@@ -6,24 +6,17 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/16 15:14:42 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/25 20:10:47 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/26 21:24:32 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "mud.h"
-#define JSMN_STATIC
-#include "../libs/jsmn.h"
-#include <fcntl.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <stdio.h>
 
 /*
 ** Compares a JSON token to a string.
 */
-static int	jsoneq(const char *json, jsmntok_t *tok, const char *s)
+int	jsoneq(const char *json, jsmntok_t *tok, const char *s)
 {
 	if (tok->type == JSMN_STRING && (int)strlen(s) == tok->end - tok->start && \
 		strncmp(json + tok->start, s, tok->end - tok->start) == 0)
@@ -62,13 +55,14 @@ t_room	*create_room(const char *js, jsmntok_t *t, int *i)
 {
 	t_room	*room;
 	int		obj_end;
-	int		exit_size;
+	int		obj_size;
 	int		k;
 
 	room = malloc(sizeof(t_room));
 	if (!room)
 		return (NULL);
 	memset(room, 0, sizeof(t_room));
+	memset(room->target_ids, 0, sizeof(room->target_ids));
 	obj_end = t[(*i)].size;
 	(*i)++;
 	// printf("size: %s\n", strndup(js, t[*i].end - t[*i].start));
@@ -86,12 +80,22 @@ t_room	*create_room(const char *js, jsmntok_t *t, int *i)
 		else if (jsoneq(js, &t[*i], "exits") == 0)
 		{
 			(*i)++;
-			exit_size = t[*i].size;
-			while(exit_size-- >0){
+			obj_size = t[*i].size;
+			while(obj_size-- >0){
 				(*i) += 2;
 				k = get_dir_index(strndup(js + t[(*i)-1].start, t[(*i)-1].end - t[(*i)-1].start));
 				room->target_ids[k] = strndup(js + t[*i].start, t[*i].end - t[*i].start);
 			}
+			if (obj_end > 0)
+				(*i)++;
+			continue;
+		}
+		else if (jsoneq(js, &t[*i], "items") == 0)
+		{
+			(*i)++;
+			parse_room_items(js, t, i, room);
+			if (obj_end > 0)
+				(*i)++;
 			continue;
 		}
 		(*i) += 2;
@@ -126,13 +130,12 @@ t_room	*load_world(char *filename)
 		if (jsoneq(js, &t[i], "rooms") == 0 && t[i + 1].type == JSMN_ARRAY)
 		{
 			rooms_size = t[i+1].size;
-			// printf("rooms size: %i\n", rooms_size);
 			i += 2;
 			// Loop rooms array and call create_room
 			head = create_room(js, t, &i);
 			i++;
 			if (!head)
-				return (NULL);
+			return (NULL);
 			current = head;
 			while(--rooms_size > 0)
 			{
@@ -142,6 +145,7 @@ t_room	*load_world(char *filename)
 				i++;
 			}
 			// This is where you would link your t_room list
+			// printf("rooms size: %i\n", rooms_size);
 			resolve_all_exits(head);
 			/* Pass 2: Link the pointers */
 			return (head); // Returns first room for now

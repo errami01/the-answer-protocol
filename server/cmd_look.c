@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/21 22:13:46 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/25 18:50:35 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/26 23:23:30 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,60 @@ static void	format_exits(t_room *r, char *buf, size_t size)
 /*
 ** Builds the full JSON response for LOOK (RFC 5.1.2).
 */
-void	cmd_look(t_player *p)
+/*
+** Formats the items array in the room.
+*/
+static void	format_items(t_room *r, char *buf, size_t size)
+{
+	t_item	*curr;
+	int		first;
+
+	strlcat(buf, "], \"items\": [", size);
+	curr = r->items;
+	first = 1;
+	while (curr)
+	{
+		if (!first)
+			strlcat(buf, ", ", size);
+		strlcat(buf, "\"", size);
+		strlcat(buf, curr->id, size);
+		strlcat(buf, "\"", size);
+		first = 0;
+		curr = curr->next;
+	}
+}
+
+/*
+** Scans the world for players in the same room and adds them to JSON.
+*/
+static void	format_players(t_player *p, t_world *w, char *buf, size_t size)
+{
+	int	i;
+	int	first;
+
+	strlcat(buf, "], \"players\": [", size);
+	i = 0;
+	first = 1;
+	while (i < MAX_CLIENTS)
+	{
+		if (w->players[i].fd != -1 && \
+			w->players[i].current_room == p->current_room)
+		{
+			if (!first)
+				strlcat(buf, ", ", size);
+			strlcat(buf, "\"", size);
+			strlcat(buf, w->players[i].name, size);
+			strlcat(buf, "\"", size);
+			first = 0;
+		}
+		i++;
+	}
+}
+
+/*
+** Builds the full JSON response for LOOK (RFC 5.1.2).
+*/
+void	cmd_look(t_player *p, t_world *w)
 {
 	char	out[2048];
 	t_room	*r;
@@ -57,12 +110,12 @@ void	cmd_look(t_player *p)
 	r = p->current_room;
 	memset(out, 0, 2048);
 	strlcpy(out, "OK { \"room\": { ", 2048);
-	snprintf(out + strlen(out), 2048 - strlen(out), 
+	snprintf(out + strlen(out), 2048 - strlen(out),
 		"\"id\": \"%s\", \"name\": \"%s\", \"description\": \"%s\", ",
 		r->id, r->name, r->description);
 	format_exits(r, out, 2048);
-	strlcat(out, " }, \"players\": [", 2048);
-	/* Logic for other players in room goes here later */
-	strlcat(out, "], \"items\": [], \"npcs\": [] }\n", 2048);
+	format_players(p, w, out, 2048);
+	format_items(r, out, 2048);
+	strlcat(out, "], \"npcs\": [] }\n", 2048);
 	write(p->fd, out, strlen(out));
 }
