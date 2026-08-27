@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/16 15:14:42 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/26 21:24:32 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/27 15:08:10 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,12 @@ t_room	*create_room(const char *js, jsmntok_t *t, int *i)
 			parse_room_items(js, t, i, room);
 			if (obj_end > 0)
 				(*i)++;
+			continue;
+		}
+		else if (jsoneq(js, &t[*i], "npcs") == 0)
+		{
+			(*i)++; // Move to the array token
+			parse_npc_array(js, t, i, room);
 			continue;
 		}
 		(*i) += 2;

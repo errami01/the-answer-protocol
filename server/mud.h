@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/15 21:58:05 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/26 22:19:04 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/27 14:44:37 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,17 @@ typedef struct s_item
 	struct s_item	*next;
 }	t_item;
 
+typedef struct s_npc
+{
+	char			*id;
+	char			*name;
+	int				hp;
+	int				max_hp;
+	int				is_hostile;
+	char			*dialogue;
+	struct s_npc	*next;
+}	t_npc;
+
 typedef struct s_room
 {
 	char			*id;
@@ -45,6 +56,7 @@ typedef struct s_room
 	char			*target_ids[MAX_EXITS]; /* Temporary strings from JSON */
 	struct s_room	*next;
 	t_item			*items;
+	t_npc			*npcs;
 }	t_room;
 
 typedef struct s_player
@@ -62,6 +74,7 @@ typedef struct s_world
 	int				room_count;
 	t_player		players[MAX_CLIENTS];
 }	t_world;
+
 
 t_room	*load_world(char *filename);
 char	*read_world_file(char *filename);
@@ -91,4 +104,13 @@ t_item	*remove_item(t_item **list, char *id_or_name);
 void	parse_room_items(const char *js, jsmntok_t *t, int *i, t_room *room);
 t_item	*spawn_item(const char *js, jsmntok_t *t, int count, char *id);
 int		jsoneq(const char *json, jsmntok_t *tok, const char *s);
+/* Add to t_room struct */
+/* t_npc *npcs; */
+
+/* Prototypes */
+void	cmd_attack(t_player *p, char *arg, t_world *w);
+void	cmd_status(t_player *p);
+void	handle_death(t_player *p, t_world *w);
+t_npc	*remove_npc(t_npc **list, char *name); // Optional: for XP/Loot
+void	parse_npc_array(const char *js, jsmntok_t *t, int *i, t_room *room);
 #endif

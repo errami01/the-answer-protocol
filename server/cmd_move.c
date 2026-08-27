@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/25 14:46:34 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/25 20:07:13 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/27 14:34:40 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,6 @@ void	cmd_move(t_player *p, char *arg, t_world *world)
 	char	msg[256];
 
 	idx = get_dir_index(arg);
-    printf("arg: %s\n", arg);
-    printf("idx: %i\n", idx);
     
 	if (idx == -1 || !p->current_room->exits[idx])
 	{

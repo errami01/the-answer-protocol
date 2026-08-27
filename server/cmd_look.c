@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/21 22:13:46 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/26 23:23:30 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/27 15:56:20 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ static void	format_players(t_player *p, t_world *w, char *buf, size_t size)
 	int	i;
 	int	first;
 
-	strlcat(buf, "], \"players\": [", size);
+	strlcat(buf, ", \"players\": [", size);
 	i = 0;
 	first = 1;
 	while (i < MAX_CLIENTS)
@@ -98,7 +98,25 @@ static void	format_players(t_player *p, t_world *w, char *buf, size_t size)
 		i++;
 	}
 }
+static void	format_npcs(t_room *r, char *buf, size_t size)
+{
+	t_npc	*curr;
+	int		first;
 
+	strlcat(buf, "], \"npcs\": [", size);
+	curr = r->npcs;
+	first = 1;
+	while (curr)
+	{
+		if (!first)
+			strlcat(buf, ", ", size);
+		strlcat(buf, "\"", size);
+		strlcat(buf, curr->id, size);
+		strlcat(buf, "\"", size);
+		first = 0;
+		curr = curr->next;
+	}
+}
 /*
 ** Builds the full JSON response for LOOK (RFC 5.1.2).
 */
@@ -116,6 +134,7 @@ void	cmd_look(t_player *p, t_world *w)
 	format_exits(r, out, 2048);
 	format_players(p, w, out, 2048);
 	format_items(r, out, 2048);
-	strlcat(out, "], \"npcs\": [] }\n", 2048);
+	format_npcs(r, out, 2048);
+	strlcat(out, "]}\n", 2048);
 	write(p->fd, out, strlen(out));
 }

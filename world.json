@@ -22,6 +22,15 @@
             },
             "items": [
                 "item.sword"
+            ],
+            "npcs": [
+                {
+                "id": "npc.guard",
+                "name": "Village Guard",
+                "hp": 50,
+                "hostile": false,
+                "dialogue": "Stay safe, traveler."
+                }
             ]
           
         },
@@ -31,11 +40,21 @@
             "desc": "Smells of bread.",
             "exits": {
                 "south": "square",
-                "west": "alley"
+                "west": "alley",
+                "east": "shop"
             },
             "items": [
                 "item.herb",
-                "item.herb"
+                "item.sword"
+            ],
+            "npcs": [
+                {
+                "id": "npc.goblin",
+                "name": "Hungry Goblin",
+                "hp": 20,
+                "hostile": true,
+                "dialogue": "Gimme your bread!"
+                }
             ]
         },
         {
@@ -87,8 +106,13 @@
             "name": "General Store",
             "desc": "Supplies for all.",
             "exits": {
-                "west": "bakery"
-            }
+                "west": "bakery",
+                "east": "gate"
+            },
+            "items": [
+                "item.herb",
+                "item.sword"
+            ]
         }
     ]
 }
