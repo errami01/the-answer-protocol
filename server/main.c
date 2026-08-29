@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/08 12:34:17 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/27 16:02:55 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/28 17:05:29 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,10 @@ void	handle_client_msg(struct pollfd *fds, int i, t_world *world)
 		cmd_status(p);
 	else if (p && strncmp(buf, "ATTACK ", 7) == 0)
 		cmd_attack(p, buf + 7, world);
+	else if (p && strncmp(buf, "QUEST ", 6) == 0)
+		cmd_quest(p, buf + 6, world);
+	else if (p && strncmp(buf, "QUESTS", 6) == 0)
+		cmd_quests(p);
 	else
 		write(fds[i].fd, "OK command_received\n", 20);
 }

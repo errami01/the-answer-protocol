@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/15 21:58:05 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/27 14:44:37 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/29 18:51:46 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,31 @@
 # define MAX_EXITS 6
 # define MAX_ROOMS 256
 
+typedef enum e_qstatus
+{
+	Q_AVAILABLE,
+	Q_ACTIVE,
+	Q_COMPLETED
+}	t_qstatus;
+
+typedef struct s_quest
+{
+	char			*id;
+	char			*description;
+	char			*req_item_id;
+	char			*req_npc_death;
+	int				reward_hp;
+	char			*reward_item;
+	t_qstatus		status;
+	struct s_quest	*next;
+}	t_quest;
+
 typedef struct s_item
 {
 	char			*id;
 	char			*name;
 	char			*description;
+	int				is_visible;
 	struct s_item	*next;
 }	t_item;
 
@@ -43,6 +63,7 @@ typedef struct s_npc
 	int				max_hp;
 	int				is_hostile;
 	char			*dialogue;
+	t_quest			*quest;
 	struct s_npc	*next;
 }	t_npc;
 
@@ -66,6 +87,7 @@ typedef struct s_player
 	t_room			*current_room;
 	t_item			*inventory;
 	int				hp;
+	t_quest			*quests;
 }	t_player;
 
 typedef struct s_world
@@ -101,6 +123,7 @@ void	cmd_inventory(t_player *p);
 /* Linked List Helpers */
 void	add_item(t_item **list, t_item *item);
 t_item	*remove_item(t_item **list, char *id_or_name);
+t_item	*find_item(t_item *list, char *name);
 void	parse_room_items(const char *js, jsmntok_t *t, int *i, t_room *room);
 t_item	*spawn_item(const char *js, jsmntok_t *t, int count, char *id);
 int		jsoneq(const char *json, jsmntok_t *tok, const char *s);
@@ -113,4 +136,7 @@ void	cmd_status(t_player *p);
 void	handle_death(t_player *p, t_world *w);
 t_npc	*remove_npc(t_npc **list, char *name); // Optional: for XP/Loot
 void	parse_npc_array(const char *js, jsmntok_t *t, int *i, t_room *room);
+void	cmd_quest(t_player *p, char *arg, t_world *w);
+void	cmd_quests(t_player *p);
+t_npc	*find_npc(t_npc *list, char *name);
 #endif

@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/21 22:13:46 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/27 15:56:20 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/29 22:14:43 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,15 @@ static void	format_items(t_room *r, char *buf, size_t size)
 	first = 1;
 	while (curr)
 	{
-		if (!first)
-			strlcat(buf, ", ", size);
-		strlcat(buf, "\"", size);
-		strlcat(buf, curr->id, size);
-		strlcat(buf, "\"", size);
-		first = 0;
+		if (curr->is_visible)
+		{
+			if (!first)
+				strlcat(buf, ", ", size);
+			strlcat(buf, "\"", size);
+			strlcat(buf, curr->id, size);
+			strlcat(buf, "\"", size);
+			first = 0;
+		}
 		curr = curr->next;
 	}
 }
