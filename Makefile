@@ -6,6 +6,7 @@ SERVER_SRC = server/main.c server/world_loader.c server/world_linker.c \
 			server/room_utils.c libs/jsmn.c server/cmd_status.c \
 			server/cmd_attack.c server/death.c server/npc_utils.c \
 			server/cmd_quest.c server/cmd_quests_list.c server/logger.c \
+			server/disconnect.c
 
 SERVER_OBJ = $(SERVER_SRC:.c=.o)
 NAME = server_app

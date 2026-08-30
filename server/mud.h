@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/15 21:58:05 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/29 18:51:46 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/30 11:05:59 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,8 +127,6 @@ t_item	*find_item(t_item *list, char *name);
 void	parse_room_items(const char *js, jsmntok_t *t, int *i, t_room *room);
 t_item	*spawn_item(const char *js, jsmntok_t *t, int count, char *id);
 int		jsoneq(const char *json, jsmntok_t *tok, const char *s);
-/* Add to t_room struct */
-/* t_npc *npcs; */
 
 /* Prototypes */
 void	cmd_attack(t_player *p, char *arg, t_world *w);
@@ -139,4 +137,5 @@ void	parse_npc_array(const char *js, jsmntok_t *t, int *i, t_room *room);
 void	cmd_quest(t_player *p, char *arg, t_world *w);
 void	cmd_quests(t_player *p);
 t_npc	*find_npc(t_npc *list, char *name);
+void	handle_disconnect(t_world *world, int i, struct pollfd *fds);
 #endif

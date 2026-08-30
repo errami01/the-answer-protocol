@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/08 12:34:17 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/28 17:05:29 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/30 11:19:22 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,14 @@
 /*
 ** Closes the socket and resets the pollfd structure to prevent polling -1.
 */
-void	cleanup_client(struct pollfd *fds, int i)
-{
-	close(fds[i].fd);
-	fds[i].fd = -1;
-	fds[i].events = 0;
-	fds[i].revents = 0;
-	printf("Log: Player disconnected.\n");
-}
+// void	cleanup_client(struct pollfd *fds, int i)
+// {
+// 	close(fds[i].fd);
+// 	fds[i].fd = -1;
+// 	fds[i].events = 0;
+// 	fds[i].revents = 0;
+// 	printf("Log: Player disconnected.\n");
+// }
 
 /*
 ** Accepts new connection and finds the first empty slot in the poll array.
@@ -69,7 +69,7 @@ void	handle_client_msg(struct pollfd *fds, int i, t_world *world)
 	bytes = recv(fds[i].fd, buf, BUFFER_SIZE - 1, 0);
 	if (bytes <= 0)
 	{
-		cleanup_client(fds, i);
+		handle_disconnect(world, i, fds);
 		return ;
 	}
 	buf[bytes-1] = '\0';
@@ -77,7 +77,7 @@ void	handle_client_msg(struct pollfd *fds, int i, t_world *world)
 	if (p && strncmp(buf, "QUIT", 4) == 0)
 	{
 		write(fds[i].fd, "OK bye\n", 7);
-		cleanup_client(fds, i);
+		handle_disconnect(world, i, fds);
 	}
 	else if (!p && strncmp(buf, "CONNECT ", 8) == 0)
 	{
