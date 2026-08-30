@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/08 12:34:17 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/30 11:19:22 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/30 12:21:31 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ void	handle_client_msg(struct pollfd *fds, int i, t_world *world)
 	else if (!p && strncmp(buf, "CONNECT ", 8) == 0)
 	{
 		/* Find first empty player slot in world->players and init */
+		if (!validate_player_name(buf + 8, world->players, fds[i].fd))
+			return;
 		init_player(&world->players[i], fds[i].fd, buf + 8, world->rooms);
 		write(fds[i].fd, "OK connected\n", 13);
 	}

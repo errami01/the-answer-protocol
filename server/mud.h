@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/15 21:58:05 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/30 11:05:59 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/30 12:12:37 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ t_world	*fill_world(t_room *head, t_world *world);
 void	handle_command(int fd, char *msg, t_world *world);
 void	cmd_look(t_player *player, t_world *world);
 void	init_player(t_player *player, int fd, char *name, t_room *start_room);
+int		validate_player_name(const char *name, const t_player *players, int fd);
 
 /* Helper to find player by FD */
 t_player	*get_player_by_fd(t_world *world, int fd);
