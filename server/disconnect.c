@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/30 11:08:20 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/31 11:32:40 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/31 18:01:55 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ void	handle_disconnect(t_world *world, int i, struct pollfd *fds)
 	p = &world->players[i];
     snprintf(msg, 100, "Player %s disconnected", p->name ? p->name : "Unknown");
 	printf("%s\n", msg);
-    log_event("INFO", p->name ? p->name : "SYSTEM", msg);
+    msg[strlen(msg)-1] = '\0';
+    log_event("INFO", p->name ? p->name : "SYSTEM", msg, p->ip);
 
 	if (p->fd != -1)
 	{
@@ -39,7 +40,7 @@ void	handle_disconnect(t_world *world, int i, struct pollfd *fds)
 			snprintf(msg, sizeof(msg), "EVT ROOM PRESENCE LEAVE %s\n", p->name);
 			broadcast_to_room(world, p->current_room, msg, p->fd);
             msg[strlen(msg)-1] = '\0';
-            log_event("INFO", p->name, msg);
+            log_event("INFO", p->name, msg, NULL);
 			// printf("Log: Player %s disconnected gracefully.\n", p->name);
 		}
 		if (p->name)

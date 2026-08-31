@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/21 22:13:46 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/30 22:22:17 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/31 17:55:08 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,7 @@ void	cmd_look(t_player *p, t_world *w)
 	format_npcs(r, out, 2048);
 	strlcat(out, "]}\n", 2048);
 	write(p->fd, out, strlen(out));
-	log_event("INFO", p->name, out);
+	out[strlen(out)-1] = '\0';
+	log_event("INFO", p->name, out, NULL);
 	
 }

@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/25 14:46:34 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/30 22:46:22 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/31 17:55:27 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,5 @@ void	cmd_move(t_player *p, char *arg, t_world *world)
 	snprintf(msg, 256, "OK room=%s\n", p->current_room->id);
 	write(p->fd, msg, strlen(msg));
 	msg[strlen(msg) -1] = '\0';
-	log_event("INFO", p->name, msg);
+	log_event("INFO", p->name, msg, NULL);
 }

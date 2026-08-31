@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/21 22:11:24 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/31 14:43:33 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/31 18:12:41 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	is_name_taken(const char *name, const t_player *players, int fd)
 		if (players[i].name && strcmp(players[i].name, name) == 0)
 		{
 			write(fd, "ERR 201 NAME_IN_USE\n", 20);
-			log_event("ERROR", "SYSTEM", "ERR 201 NAME_IN_USE");
+			log_event("ERROR", "SYSTEM", "ERR 201 NAME_IN_USE", NULL);
 			return (1);
 		}
 		i++;
@@ -75,11 +75,11 @@ int	init_player(t_player *player, int fd, char *name, t_room *start_room)
 		player->hp = 100;
 		player->inventory = NULL;
 		write(fd, "OK connected\n", 13);
-		log_event("INFO", player ? player->name : "UNAUTH", name);
+		log_event("INFO", player ? player->name : "UNAUTH", "OK connected", player->ip);
 		return (1);
 	}
 	write(fd, "ERR 201 INVALID_NAME\n", 21);
-	log_event("ERROR", "SYSTEM", "ERR 201 INVALID_NAME");
+	log_event("ERROR", "SYSTEM", "ERR 201 INVALID_NAME", NULL);
 	return (0);
 
 }

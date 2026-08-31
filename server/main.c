@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/08 12:34:17 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/31 14:42:59 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/31 18:02:19 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,20 @@
 /*
 ** Accepts new connection and finds the first empty slot in the poll array.
 */
-void	accept_new_client(int server_fd, struct pollfd *fds)
+char	*accept_new_client(int server_fd, struct pollfd *fds)
 {
-	int	new_fd;
-	int	i;
+	int		new_fd;
+	int		i;
+	char	*ip;
+	struct	sockaddr_in	addr;
+	socklen_t			len;
 
-	new_fd = accept(server_fd, NULL, NULL);
+	len = sizeof(addr);
+	new_fd = accept(server_fd, (struct sockaddr *)&addr, &len);
 	if (new_fd < 0)
-		return ;
+		return (NULL);
 	i = 1;
+	ip = inet_ntoa(addr.sin_addr);
 	while (i < MAX_CLIENTS)
 	{
 		if (fds[i].fd == -1)
@@ -42,13 +47,14 @@ void	accept_new_client(int server_fd, struct pollfd *fds)
 			fds[i].fd = new_fd;
 			fds[i].events = POLLIN;
 			write(new_fd, "OK hello proto=1\n", 17);
-			log_event("INFO", "SYSTEM", "New connection established");
-			return ;
+			log_event("INFO", "SYSTEM", "New connection established", ip);
+			return (ip);
 		}
 		i++;
 	}
 	write(new_fd, "ERR 900 CONNECTION_FAILED\n", 26);
 	close(new_fd);
+	return (NULL);
 }
 
 /*
@@ -68,6 +74,7 @@ void	handle_client_msg(struct pollfd *fds, int i, t_world *world)
 	}
 	buf[bytes-1] = '\0';
 	p = get_player_by_fd(world, fds[i].fd);
+	strlcpy(world->players[i].ip, world->incoming_ip, INET_ADDRSTRLEN); 
 	if (p && strncmp(buf, "QUIT", 4) == 0)
 	{
 		write(fds[i].fd, "OK bye\n", 7);
@@ -158,7 +165,7 @@ int	main(void)
 		if (poll(fds, MAX_CLIENTS, -1) < 0)
 			break ;
 		if (fds[0].revents & POLLIN)
-			accept_new_client(server_fd, fds);
+			strlcpy(world.incoming_ip, accept_new_client(server_fd, fds), INET_ADDRSTRLEN);
 		i = 1;
 		while (i < MAX_CLIENTS)
 		{

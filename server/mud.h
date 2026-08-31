@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/15 21:58:05 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/31 12:27:26 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/31 17:50:04 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <ctype.h>
+#include <arpa/inet.h>
 
 # define MAX_CLIENTS 128
 # define MAX_EXITS 6
@@ -88,6 +89,7 @@ typedef struct s_player
 	t_room			*current_room;
 	t_item			*inventory;
 	int				hp;
+	char			ip[INET_ADDRSTRLEN];
 	t_quest			*quests;
 }	t_player;
 
@@ -96,6 +98,7 @@ typedef struct s_world
 	t_room			*rooms;
 	int				room_count;
 	t_player		players[MAX_CLIENTS];
+	char			incoming_ip[INET_ADDRSTRLEN];
 }	t_world;
 
 
@@ -140,5 +143,5 @@ void	cmd_quest(t_player *p, char *arg, t_world *w);
 void	cmd_quests(t_player *p);
 t_npc	*find_npc(t_npc *list, char *name);
 void	handle_disconnect(t_world *world, int i, struct pollfd *fds);
-void	log_event(const char *level, const char *player, const char *action);
+void	log_event(const char *level, const char *player, const char *action, const char *ip);
 #endif

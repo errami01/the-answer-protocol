@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 11:35:18 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/31 11:15:35 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/31 17:56:30 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,5 @@ void	cmd_status(t_player *p)
 		p->hp, stat_str);
 	write(p->fd, out, strlen(out));
 	out[strlen(out)-1] = '\0';
-	log_event("INFO", p->name, out);
+	log_event("INFO", p->name, out, NULL);
 }

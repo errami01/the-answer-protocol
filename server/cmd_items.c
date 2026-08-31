@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/25 21:59:19 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/30 22:21:08 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/31 17:54:50 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,14 @@ void	cmd_take(t_player *p, char *arg, t_world *w)
 	if (!item)
 	{
 		write(p->fd, "ERR 404 ITEM_NOT_FOUND\n", 23);
-		log_event("WARN", p->name, "Response sent: ERR 404 ITEM_NOT_FOUND");
+		log_event("WARN", p->name, "Response sent: ERR 404 ITEM_NOT_FOUND", NULL);
 		return ;
 	}
 	add_item(&p->inventory, item);
 	snprintf(out, sizeof(out), "OK taken=%s\n", item->id);
 	write(p->fd, out, strlen(out));
-	log_event("INFO", p->name, out);
+	out[strlen(out)-1] = '\0';
+	log_event("INFO", p->name, out, NULL);
 }
 
 void	cmd_drop(t_player *p, char *arg, t_world *w)
@@ -44,13 +45,14 @@ void	cmd_drop(t_player *p, char *arg, t_world *w)
 	if (!item)
 	{
 		write(p->fd, "ERR 404 ITEM_NOT_IN_INVENTORY\n", 30);
-		log_event("WARN", p->name, "Response sent: ERR 404 ITEM_NOT_IN_INVENTORY");
+		log_event("WARN", p->name, "Response sent: ERR 404 ITEM_NOT_IN_INVENTORY", NULL);
 		return ;
 	}
 	add_item(&p->current_room->items, item);
 	snprintf(out, sizeof(out), "OK dropped=%s\n", item->id);
 	write(p->fd, out, strlen(out));
-	log_event("INFO", p->name, out);
+	out[strlen(out)-1] = '\0';
+	log_event("INFO", p->name, out, NULL);
 
 }
 
@@ -75,6 +77,7 @@ void	cmd_inventory(t_player *p)
 	}
 	strlcat(out, "]\n", sizeof(out));
 	write(p->fd, out, strlen(out));
-	log_event("INFO", p->name, out);
+	out[strlen(out)-1] = '\0';
+	log_event("INFO", p->name, out, NULL);
 	
 }

@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 21:33:57 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/31 11:11:34 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/31 17:56:22 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,5 @@ void	cmd_quests(t_player *p)
 	strlcat(out, "]\n", sizeof(out));
 	write(p->fd, out, strlen(out));
 	out[strlen(out)-1] = '\0';
-	log_event("INFO", p->name, out);
+	log_event("INFO", p->name, out, NULL);
 }
