@@ -3,3 +3,4 @@ test.c
 a.out
 server_app
 ToFree.txt
+server.log

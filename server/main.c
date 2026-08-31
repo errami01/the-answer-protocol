@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/08 12:34:17 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/30 12:21:31 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/31 14:42:59 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,7 @@
 /*
 ** Closes the socket and resets the pollfd structure to prevent polling -1.
 */
-// void	cleanup_client(struct pollfd *fds, int i)
-// {
-// 	close(fds[i].fd);
-// 	fds[i].fd = -1;
-// 	fds[i].events = 0;
-// 	fds[i].revents = 0;
-// 	printf("Log: Player disconnected.\n");
-// }
+
 
 /*
 ** Accepts new connection and finds the first empty slot in the poll array.
@@ -49,6 +42,7 @@ void	accept_new_client(int server_fd, struct pollfd *fds)
 			fds[i].fd = new_fd;
 			fds[i].events = POLLIN;
 			write(new_fd, "OK hello proto=1\n", 17);
+			log_event("INFO", "SYSTEM", "New connection established");
 			return ;
 		}
 		i++;
@@ -82,10 +76,9 @@ void	handle_client_msg(struct pollfd *fds, int i, t_world *world)
 	else if (!p && strncmp(buf, "CONNECT ", 8) == 0)
 	{
 		/* Find first empty player slot in world->players and init */
-		if (!validate_player_name(buf + 8, world->players, fds[i].fd))
+		if (is_name_taken(buf + 8, world->players, fds[i].fd))
 			return;
 		init_player(&world->players[i], fds[i].fd, buf + 8, world->rooms);
-		write(fds[i].fd, "OK connected\n", 13);
 	}
 	else if (p && strncmp(buf, "LOOK", 4) == 0)
 		cmd_look(p, world);

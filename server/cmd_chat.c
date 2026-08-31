@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/25 21:19:15 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/25 21:19:21 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/30 22:14:22 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,13 @@ static void	process_chat(t_player *p, char *scope, char *msg_text, t_world *w)
 	{
 		snprintf(evt, sizeof(evt), "EVT GLOBAL CHAT %s %s", p->name, msg_text);
 		broadcast_global(w, evt, p->fd);
+		log_event("INFO", p->name, evt);
 	}
 	else if (strncmp(scope, "ROOM", 4) == 0)
 	{
 		snprintf(evt, sizeof(evt), "EVT ROOM CHAT %s %s", p->name, msg_text);
 		broadcast_to_room(w, p->current_room, evt, p->fd);
+		log_event("INFO", p->name, evt);
 	}
 	write(p->fd, "OK\n", 3);
 }
@@ -49,6 +51,7 @@ void	cmd_chat(t_player *p, char *arg, t_world *world)
 	if (!msg_text)
 	{
 		write(p->fd, "ERR 400 INVALID_CHAT_FORMAT\n", 28);
+		log_event("WARN", p->name, "ERR 400 INVALID_CHAT_FORMAT");
 		return ;
 	}
 	*msg_text = '\0';

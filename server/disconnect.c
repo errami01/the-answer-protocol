@@ -6,13 +6,21 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/30 11:08:20 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/30 11:09:24 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/08/31 11:32:40 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "mud.h"
 
+void	cleanup_client(struct pollfd *fds, int i)
+{
+
+	close(fds[i].fd);
+	fds[i].fd = -1;
+	fds[i].events = 0;
+	fds[i].revents = 0;
+}
 
 void	handle_disconnect(t_world *world, int i, struct pollfd *fds)
 {
@@ -20,13 +28,19 @@ void	handle_disconnect(t_world *world, int i, struct pollfd *fds)
 	char		msg[256];
 
 	p = &world->players[i];
+    snprintf(msg, 100, "Player %s disconnected", p->name ? p->name : "Unknown");
+	printf("%s\n", msg);
+    log_event("INFO", p->name ? p->name : "SYSTEM", msg);
+
 	if (p->fd != -1)
 	{
 		if (p->name && p->current_room)
 		{
 			snprintf(msg, sizeof(msg), "EVT ROOM PRESENCE LEAVE %s\n", p->name);
 			broadcast_to_room(world, p->current_room, msg, p->fd);
-			printf("Log: Player %s disconnected gracefully.\n", p->name);
+            msg[strlen(msg)-1] = '\0';
+            log_event("INFO", p->name, msg);
+			// printf("Log: Player %s disconnected gracefully.\n", p->name);
 		}
 		if (p->name)
 			free(p->name);
@@ -35,8 +49,9 @@ void	handle_disconnect(t_world *world, int i, struct pollfd *fds)
 	/* Reset player slot for reuse */
 	memset(p, 0, sizeof(t_player));
 	p->fd = -1;
+    cleanup_client(fds, i);
 	/* Reset poll structure */
-	fds[i].fd = -1;
-	fds[i].events = 0;
-	fds[i].revents = 0;
+	// fds[i].fd = -1;
+	// fds[i].events = 0;
+	// fds[i].revents = 0;
 }
