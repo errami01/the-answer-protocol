@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 11:37:57 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/31 17:51:55 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/09/01 16:32:35 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,13 @@ t_npc	*find_npc(t_npc *list, char *name)
 /*
 ** Logic for NPC counter-attack and broadcasting results.
 */
-static int  is_quest(t_quest *list, t_npc *npc)
+static int  is_quest(const t_quest *list, const t_npc *npc)
 {
+
     while (list)
     {
-        if (strcasecmp(list->req_npc_death, npc->name) == 0 || strcmp(list->req_npc_death, npc->id) == 0)
+        if (list->req_npc_death && 
+			(strcasecmp(list->req_npc_death, npc->name) == 0 || strcmp(list->req_npc_death, npc->id) == 0))
             return (1);
         list = list->next;
     }
@@ -50,11 +52,13 @@ static void combat_log(t_player *p, t_npc *npc, t_world *w, int p_dmg)
 		"OK {\"attacker_hp\": %d, \"target_hp\": %d, \"damage\": %d}\n",
 		p->hp, npc->hp, p_dmg);
 	write(p->fd, out, strlen(out));
+	out[strlen(out)-1] = '\0';
 	log_event("INFO", p->name, out, NULL);
 	snprintf(out, sizeof(out), "EVT ROOM CHAT %s attacked %s!\n", 
 		p->name, npc->name);
-	log_event("INFO", p->name, out, NULL);
 	broadcast_to_room(w, p->current_room, out, p->fd);
+	out[strlen(out)-1] = '\0';
+	log_event("INFO", p->name, out, NULL);
     
 }
 static void	resolve_combat(t_player *p, t_npc *npc, t_world *w)
@@ -65,8 +69,8 @@ static void	resolve_combat(t_player *p, t_npc *npc, t_world *w)
 
     if (!npc->hp)
     {
-        write(p->fd, "The Goblin is dead.\n", 21);
-		log_event("INFO", p->name, "The Goblin is dead.", NULL);
+        write(p->fd, "OK The Goblin is dead.\n", 24);
+		log_event("INFO", p->name, "OK The Goblin is dead.", NULL);
         return;        
     }
 	p_dmg = (rand() % 10) + 5; // Player deals 5-15 dmg
@@ -75,10 +79,9 @@ static void	resolve_combat(t_player *p, t_npc *npc, t_world *w)
 	    npc->hp -= p_dmg;
     else
 	{
-		write(p->fd, "You need a Quest to defeat the enemy.\n", 38);
-		log_event("INFO", p->name, "You need a Quest to defeat the enemy.", NULL);
+		write(p->fd, "OK You need a Quest to defeat the enemy.\n", 41);
+		log_event("INFO", p->name, "OK You need a Quest to defeat the enemy.", NULL);
 	}
-		
 	if (npc->hp > 0)
 		p->hp -= n_dmg;
     else npc->hp = 0;
@@ -87,6 +90,7 @@ static void	resolve_combat(t_player *p, t_npc *npc, t_world *w)
     {
         item = find_item(p->current_room->items, "item.goblin_power");
         item->is_visible = 1;
+		npc->dialogue = "OK ....";
     }
     if (p->hp <= 0)
         handle_death(p, w);

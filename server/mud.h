@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/15 21:58:05 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/31 21:06:40 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/09/01 11:30:06 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,4 +148,5 @@ t_npc	*find_npc(t_npc *list, char *name);
 void	handle_disconnect(t_world *world, int i, struct pollfd *fds);
 void	log_event(const char *level, const char *player, const char *action, const char *ip);
 int		check_flooding(t_player *p);
+void	cmd_talk(t_player *p, char *arg);
 #endif

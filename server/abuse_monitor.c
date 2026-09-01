@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/31 20:26:01 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/31 21:43:53 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/09/01 16:37:25 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ int	check_flooding(t_player *p)
 	}
 	if (p->msg_count > 5)
 	{
-        printf("check flooding\n");
 		log_event("WARN", p->name ? p->name : "Unknown", "Potential command flooding detected", p->ip);
 		return (1);
 	}

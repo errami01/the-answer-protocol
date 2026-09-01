@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 11:49:39 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/31 17:56:45 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/09/01 16:34:06 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 void	handle_death(t_player *p, t_world *w)
 {
-	char	*msg;
+	char	msg[100];
 
-	msg = "EVT GLOBAL CHAT server Player has fallen in battle...\n";
+	strcpy(msg, "EVT GLOBAL CHAT server Player has fallen in battle...\n");
 	broadcast_global(w, msg, -1);
 	msg[strlen(msg) - 1] = '\0';
 	log_event("INFO", p->name, msg, NULL);

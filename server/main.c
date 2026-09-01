@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/08 12:34:17 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/31 22:34:15 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/09/01 17:05:31 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,10 @@ void	handle_client_msg(struct pollfd *fds, int i, t_world *world)
 	strlcpy(world->players[i].ip, world->incoming_ip, INET_ADDRSTRLEN);
 	
 	if (check_flooding(&world->players[i]))
+	{
 		handle_disconnect(world, i, fds);
+		return;
+	}
 	log_event("INFO", world->players[i].name? world->players[i].name : "Unkown", buf, NULL);
 	if (p && strncmp(buf, "QUIT", 4) == 0)
 	{
@@ -112,6 +115,8 @@ void	handle_client_msg(struct pollfd *fds, int i, t_world *world)
 		cmd_quest(p, buf + 6, world);
 	else if (p && strncmp(buf, "QUESTS", 6) == 0)
 		cmd_quests(p);
+	else if (p && strncmp(buf, "TALK ", 5) == 0)
+		cmd_talk(p, buf + 5);
 	else
 		write(fds[i].fd, "OK command_received\n", 20);
 }

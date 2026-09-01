@@ -15,7 +15,7 @@
         {
             "id": "item.goblin_power",
             "name": "goblin power",
-            "desc": "Kill the goblin to get a his power.",
+            "desc": "Kill the goblin to get his power.",
             "is_visible": false
         }
 
@@ -38,6 +38,7 @@
                     "name": "City Guard",
                     "hp": 100,
                     "is_hostile": false,
+                    "dialogue": "I have a quest for you!",
                     "quest": {
                         "id": "q.kill_goblin",
                         "desc": "Defeat the goblin in the alley and bring the goblin power item.",
@@ -58,8 +59,16 @@
                 "east": "shop"
             },
             "items": [
-                "item.herb",
-                "item.sword"
+                "item.herb"
+            ],
+            "npcs": [
+                {
+                    "id": "npc.baker",
+                    "name": "Baker",
+                    "hp": 100,
+                    "is_hostile": false,
+                    "dialogue": "Welcome to my bakery"
+                }
             ]
         },
         {
@@ -136,6 +145,7 @@
                     "name": "Village Elder",
                     "hp": 50,
                     "is_hostile": false,
+                    "dialogue": "I have a quest for you!",
                     "quest": {
                         "id": "q.herbs",
                         "desc": "Bring me the Medicinal Herbs from the bakery.",

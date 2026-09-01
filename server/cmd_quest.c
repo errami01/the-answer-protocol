@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 21:30:19 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/31 17:56:01 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/09/01 15:50:36 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ static void	handle_quest_logic(t_player *p, t_npc *npc)
 	q = npc->quest; // Assume NPC has one quest for simplicity
 	if (!q || q->status == Q_COMPLETED)
 	{
+		if (q->status == Q_COMPLETED)
+			npc->dialogue = "OK You did a good job";
 		write(p->fd, "ERR 406 NO_QUEST_AVAILABLE\n", 27);
 		log_event("WARN", p->name, "ERR 406 NO_QUEST_AVAILABLE", NULL);
 		return ;
