@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/08 12:34:17 by aberrami          #+#    #+#             */
-/*   Updated: 2026/09/01 17:05:31 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/09/01 21:01:52 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,8 @@ void	handle_client_msg(struct pollfd *fds, int i, t_world *world)
 		cmd_quests(p);
 	else if (p && strncmp(buf, "TALK ", 5) == 0)
 		cmd_talk(p, buf + 5);
+	else if (p && strncmp(buf, "GROUP ", 6) == 0)
+		cmd_group(p, buf + 6, world);
 	else
 		write(fds[i].fd, "OK command_received\n", 20);
 }

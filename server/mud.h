@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/15 21:58:05 by aberrami          #+#    #+#             */
-/*   Updated: 2026/09/01 11:30:06 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/09/01 20:37:19 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ typedef struct s_player
 	t_quest			*quests;
 	long			last_msg_time;
 	int				msg_count;
+	char			*group_id;
+	char			*invited_by;
 }	t_player;
 
 typedef struct s_world
@@ -149,4 +151,7 @@ void	handle_disconnect(t_world *world, int i, struct pollfd *fds);
 void	log_event(const char *level, const char *player, const char *action, const char *ip);
 int		check_flooding(t_player *p);
 void	cmd_talk(t_player *p, char *arg);
+void	cmd_group(t_player *p, char *arg, t_world *w);
+void	broadcast_group(t_world *w, char *group_id, char *msg, int exclude_fd);
+t_player	*find_player_by_name(t_world *w, char *name);
 #endif
