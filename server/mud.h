@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/15 21:58:05 by aberrami          #+#    #+#             */
-/*   Updated: 2026/09/01 20:37:19 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/09/02 18:12:19 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,7 @@
 # define JSMN_HEADER
 
 #include "../libs/jsmn.h"
-#include <poll.h>
-#include <fcntl.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <ctype.h>
-#include <arpa/inet.h>
-#include <time.h>
+#include "../shared/protocol.h"
 
 # define MAX_CLIENTS 128
 # define MAX_EXITS 6

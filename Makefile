@@ -7,17 +7,24 @@ SERVER_SRC = server/main.c server/world_loader.c server/world_linker.c \
 			server/cmd_attack.c server/death.c server/npc_utils.c \
 			server/cmd_quest.c server/cmd_quests_list.c server/logger.c \
 			server/disconnect.c server/abuse_monitor.c server/cmd_talk.c \
-			server/group_utils.c server/cmd_group.c
+			server/group_utils.c server/cmd_group.c \
 
 SERVER_OBJ = $(SERVER_SRC:.c=.o)
-NAME = server_app
+SERVER_NAME = server_app
+CLIENT_NAME = client_app
+CLIENT_SRC = client_cli/main.c
+CLIENT_OBJ = $(CLIENT_SRC:.c=.o)
 
-all: $(NAME)
+all: $(SERVER_NAME) client
 
-$(NAME): $(SERVER_OBJ)
-	$(CC) $(CFLAGS) $(SERVER_OBJ) -o $(NAME)
+client: $(CLIENT_OBJ)
+	$(CC) $(CFLAGS) $(CLIENT_OBJ) -o $(CLIENT_NAME)
+
+$(SERVER_NAME): $(SERVER_OBJ)
+	$(CC) $(CFLAGS) $(SERVER_OBJ) -o $(SERVER_NAME)
+
 
 clean:
-	rm -f $(SERVER_OBJ) $(NAME)
+	rm -f $(SERVER_OBJ) $(SERVER_NAME) $(CLIENT_OBJ) $(CLIENT_NAME)
 
 re: clean all
