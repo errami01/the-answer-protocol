@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/15 21:58:05 by aberrami          #+#    #+#             */
-/*   Updated: 2026/09/02 18:12:19 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/09/06 22:20:59 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ int		jsoneq(const char *json, jsmntok_t *tok, const char *s);
 /* Prototypes */
 void	cmd_attack(t_player *p, char *arg, t_world *w);
 void	cmd_status(t_player *p);
-void	handle_death(t_player *p, t_world *w);
+void	handle_death(t_player *p, t_npc *npc, t_world *w);
 t_npc	*remove_npc(t_npc **list, char *name); // Optional: for XP/Loot
 void	parse_npc_array(const char *js, jsmntok_t *t, int *i, t_room *room);
 void	cmd_quest(t_player *p, char *arg, t_world *w);
