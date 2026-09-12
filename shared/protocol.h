@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 18:03:07 by aberrami          #+#    #+#             */
-/*   Updated: 2026/09/02 18:06:52 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/09/12 17:58:05 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,6 @@
 #include <ctype.h>
 #include <arpa/inet.h>
 #include <time.h>
+#include <bsd/string.h>
 
 #endif

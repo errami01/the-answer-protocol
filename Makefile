@@ -21,7 +21,7 @@ client: $(CLIENT_OBJ)
 	$(CC) $(CFLAGS) $(CLIENT_OBJ) -o $(CLIENT_NAME)
 
 $(SERVER_NAME): $(SERVER_OBJ)
-	$(CC) $(CFLAGS) $(SERVER_OBJ) -o $(SERVER_NAME)
+	$(CC) $(CFLAGS) $(SERVER_OBJ) -lbsd -o $(SERVER_NAME)
 
 
 clean:

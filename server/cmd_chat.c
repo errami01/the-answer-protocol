@@ -6,18 +6,16 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/25 21:19:15 by aberrami          #+#    #+#             */
-/*   Updated: 2026/09/01 22:27:28 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/09/12 18:14:44 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "mud.h"
-
 
 /*
 ** Formats the event message and sends it to the correct scope.
 */
-static void	process_chat(t_player *p, char *scope, char *msg_text, t_world *w)
+static void	broad_log(t_player *p, char *scope, char *msg_text, t_world *w)
 {
 	char	evt[1024];
 
@@ -33,15 +31,23 @@ static void	process_chat(t_player *p, char *scope, char *msg_text, t_world *w)
 		broadcast_to_room(w, p->current_room, evt, p->fd);
 		log_event("INFO", p->name, evt, NULL);
 	}
+}
+
+static void	process_chat(t_player *p, char *scope, char *msg_text, t_world *w)
+{
+	char	evt[1024];
+
+	if (strncmp(scope, "GLOBAL", 6) == 0 || strncmp(scope, "ROOM", 4))
+		broad_log(p, scope, msg_text, w);
 	else if (strncmp(scope, "GROUP", 5) == 0)
 	{
 		if (!p->group_id)
 			write(p->fd, "ERR 401 NOT_IN_GROUP\n", 21);
 		else
 		{
-			snprintf(evt, sizeof(evt), "EVT GROUP CHAT %s %s\n", p->name, msg_text);
+			snprintf(
+				evt, sizeof(evt), "EVT GROUP CHAT %s %s\n", p->name, msg_text);
 			broadcast_group(w, p->group_id, evt, p->fd);
-			// write(p->fd, "OK\n", 3);
 		}
 	}
 	write(p->fd, "OK\n", 3);
