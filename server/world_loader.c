@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/16 15:14:42 by aberrami          #+#    #+#             */
-/*   Updated: 2026/09/13 16:19:34 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/09/13 17:24:08 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,13 @@ t_room	*create_room(const char *js, jsmntok_t *t, int *i)
 /*
 ** Main entry for world loading. (Pass 1 only for brevity)
 */
+void	creat_all_rooms(t_room **current, char *js, jsmntok_t *t, int *i)
+{
+	(*current)->next = create_room(js, t, i);
+	*current = (*current)->next;
+	(*current)->next = NULL;
+	(*i)++;
+}
 t_room	*load_rooms(char *js, jsmntok_t *t, int r)
 {
 	int		i;
@@ -132,12 +139,7 @@ t_room	*load_rooms(char *js, jsmntok_t *t, int r)
 				return (NULL);
 			current = head;
 			while(--rooms_size > 0)
-			{
-				current->next = create_room(js, t, &i);
-				current = current->next;
-				current->next = NULL;
-				i++;
-			}
+				creat_all_rooms(&current, js, t, &i);
 			resolve_all_exits(head);
 			return (head);
 		}
@@ -145,6 +147,7 @@ t_room	*load_rooms(char *js, jsmntok_t *t, int r)
 	}
 	return (NULL);
 }
+
 t_room	*load_world(char *filename)
 {
 	char			*js;
@@ -159,30 +162,9 @@ t_room	*load_world(char *filename)
 	r = jsmn_parse(&p, js, strlen(js), t, 256);
 	if (r < 0)
 		return (NULL);
-	return load_rooms(js, t, r);
+	return (load_rooms(js, t, r));
 }
 
-t_world	*fill_world(t_room *head, t_world *world)
-{
-	t_room	*current;
-	int		i;
-
-	i = 0;
-	while (i < MAX_CLIENTS)
-	{
-		memset(&world->players[i], 0, sizeof(t_player));
-		i++;
-	}
-	current = head;
-	world->rooms = head;
-	world->room_count = 0;
-	while (current != 0)
-	{
-		current = current->next;
-		world->room_count++;
-	}
-	return (world);
-}
 // int	get_dir_index(const char *dir)
 // {
 // 	if (strcmp(dir, "north") == 0) return (0);

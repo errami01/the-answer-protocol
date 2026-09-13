@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/08 12:34:17 by aberrami          #+#    #+#             */
-/*   Updated: 2026/09/12 17:59:23 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/09/13 16:25:28 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,28 @@ int	init_server_socket(void)
 	if (listen(s_fd, 10) < 0)
 		return (-1);
 	return (s_fd);
+}
+
+t_world	*fill_world(t_room *head, t_world *world)
+{
+	t_room	*current;
+	int		i;
+
+	i = 0;
+	while (i < MAX_CLIENTS)
+	{
+		memset(&world->players[i], 0, sizeof(t_player));
+		i++;
+	}
+	current = head;
+	world->rooms = head;
+	world->room_count = 0;
+	while (current != 0)
+	{
+		current = current->next;
+		world->room_count++;
+	}
+	return (world);
 }
 
 int	main(void)
