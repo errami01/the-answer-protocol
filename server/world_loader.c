@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/16 15:14:42 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/27 15:08:10 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/09/13 16:19:34 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,24 +112,13 @@ t_room	*create_room(const char *js, jsmntok_t *t, int *i)
 /*
 ** Main entry for world loading. (Pass 1 only for brevity)
 */
-t_room	*load_world(char *filename)
+t_room	*load_rooms(char *js, jsmntok_t *t, int r)
 {
-	char			*js;
-	jsmn_parser		p;
-	jsmntok_t		t[256];
-	int				r;
-	int				i;
-	int				rooms_size;
-	t_room			*head;
-	t_room			*current;
+	int		i;
+	int		rooms_size;
+	t_room	*head;
+	t_room	*current;
 
-	js = read_world_file(filename);
-	if (!js)
-		return (NULL);
-	jsmn_init(&p);
-	r = jsmn_parse(&p, js, strlen(js), t, 256);
-	if (r < 0)
-		return (NULL);
 	i = 1;
 	while (i < r)
 	{
@@ -137,11 +126,10 @@ t_room	*load_world(char *filename)
 		{
 			rooms_size = t[i+1].size;
 			i += 2;
-			// Loop rooms array and call create_room
 			head = create_room(js, t, &i);
 			i++;
 			if (!head)
-			return (NULL);
+				return (NULL);
 			current = head;
 			while(--rooms_size > 0)
 			{
@@ -150,24 +138,37 @@ t_room	*load_world(char *filename)
 				current->next = NULL;
 				i++;
 			}
-			// This is where you would link your t_room list
-			// printf("rooms size: %i\n", rooms_size);
 			resolve_all_exits(head);
-			/* Pass 2: Link the pointers */
-			return (head); // Returns first room for now
+			return (head);
 		}
 		i++;
 	}
 	return (NULL);
+}
+t_room	*load_world(char *filename)
+{
+	char			*js;
+	jsmn_parser		p;
+	jsmntok_t		t[256];
+	int				r;
+
+	js = read_world_file(filename);
+	if (!js)
+		return (NULL);
+	jsmn_init(&p);
+	r = jsmn_parse(&p, js, strlen(js), t, 256);
+	if (r < 0)
+		return (NULL);
+	return load_rooms(js, t, r);
 }
 
 t_world	*fill_world(t_room *head, t_world *world)
 {
 	t_room	*current;
 	int		i;
-	
+
 	i = 0;
-	while(i < MAX_CLIENTS)
+	while (i < MAX_CLIENTS)
 	{
 		memset(&world->players[i], 0, sizeof(t_player));
 		i++;
@@ -175,14 +176,12 @@ t_world	*fill_world(t_room *head, t_world *world)
 	current = head;
 	world->rooms = head;
 	world->room_count = 0;
-	
-	while(current != 0)
+	while (current != 0)
 	{
 		current = current->next;
 		world->room_count++;
 	}
-	return(world);
-	
+	return (world);
 }
 // int	get_dir_index(const char *dir)
 // {
