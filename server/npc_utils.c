@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 14:43:15 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/29 22:57:54 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/09/14 16:47:10 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ void	parse_npc_array(const char *js, jsmntok_t *t, int *i, t_room *room)
 	int		array_size;
 	t_npc	*new_npc;
 
+	(*i)++;
 	if (t[*i].type != JSMN_ARRAY)
 		return ;
 	array_size = t[*i].size;
