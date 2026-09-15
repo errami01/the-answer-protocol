@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/15 21:58:05 by aberrami          #+#    #+#             */
-/*   Updated: 2026/09/06 22:20:59 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/09/15 16:09:24 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ void	cmd_inventory(t_player *p);
 void	add_item(t_item **list, t_item *item);
 t_item	*remove_item(t_item **list, char *id_or_name);
 t_item	*find_item(t_item *list, char *name);
-void	parse_room_items(const char *js, jsmntok_t *t, int *i, t_room *room);
+t_room	*create_room(const char *js, jsmntok_t *t, int *i);
 t_item	*spawn_item(const char *js, jsmntok_t *t, int count, char *id);
 int		jsoneq(const char *json, jsmntok_t *tok, const char *s);
 
