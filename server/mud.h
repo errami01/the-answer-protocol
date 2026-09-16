@@ -6,17 +6,16 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/15 21:58:05 by aberrami          #+#    #+#             */
-/*   Updated: 2026/09/15 16:09:24 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/09/16 17:42:26 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef MUD_H
 # define MUD_H
 # define JSMN_HEADER
 
-#include "../libs/jsmn.h"
-#include "../shared/protocol.h"
+# include "../libs/jsmn.h"
+# include "../shared/protocol.h"
 
 # define MAX_CLIENTS 128
 # define MAX_EXITS 6
@@ -98,52 +97,55 @@ typedef struct s_world
 	char			incoming_ip[INET_ADDRSTRLEN];
 }	t_world;
 
-
-t_room	*load_world(char *filename);
-char	*read_world_file(char *filename);
-void	debug_print_world(t_room *head);
-void	resolve_all_exits(t_room *head);
+t_room		*load_world(char *filename);
+char		*read_world_file(char *filename);
+void		debug_print_world(t_room *head);
+void		resolve_all_exits(t_room *head);
 /* Prototypes for commands */
-t_world	*fill_world(t_room *head, t_world *world);
-void	handle_command(int fd, char *msg, t_world *world);
-void	cmd_look(t_player *player, t_world *world);
-int		init_player(t_player *player, int fd, char *name, t_room *start_room);
-int		is_name_taken(const char *name, const t_player *players, int fd);
+t_world		*fill_world(t_room *head, t_world *world);
+void		handle_command(int fd, char *msg, t_world *world);
+void		cmd_look(t_player *player, t_world *world);
+int			init_player(t_player *player, int fd, char *name,
+				t_room *start_room);
+int			is_name_taken(const char *name, const t_player *players, int fd);
 
 /* Helper to find player by FD */
 t_player	*get_player_by_fd(t_world *world, int fd);
 /* Add these to mud.h */
-void	broadcast_to_room(t_world *world, t_room *room, char *msg, int exclude_fd);
-void	cmd_move(t_player *p, char *arg, t_world *world);
-int		get_dir_index(const char *dir);
-void	broadcast_global(t_world *world, char *msg, int exclude_fd);
-void	cmd_chat(t_player *p, char *arg, t_world *world);
-void	cmd_take(t_player *p, char *arg, t_world *w);
-void	cmd_drop(t_player *p, char *arg, t_world *w);
-void	cmd_inventory(t_player *p);
+void		broadcast_to_room(t_world *world, t_room *room, char *msg,
+				int exclude_fd);
+void		cmd_move(t_player *p, char *arg, t_world *world);
+int			get_dir_index(const char *dir);
+void		broadcast_global(t_world *world, char *msg, int exclude_fd);
+void		cmd_chat(t_player *p, char *arg, t_world *world);
+void		cmd_take(t_player *p, char *arg, t_world *w);
+void		cmd_drop(t_player *p, char *arg, t_world *w);
+void		cmd_inventory(t_player *p);
 
 /* Linked List Helpers */
-void	add_item(t_item **list, t_item *item);
-t_item	*remove_item(t_item **list, char *id_or_name);
-t_item	*find_item(t_item *list, char *name);
-t_room	*create_room(const char *js, jsmntok_t *t, int *i);
-t_item	*spawn_item(const char *js, jsmntok_t *t, int count, char *id);
-int		jsoneq(const char *json, jsmntok_t *tok, const char *s);
+void		add_item(t_item **list, t_item *item);
+t_item		*remove_item(t_item **list, char *id_or_name);
+t_item		*find_item(t_item *list, char *name);
+t_room		*create_room(const char *js, jsmntok_t *t, int *i);
+t_item		*spawn_item(const char *js, jsmntok_t *t, int count, char *id);
+int			jsoneq(const char *json, jsmntok_t *tok, const char *s);
 
 /* Prototypes */
-void	cmd_attack(t_player *p, char *arg, t_world *w);
-void	cmd_status(t_player *p);
-void	handle_death(t_player *p, t_npc *npc, t_world *w);
-t_npc	*remove_npc(t_npc **list, char *name); // Optional: for XP/Loot
-void	parse_npc_array(const char *js, jsmntok_t *t, int *i, t_room *room);
-void	cmd_quest(t_player *p, char *arg, t_world *w);
-void	cmd_quests(t_player *p);
-t_npc	*find_npc(t_npc *list, char *name);
-void	handle_disconnect(t_world *world, int i, struct pollfd *fds);
-void	log_event(const char *level, const char *player, const char *action, const char *ip);
-int		check_flooding(t_player *p);
-void	cmd_talk(t_player *p, char *arg);
-void	cmd_group(t_player *p, char *arg, t_world *w);
-void	broadcast_group(t_world *w, char *group_id, char *msg, int exclude_fd);
+void		cmd_attack(t_player *p, char *arg, t_world *w);
+void		cmd_status(t_player *p);
+void		handle_death(t_player *p, t_npc *npc, t_world *w);
+t_npc		*remove_npc(t_npc **list, char *name); // Optional: for XP/Loot
+void		parse_npc_array(const char *js, jsmntok_t *t, int *i, t_room *room);
+void		cmd_quest(t_player *p, char *arg, t_world *w);
+void		cmd_quests(t_player *p);
+t_npc		*find_npc(t_npc *list, char *name);
+void		handle_disconnect(t_world *world, int i, struct pollfd *fds);
+void		log_event(const char *level, const char *player, const char *action,
+				const char *ip);
+int			check_flooding(t_player *p);
+void		cmd_talk(t_player *p, char *arg);
+void		cmd_group(t_player *p, char *arg, t_world *w);
+void		broadcast_group(t_world *w, char *group_id, char *msg,
+				int exclude_fd);
 t_player	*find_player_by_name(t_world *w, char *name);
 #endif

@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/08 12:34:17 by aberrami          #+#    #+#             */
-/*   Updated: 2026/09/13 16:25:28 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/09/16 17:58:14 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,6 +169,23 @@ t_world	*fill_world(t_room *head, t_world *world)
 	return (world);
 }
 
+void	monitor_connection(struct pollfd *fds, int i, t_world *world, int server_fd)
+{
+	while (1)
+	{
+		if (poll(fds, MAX_CLIENTS, -1) < 0)
+			break ;
+		if (fds[0].revents & POLLIN)
+			strlcpy(world->incoming_ip, accept_new_client(server_fd, fds), INET_ADDRSTRLEN);
+		i = 1;
+		while (i < MAX_CLIENTS)
+		{
+			if (fds[i].fd != -1 && (fds[i].revents & POLLIN))
+				handle_client_msg(fds, i, world);
+			i++;
+		}
+	}
+}
 int	main(void)
 {
 	int				server_fd;
@@ -192,21 +209,6 @@ int	main(void)
 		fprintf(stderr, "Error: Failed to load world.json\n");
 		return (1);
 	}
-	// debug_print_world(world_map);
-
-	while (1)
-	{
-		if (poll(fds, MAX_CLIENTS, -1) < 0)
-			break ;
-		if (fds[0].revents & POLLIN)
-			strlcpy(world.incoming_ip, accept_new_client(server_fd, fds), INET_ADDRSTRLEN);
-		i = 1;
-		while (i < MAX_CLIENTS)
-		{
-			if (fds[i].fd != -1 && (fds[i].revents & POLLIN))
-				handle_client_msg(fds, i, &world);
-			i++;
-		}
-	}
+	monitor_connection(fds, i, &world, server_fd);
 	return (0);
 }
