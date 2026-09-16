@@ -6,17 +6,38 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 14:43:15 by aberrami          #+#    #+#             */
-/*   Updated: 2026/09/14 16:47:10 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/09/16 17:06:07 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mud.h"
+
+static void	parse_quest_attr(t_quest *q, const char *js, jsmntok_t *t, int *i)
+{
+	if (jsoneq(js, &t[*i], "id") == 0)
+		q->id = strndup(js + t[*i + 1].start, t[*i + 1].end - t[*i + 1].start);
+	else if (jsoneq(js, &t[*i], "desc") == 0)
+		q->description = strndup(js + t[*i + 1].start,
+				t[*i + 1].end - t[*i + 1].start);
+	else if (jsoneq(js, &t[*i], "req_item_id") == 0)
+		q->req_item_id = strndup(js + t[*i + 1].start,
+				t[*i + 1].end - t[*i + 1].start);
+	else if (jsoneq(js, &t[*i], "req_npc_death") == 0)
+		q->req_npc_death = strndup(js + t[*i + 1].start,
+				t[*i + 1].end - t[*i + 1].start);
+	else if (jsoneq(js, &t[*i], "reward_item") == 0)
+		q->reward_item = strndup(js + t[*i + 1].start,
+				t[*i + 1].end - t[*i + 1].start);
+	else if (jsoneq(js, &t[*i], "reward_hp") == 0)
+		q->reward_hp = atoi(js + t[*i + 1].start);
+}
 
 static t_quest	*parse_quest_details(const char *js, jsmntok_t *t, int *i)
 {
 	t_quest	*q;
 	int		num_fields;
 
+	(*i)++;
 	q = malloc(sizeof(t_quest));
 	if (!q)
 		return (NULL);
@@ -25,27 +46,41 @@ static t_quest	*parse_quest_details(const char *js, jsmntok_t *t, int *i)
 	(*i)++;
 	while (num_fields-- > 0)
 	{
-		if (jsoneq(js, &t[*i], "id") == 0)
-			q->id = strndup(js + t[*i + 1].start, t[*i + 1].end - t[*i + 1].start);
-		else if (jsoneq(js, &t[*i], "desc") == 0)
-			q->description = strndup(js + t[*i + 1].start, t[*i + 1].end - t[*i + 1].start);
-		else if (jsoneq(js, &t[*i], "req_item_id") == 0)
-			q->req_item_id = strndup(js + t[*i + 1].start, t[*i + 1].end - t[*i + 1].start);
-        else if (jsoneq(js, &t[*i], "req_npc_death") == 0)
-            q->req_npc_death = strndup(js + t[*i + 1].start, t[*i + 1].end - t[*i + 1].start);
-        else if (jsoneq(js, &t[*i], "reward_item") == 0)
-            q->reward_item = strndup(js + t[*i + 1].start, t[*i + 1].end - t[*i + 1].start);
-        else if (jsoneq(js, &t[*i], "reward_hp") == 0)
-            q->reward_hp = atoi(js + t[*i + 1].start);
+		parse_quest_attr(q, js, t, i);
 		if (num_fields)
-            (*i) += 2;
-        else (*i)++;
+			(*i) += 2;
+		else
+			(*i)++;
 	}
 	return (q);
 }
+
 /*
 ** Extracts NPC data from JSON tokens.
 */
+static int	parse_simple_attr(const char *js, jsmntok_t *t, int *i, t_npc *npc)
+{
+	int	is_parsed;
+
+	is_parsed = 1;
+	if (jsoneq(js, &t[*i], "id") == 0)
+		npc->id = strndup(js + t[*i + 1].start,
+				t[*i + 1].end - t[*i + 1].start);
+	else if (jsoneq(js, &t[*i], "name") == 0)
+		npc->name = strndup(js + t[*i + 1].start,
+				t[*i + 1].end - t[*i + 1].start);
+	else if (jsoneq(js, &t[*i], "hp") == 0)
+		npc->hp = atoi(js + t[*i + 1].start);
+	else if (jsoneq(js, &t[*i], "hostile") == 0)
+		npc->is_hostile = (strncmp(js + t[*i + 1].start, "true", 4) == 0);
+	else if (jsoneq(js, &t[*i], "dialogue") == 0)
+		npc->dialogue = strndup(js + t[*i + 1].start,
+				t[*i + 1].end - t[*i + 1].start);
+	else
+		is_parsed = 0;
+	return (is_parsed);
+}
+
 static t_npc	*parse_single_npc(const char *js, jsmntok_t *t, int *i)
 {
 	t_npc	*npc;
@@ -59,26 +94,18 @@ static t_npc	*parse_single_npc(const char *js, jsmntok_t *t, int *i)
 	(*i)++;
 	while (obj_size-- > 0)
 	{
-		if (jsoneq(js, &t[*i], "id") == 0)
-			npc->id = strndup(js + t[*i + 1].start, t[*i + 1].end - t[*i + 1].start);
-		else if (jsoneq(js, &t[*i], "name") == 0)
-			npc->name = strndup(js + t[*i + 1].start, t[*i + 1].end - t[*i + 1].start);
-		else if (jsoneq(js, &t[*i], "hp") == 0)
-			npc->hp = atoi(js + t[*i + 1].start);
-		else if (jsoneq(js, &t[*i], "hostile") == 0)
-			npc->is_hostile = (strncmp(js + t[*i + 1].start, "true", 4) == 0);
-		else if (jsoneq(js, &t[*i], "dialogue") == 0)
-			npc->dialogue = strndup(js + t[*i + 1].start, t[*i + 1].end - t[*i + 1].start);
-        else if(jsoneq(js, &t[*i], "quest") == 0)
-        {
-            (*i)++; // Move to the array token
-            npc->quest = parse_quest_details(js, t, i);
-            continue;
-        }
-		if(obj_size)
-            (*i) += 2;
-        else
-            (*i)++;
+		if (!parse_simple_attr(js, t, i, npc))
+		{
+			if (jsoneq(js, &t[*i], "quest") == 0)
+			{
+				npc->quest = parse_quest_details(js, t, i);
+				continue ;
+			}
+		}
+		if (obj_size)
+			(*i) += 2;
+		else
+			(*i)++;
 	}
 	return (npc);
 }
