@@ -6,13 +6,11 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 12:18:07 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/26 16:07:46 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/09/15 16:28:01 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "mud.h"
-
 
 /*
 ** Finds a room in the linked list by its ID string.
@@ -46,9 +44,8 @@ static void	link_single_room(t_room *all_rooms, t_room *room)
 		if (room->target_ids[i])
 		{
 			room->exits[i] = room_by_id(all_rooms, room->target_ids[i]);
-			/* Validation required by PDF Page 4: Verify references */
 			if (!room->exits[i])
-				printf("Warning: Room %s leads to non-existent %s\n", 
+				printf("Warning: Room %s leads to non-existent %s\n",
 					room->id, room->target_ids[i]);
 		}
 		i++;
@@ -61,6 +58,7 @@ static void	link_single_room(t_room *all_rooms, t_room *room)
 void	resolve_all_exits(t_room *head)
 {
 	t_room	*curr;
+
 	curr = head;
 	while (curr)
 	{
