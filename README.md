@@ -19,6 +19,21 @@ Start the server by specifying the port (defaulting to 4242 if not modified):
 ```
 The server will load the world.json file automatically upon startup.
 
+### Connect to the server
+After starting the server, open a new terminal and connect to the server:
+```bash
+./client_app localhost 4242
+```
+or simply by running:
+```bash
+nc localhost 4242
+```
+Connect to the server following the protocol rfc provided with the project:
+```bash
+CONNECT bob
+```
+You can then use other commands like ```LOOK```, ```MOVE north```...
+
 ## Architecture
 - **Concurrency Model**: The server uses I/O Multiplexing via the poll() system call. This allows a single-threaded process to handle up to 128 simultaneous connections without the overhead of threads or processes.
 - **Request Handling**: We implemented a Dispatcher pattern. Incoming strings are parsed and routed to specific command handlers (e.g., cmd_look, cmd_move) to ensure code maintainability and Norminette compliance.
