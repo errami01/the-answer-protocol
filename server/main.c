@@ -6,122 +6,12 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/08 12:34:17 by aberrami          #+#    #+#             */
-/*   Updated: 2026/09/16 17:58:14 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/09/29 21:05:08 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include <arpa/inet.h>
 #include "mud.h"
-
-#define MAX_CLIENTS 128
-#define PORT 4242
-#define BUFFER_SIZE 1024
-
-/*
-** Closes the socket and resets the pollfd structure to prevent polling -1.
-*/
-
-
-/*
-** Accepts new connection and finds the first empty slot in the poll array.
-*/
-char	*accept_new_client(int server_fd, struct pollfd *fds)
-{
-	int		new_fd;
-	int		i;
-	char	*ip;
-	struct	sockaddr_in	addr;
-	socklen_t			len;
-
-	len = sizeof(addr);
-	new_fd = accept(server_fd, (struct sockaddr *)&addr, &len);
-	if (new_fd < 0)
-		return (NULL);
-	i = 1;
-	ip = inet_ntoa(addr.sin_addr);
-	while (i < MAX_CLIENTS)
-	{
-		if (fds[i].fd == -1)
-		{
-			fds[i].fd = new_fd;
-			fds[i].events = POLLIN;
-			write(new_fd, "OK hello proto=1\n", 17);
-			log_event("INFO", "SYSTEM", "New connection established", ip);
-			return (ip);
-		}
-		i++;
-	}
-	write(new_fd, "ERR 900 CONNECTION_FAILED\n", 26);
-	close(new_fd);
-	return (NULL);
-}
-
-/*
-** Reads client message. For now, we only handle CONNECT and QUIT.
-*/
-void	handle_client_msg(struct pollfd *fds, int i, t_world *world)
-{
-	char		buf[BUFFER_SIZE];
-	int			bytes;
-	t_player	*p;
-
-	bytes = recv(fds[i].fd, buf, BUFFER_SIZE - 1, 0);
-	if (bytes <= 0)
-	{
-		handle_disconnect(world, i, fds);
-		return ;
-	}
-	buf[bytes-1] = '\0';
-	
-	p = get_player_by_fd(world, fds[i].fd);
-	strlcpy(world->players[i].ip, world->incoming_ip, INET_ADDRSTRLEN);
-	
-	if (check_flooding(&world->players[i]))
-	{
-		handle_disconnect(world, i, fds);
-		return;
-	}
-	log_event("INFO", world->players[i].name? world->players[i].name : "Unkown", buf, NULL);
-	if (p && strncmp(buf, "QUIT", 4) == 0)
-	{
-		write(fds[i].fd, "OK bye\n", 7);
-		handle_disconnect(world, i, fds);
-	}
-	else if (!p && strncmp(buf, "CONNECT ", 8) == 0)
-	{
-		/* Find first empty player slot in world->players and init */
-		if (is_name_taken(buf + 8, world->players, fds[i].fd))
-			return;
-		init_player(&world->players[i], fds[i].fd, buf + 8, world->rooms);
-	}
-	else if (p && strncmp(buf, "LOOK", 4) == 0)
-		cmd_look(p, world);
-	else if (p && strncmp(buf, "MOVE ", 5) == 0)
-    	cmd_move(p, buf + 5, world);
-	else if (p && strncmp(buf, "CHAT ", 5) == 0)
-		cmd_chat(p, buf + 5, world);
-	else if (p && strncmp(buf, "TAKE ", 5) == 0)
-		cmd_take(p, buf + 5, world);
-	else if (p && strncmp(buf, "DROP ", 5) == 0)
-		cmd_drop(p, buf + 5, world);
-	else if (p && strncmp(buf, "INVENTORY", 9) == 0)
-		cmd_inventory(p);
-	else if (p && strncmp(buf, "STATUS", 5) == 0)
-		cmd_status(p);
-	else if (p && strncmp(buf, "ATTACK ", 7) == 0)
-		cmd_attack(p, buf + 7, world);
-	else if (p && strncmp(buf, "QUEST ", 6) == 0)
-		cmd_quest(p, buf + 6, world);
-	else if (p && strncmp(buf, "QUESTS", 6) == 0)
-		cmd_quests(p);
-	else if (p && strncmp(buf, "TALK ", 5) == 0)
-		cmd_talk(p, buf + 5);
-	else if (p && strncmp(buf, "GROUP ", 6) == 0)
-		cmd_group(p, buf + 6, world);
-	else
-		write(fds[i].fd, "OK command_received\n", 20);
-}
 
 /*
 ** Initializes the server socket with SO_REUSEADDR.
@@ -169,14 +59,16 @@ t_world	*fill_world(t_room *head, t_world *world)
 	return (world);
 }
 
-void	monitor_connection(struct pollfd *fds, int i, t_world *world, int server_fd)
+void	monitor_connection(struct pollfd *fds, int i, t_world *world,
+		int server_fd)
 {
 	while (1)
 	{
 		if (poll(fds, MAX_CLIENTS, -1) < 0)
 			break ;
 		if (fds[0].revents & POLLIN)
-			strlcpy(world->incoming_ip, accept_new_client(server_fd, fds), INET_ADDRSTRLEN);
+			strlcpy(world->incoming_ip, accept_new_client(server_fd, fds),
+				INET_ADDRSTRLEN);
 		i = 1;
 		while (i < MAX_CLIENTS)
 		{
@@ -186,6 +78,7 @@ void	monitor_connection(struct pollfd *fds, int i, t_world *world, int server_fd
 		}
 	}
 }
+
 int	main(void)
 {
 	int				server_fd;

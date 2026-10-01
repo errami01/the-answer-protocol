@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/15 21:58:05 by aberrami          #+#    #+#             */
-/*   Updated: 2026/09/16 17:42:26 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/09/29 20:56:14 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 # include "../libs/jsmn.h"
 # include "../shared/protocol.h"
 
+#define MAX_CLIENTS 128
+#define PORT 4242
+#define BUFFER_SIZE 1024
 # define MAX_CLIENTS 128
 # define MAX_EXITS 6
 # define MAX_ROOMS 256
@@ -97,6 +100,8 @@ typedef struct s_world
 	char			incoming_ip[INET_ADDRSTRLEN];
 }	t_world;
 
+char		*accept_new_client(int server_fd, struct pollfd *fds);
+void		handle_client_msg(struct pollfd *fds, int i, t_world *world);
 t_room		*load_world(char *filename);
 char		*read_world_file(char *filename);
 void		debug_print_world(t_room *head);

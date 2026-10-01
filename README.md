@@ -1,4 +1,4 @@
-*This project has been created as part of the 42 curriculum by aberrami and <partner_login>.*
+*This project has been created as part of the 42 curriculum by aberrami and msturma.*
 
 # The Answer Protocol (TAP) - MUD Server
 
@@ -54,3 +54,7 @@ Our implementation strictly adheres to RFC 42TAP.
 - **Multiplayer**: Connect multiple instances of ```nc localhost 4242``` to verify that ```EVT``` messages (like ```CHAT``` or ```PRESENCE```) are broadcast correctly to other clients.
 - **Combat**: Engage the "Goblin" in the "Dark Alley" and monitor the ```STATUS``` command to ensure HP decreases correctly.
 - **Quests**: Take the "Herbs" from the "Woods" and deliver them to the "Baker" using the ```QUEST``` command.
+
+
+
+valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./server_app

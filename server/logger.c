@@ -6,13 +6,15 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 21:37:35 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/31 17:49:21 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/09/29 21:10:57 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mud.h"
 #include <time.h>
-void	log_event(const char *level, const char *player, const char *action, const char *ip)
+
+void	log_event(const char *level, const char *player,
+		const char *action, const char *ip)
 {
 	FILE	*fp;
 	char	timestamp[64];
@@ -24,9 +26,13 @@ void	log_event(const char *level, const char *player, const char *action, const 
 	if (fp)
 	{
 		if (!ip)
-			fprintf(fp, "{\"time\": \"%s\", \"level\": \"%s\", \"user\": \"%s\", \"msg\": \"%s\"}\n",
+			fprintf(fp, "{\"time\": \"%s\", \"level\": \"%s\", "
+				"\"user\": \"%s\", \"msg\": \"%s\"}\n",
 				timestamp, level, player, action);
-		else	fprintf(fp, "{\"time\": \"%s\", \"level\": \"%s\", \"user\": \"%s\", \"ip\": \"%s\", \"msg\": \"%s\"}\n",
+		else
+			fprintf(fp,
+				"{\"time\": \"%s\", \"level\": \"%s\", \"user\": \"%s\", "
+				"\"ip\": \"%s\", \"msg\": \"%s\"}\n",
 				timestamp, level, player, ip, action);
 		fclose(fp);
 	}
