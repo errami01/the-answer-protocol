@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/03 20:29:20 by aberrami          #+#    #+#             */
-/*   Updated: 2026/10/04 14:03:40 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/10/04 15:01:16 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,18 +96,9 @@ static int	handle_conn_msg(struct pollfd *fds, int i, char *buf,
 		name = world->players[i].name;
 	log_event("INFO", name, buf, NULL);
 	if (p && strncasecmp(buf, "QUIT", 4) == 0)
-	{
-		write(fds[i].fd, "OK bye\n", 7);
-		handle_disconnect(world, i, fds);
-		return (1);
-	}
+		return (cmd_quit(fds, i, world));
 	else if (!p && strncasecmp(buf, "CONNECT ", 8) == 0)
-	{
-		if (is_name_taken(buf + 8, world->players, fds[i].fd))
-			return (1);
-		init_player(&world->players[i], fds[i].fd, buf + 8, world->rooms);
-		return (1);
-	}
+		return (cmd_connect(fds, i, buf, world));
 	return (handle_other_cmd(p, buf, world));
 }
 

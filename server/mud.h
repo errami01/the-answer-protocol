@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/15 21:58:05 by aberrami          #+#    #+#             */
-/*   Updated: 2026/10/04 12:10:49 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/10/04 15:00:27 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,8 @@ void		resolve_all_exits(t_room *head);
 /* Prototypes for commands */
 t_world		*fill_world(t_room *head, t_world *world);
 void		handle_command(int fd, char *msg, t_world *world);
+int 		cmd_connect(struct pollfd *fds, int i, char *buf, t_world *world);
+int			cmd_quit(struct pollfd *fds, int i, t_world *world);
 void		cmd_look(t_player *player, t_world *world);
 int			init_player(t_player *player, int fd, char *name,
 				t_room *start_room);
