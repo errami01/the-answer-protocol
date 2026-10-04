@@ -6,20 +6,40 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/30 11:08:20 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/31 18:01:55 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/10/03 18:32:39 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "mud.h"
 
 void	cleanup_client(struct pollfd *fds, int i)
 {
-
 	close(fds[i].fd);
 	fds[i].fd = -1;
 	fds[i].events = 0;
 	fds[i].revents = 0;
+}
+
+static void	clean_player(t_player *p)
+{
+	if (p->name)
+		free(p->name);
+	close(p->fd);
+}
+
+static void	log_discon(t_player *p, char *msg)
+{
+	char		*user;
+
+	user = "Unknown";
+	if (p->name)
+		user = p->name;
+	snprintf(msg, 100, "Player %s disconnected", user);
+	msg[strlen(msg)-1] = '\0';
+	printf("%s\n", msg);
+	if (!p->name)
+		user = "SYSTEM";
+	log_event("INFO", user, msg, p->ip);
 }
 
 void	handle_disconnect(t_world *world, int i, struct pollfd *fds)
@@ -28,31 +48,19 @@ void	handle_disconnect(t_world *world, int i, struct pollfd *fds)
 	char		msg[256];
 
 	p = &world->players[i];
-    snprintf(msg, 100, "Player %s disconnected", p->name ? p->name : "Unknown");
-	printf("%s\n", msg);
-    msg[strlen(msg)-1] = '\0';
-    log_event("INFO", p->name ? p->name : "SYSTEM", msg, p->ip);
-
+	log_discon(p, msg);
 	if (p->fd != -1)
 	{
 		if (p->name && p->current_room)
 		{
 			snprintf(msg, sizeof(msg), "EVT ROOM PRESENCE LEAVE %s\n", p->name);
 			broadcast_to_room(world, p->current_room, msg, p->fd);
-            msg[strlen(msg)-1] = '\0';
-            log_event("INFO", p->name, msg, NULL);
-			// printf("Log: Player %s disconnected gracefully.\n", p->name);
+			msg[strlen(msg)-1] = '\0';
+			log_event("INFO", p->name, msg, NULL);
 		}
-		if (p->name)
-			free(p->name);
-		close(p->fd);
+		clean_player(p);
 	}
-	/* Reset player slot for reuse */
 	memset(p, 0, sizeof(t_player));
 	p->fd = -1;
-    cleanup_client(fds, i);
-	/* Reset poll structure */
-	// fds[i].fd = -1;
-	// fds[i].events = 0;
-	// fds[i].revents = 0;
+	cleanup_client(fds, i);
 }

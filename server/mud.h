@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/15 21:58:05 by aberrami          #+#    #+#             */
-/*   Updated: 2026/09/29 20:56:14 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/10/04 12:10:49 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@
 # include "../libs/jsmn.h"
 # include "../shared/protocol.h"
 
-#define MAX_CLIENTS 128
-#define PORT 4242
-#define BUFFER_SIZE 1024
+# define MAX_CLIENTS 128
+# define PORT 4242
+# define BUFFER_SIZE 1024
 # define MAX_CLIENTS 128
 # define MAX_EXITS 6
 # define MAX_ROOMS 256

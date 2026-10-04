@@ -6,16 +6,16 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/25 14:43:52 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/25 21:17:40 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/10/03 17:40:07 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "mud.h"
 #include <string.h>
 #include <unistd.h>
 
-void	broadcast_to_room(t_world *world, t_room *room, char *msg, int exclude_fd)
+void	broadcast_to_room(t_world *world, t_room *room,
+		char *msg, int exclude_fd)
 {
 	int	i;
 

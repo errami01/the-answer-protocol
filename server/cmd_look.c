@@ -6,15 +6,11 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/21 22:13:46 by aberrami          #+#    #+#             */
-/*   Updated: 2026/09/12 17:59:40 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/10/03 20:19:11 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "mud.h"
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
 
 /*
 ** Formats the exits part of the JSON.
@@ -88,8 +84,8 @@ static void	format_players(t_player *p, t_world *w, char *buf, size_t size)
 	first = 1;
 	while (i < MAX_CLIENTS)
 	{
-		if (w->players[i].fd != -1 && \
-			w->players[i].current_room == p->current_room)
+		if (w->players[i].fd != -1
+			&& w->players[i].current_room == p->current_room)
 		{
 			if (!first)
 				strlcat(buf, ", ", size);
@@ -101,6 +97,7 @@ static void	format_players(t_player *p, t_world *w, char *buf, size_t size)
 		i++;
 	}
 }
+
 static void	format_npcs(t_room *r, char *buf, size_t size)
 {
 	t_npc	*curr;
@@ -120,6 +117,7 @@ static void	format_npcs(t_room *r, char *buf, size_t size)
 		curr = curr->next;
 	}
 }
+
 /*
 ** Builds the full JSON response for LOOK (RFC 5.1.2).
 */
@@ -142,5 +140,4 @@ void	cmd_look(t_player *p, t_world *w)
 	write(p->fd, out, strlen(out));
 	out[strlen(out)-1] = '\0';
 	log_event("INFO", p->name, out, NULL);
-	
 }

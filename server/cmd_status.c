@@ -6,10 +6,9 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 11:35:18 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/31 17:56:30 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/10/03 18:43:31 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "mud.h"
 
@@ -24,7 +23,7 @@ void	cmd_status(t_player *p)
 		stat_str = "wounded";
 	else
 		stat_str = "dead";
-	snprintf(out, sizeof(out), 
+	snprintf(out, sizeof(out),
 		"OK {\"hp\": %d, \"max_hp\": 100, \"status\": \"%s\"}\n",
 		p->hp, stat_str);
 	write(p->fd, out, strlen(out));

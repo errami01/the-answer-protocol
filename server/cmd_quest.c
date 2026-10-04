@@ -6,18 +6,15 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 21:30:19 by aberrami          #+#    #+#             */
-/*   Updated: 2026/09/01 18:54:31 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/10/03 20:05:41 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "mud.h"
-
 
 /*
 ** Logic to complete a quest if the player has the required item.
 */
-
 static void	complete_quest(t_player *p, t_quest *q)
 {
 	t_item	*item;
@@ -31,13 +28,14 @@ static void	complete_quest(t_player *p, t_quest *q)
 		free(item->name);
 		free(item);
 		write(p->fd, "OK Quest Completed! Reward: Full HP.\n", 37);
-		log_event("INFO", p->name, "OK Quest Completed! Reward: Full HP.", NULL);
+		log_event("INFO",
+			p->name, "OK Quest Completed! Reward: Full HP.", NULL);
 	}
 	else
 	{
 		write(p->fd, "OK You still need the item for this quest.\n", 43);
-		log_event("INFO", p->name, "OK You still need the item for this quest.", NULL);
-		
+		log_event("INFO", p->name,
+			"OK You still need the item for this quest.", NULL);
 	}
 }
 
@@ -48,17 +46,26 @@ static void	add_quest(t_quest **list, t_quest *new_quest)
 	new_quest->next = *list;
 	*list = new_quest;
 }
+
 /*
 ** Handles starting a new quest or checking completion.
 */
+static t_quest	*set_quest(t_npc *npc)
+{
+	t_quest	*q;
+
+	q = NULL;
+	if (npc->quest)
+		q = npc->quest;
+	return (q);
+}
+
 static void	handle_quest_logic(t_player *p, t_npc *npc)
 {
 	t_quest	*q;
 	char	out[512];
 
-	q = NULL; // Assume NPC has one quest for simplicity
-	if (npc->quest)
-		q = npc->quest;
+	q = set_quest(npc);
 	if (!q || q->status == Q_COMPLETED)
 	{
 		if (q && q->status == Q_COMPLETED)
@@ -70,8 +77,8 @@ static void	handle_quest_logic(t_player *p, t_npc *npc)
 	if (q->status == Q_AVAILABLE)
 	{
 		q->status = Q_ACTIVE;
-		snprintf(out, sizeof(out), "OK {\"quest_id\": \"%s\", \"desc\": \"%s\"}\n",
-			q->id, q->description);
+		snprintf(out, sizeof(out), "OK {\"quest_id\": \"%s\", "
+			"\"desc\": \"%s\"}\n", q->id, q->description);
 		add_quest(&p->quests, q);
 		write(p->fd, out, strlen(out));
 		out[strlen(out) - 1] = '\0';

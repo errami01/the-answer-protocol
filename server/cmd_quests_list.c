@@ -6,11 +6,12 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 21:33:57 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/31 17:56:22 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/10/03 19:43:31 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mud.h"
+
 void	cmd_quests(t_player *p)
 {
 	t_quest	*curr;
@@ -25,7 +26,9 @@ void	cmd_quests(t_player *p)
 	{
 		if (!first)
 			strlcat(out, ", ", sizeof(out));
-		st_str = (curr->status == Q_ACTIVE) ? "active" : "completed";
+		st_str = "completed";
+		if (curr->status == Q_ACTIVE)
+			st_str = "active";
 		snprintf(out + strlen(out), sizeof(out) - strlen(out),
 			"{\"id\": \"%s\", \"status\": \"%s\"}", curr->id, st_str);
 		first = 0;

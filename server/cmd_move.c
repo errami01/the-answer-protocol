@@ -6,23 +6,24 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/25 14:46:34 by aberrami          #+#    #+#             */
-/*   Updated: 2026/08/31 17:55:27 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/10/03 20:17:44 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "mud.h"
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
 
 int	get_dir_index(const char *dir)
 {
-	if (!dir) return (-1);
-	if (strncmp(dir, "north", 5) == 0) return (0);
-	if (strncmp(dir, "south", 5) == 0) return (1);
-	if (strncmp(dir, "east", 4) == 0)  return (2);
-	if (strncmp(dir, "west", 4) == 0)  return (3);
+	if (!dir)
+		return (-1);
+	if (strncmp(dir, "north", 5) == 0)
+		return (0);
+	if (strncmp(dir, "south", 5) == 0)
+		return (1);
+	if (strncmp(dir, "east", 4) == 0)
+		return (2);
+	if (strncmp(dir, "west", 4) == 0)
+		return (3);
 	return (-1);
 }
 
@@ -33,7 +34,6 @@ void	cmd_move(t_player *p, char *arg, t_world *world)
 	char	msg[256];
 
 	idx = get_dir_index(arg);
-    
 	if (idx == -1 || !p->current_room->exits[idx])
 	{
 		write(p->fd, "ERR 301 NO_EXIT\n", 16);
