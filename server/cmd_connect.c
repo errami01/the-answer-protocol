@@ -6,13 +6,13 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/04 14:43:23 by aberrami          #+#    #+#             */
-/*   Updated: 2026/10/04 14:59:28 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/10/04 15:08:11 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mud.h"
 
-int cmd_connect(struct pollfd *fds, int i, char *buf, t_world *world)
+int	cmd_connect(struct pollfd *fds, int i, char *buf, t_world *world)
 {
 	if (is_name_taken(buf + 8, world->players, fds[i].fd))
 		return (1);

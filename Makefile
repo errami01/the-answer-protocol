@@ -8,11 +8,12 @@ SERVER_SRC = server/main.c server/world_loader.c server/world_linker.c \
 			server/cmd_quest.c server/cmd_quests_list.c server/logger.c \
 			server/disconnect.c server/abuse_monitor.c server/cmd_talk.c \
 			server/group_utils.c server/cmd_group.c server/client_utils.c \
+			server/cmd_connect.c 
 
 SERVER_OBJ = $(SERVER_SRC:.c=.o)
 SERVER_NAME = server_app
 CLIENT_NAME = client_app
-CLIENT_SRC = client_cli/main.c
+CLIENT_SRC = client_cli/main.c client_cli/read_utils.c
 CLIENT_OBJ = $(CLIENT_SRC:.c=.o)
 
 all: $(SERVER_NAME) client
@@ -25,6 +26,9 @@ $(SERVER_NAME): $(SERVER_OBJ)
 
 
 clean:
-	rm -f $(SERVER_OBJ) $(SERVER_NAME) $(CLIENT_OBJ) $(CLIENT_NAME)
+	rm -f $(SERVER_OBJ) $(CLIENT_OBJ)
 
-re: clean all
+fclean: clean 
+	rm -f $(SERVER_NAME) $(CLIENT_NAME)
+
+re: fclean all
