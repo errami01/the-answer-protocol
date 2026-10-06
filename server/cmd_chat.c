@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/25 21:19:15 by aberrami          #+#    #+#             */
-/*   Updated: 2026/09/12 18:14:44 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/10/06 17:42:12 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void	process_chat(t_player *p, char *scope, char *msg_text, t_world *w)
 {
 	char	evt[1024];
 
-	if (strncmp(scope, "GLOBAL", 6) == 0 || strncmp(scope, "ROOM", 4))
+	if (strncmp(scope, "GLOBAL", 6) == 0 || strncmp(scope, "ROOM", 4) == 0)
 		broad_log(p, scope, msg_text, w);
 	else if (strncmp(scope, "GROUP", 5) == 0)
 	{
