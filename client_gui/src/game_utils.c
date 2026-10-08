@@ -102,6 +102,15 @@ static int parse_items(const char *response, t_room *room)
     return (0);
 }
 
+static int parse_npcs(const char *response, t_room *room)
+{
+    room->npc_count = extract_string_array(response, "\"npcs\"", room->npcs, 32);
+    if (room->npc_count < 0)
+        return (-1);
+
+    return (0);
+}
+
 int parse_look(const char *response, t_room *room)
 {
     const char *exits;
@@ -156,7 +165,8 @@ int parse_look(const char *response, t_room *room)
         room->west,
         sizeof(room->west));
 
-    parse_items(response, room);
+    if (parse_items(response, room) < 0 || parse_npcs(response, room) < 0)
+        return (-1);
 
     return (0);
 

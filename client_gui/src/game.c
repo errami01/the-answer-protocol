@@ -125,6 +125,7 @@ static void game_draw(t_scene *scene)
     );
 
     draw_items(game);
+    draw_npcs(game);
 
     int center_x = GetScreenWidth() / 2;
     int center_y = GetScreenHeight() / 2;
