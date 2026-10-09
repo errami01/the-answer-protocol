@@ -27,6 +27,7 @@ typedef enum e_game_state {
     GAME_WAIT_LOOK,
     GAME_WAIT_TAKE,
     GAME_WAIT_INVENTORY,
+    GAME_WAIT_TALK,
 } t_game_state;
 
 typedef struct s_game {
@@ -37,6 +38,11 @@ typedef struct s_game {
 
     int inventory_open;
     char *inventory[MAX_INVENTORY];
+
+    int npc_open;
+    char selected_npc[128];
+    char npc_response[512];
+    int quests_open;
 } t_game;
 
 t_scene *game_create(t_manager *manager, const char *look_init);

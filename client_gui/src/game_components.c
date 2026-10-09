@@ -113,8 +113,12 @@ void draw_npcs(t_game *game)
         {
             color = GRAY;
 
-            // if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-            //     talk(game, game->current->npcs[i]);
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            {
+                game->npc_open = 1;
+                strncpy(game->selected_npc, game->current->npcs[i], sizeof(game->selected_npc) - 1);
+                game->selected_npc[sizeof(game->selected_npc) - 1] = '\0';
+            }
         }
 
         DrawRectangleRec(rect, color);

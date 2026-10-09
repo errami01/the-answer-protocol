@@ -8,6 +8,7 @@
 #include "game_components.h"
 #include "game_utils.h"
 #include "inventory.h"
+#include "npc.h"
 
 static void game_update(t_scene *scene)
 {
@@ -28,6 +29,12 @@ static void game_update(t_scene *scene)
             else
                 inventory(game);
 
+            return ;
+        }
+
+        if (game->npc_open)
+        {
+            handle_npc_dialog(game);
             return ;
         }
 
@@ -91,6 +98,15 @@ static void game_update(t_scene *scene)
         }
 
         game->inventory_open = 1;
+        game->state = GAME_IDLE;
+        return ;
+    }
+
+    if (game->state == GAME_WAIT_TALK)
+    {
+        strncpy(game->npc_response, buf + 3, sizeof(game->npc_response) - 1);
+        game->npc_response[sizeof(game->npc_response) - 1] = '\0';
+
         game->state = GAME_IDLE;
         return ;
     }
@@ -168,6 +184,9 @@ static void game_draw(t_scene *scene)
 
     if (game->inventory_open)
         draw_inventory(game->inventory);
+
+    if (game->npc_open)
+        draw_npc_dialog(game);
 }
 
 static void game_destroy(t_scene *scene)
@@ -201,6 +220,7 @@ t_scene *game_create(t_manager *manager, const char *look_init)
     }
 
     game->current = room;
+    game->npc_response[0] = '\0';
 
     return ((t_scene *)game);
 }
