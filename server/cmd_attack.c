@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 11:37:57 by aberrami          #+#    #+#             */
-/*   Updated: 2026/09/06 22:33:52 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/10/09 17:17:59 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,16 @@ t_npc	*find_npc(t_npc *list, char *name)
 	return (NULL);
 }
 
-/*
-** Logic for NPC counter-attack and broadcasting results.
-*/
-static int	is_quest(const t_quest *list, const t_npc *npc)
+static int	check_sword(t_item *inventory)
 {
-	while (list)
+	t_item	*curr;
+	
+	curr = inventory;
+	while(curr)
 	{
-		if (list->req_npc_death
-			&& (strcasecmp(list->req_npc_death, npc->name) == 0
-				|| strcmp(list->req_npc_death, npc->id) == 0))
+		if(strcasecmp(curr->id, "item.sword") == 0)
 			return (1);
-		list = list->next;
+		curr = curr->next;
 	}
 	return (0);
 }
@@ -71,7 +69,7 @@ static void	resolve_combat(t_player *p, t_npc *npc, t_world *w)
 	}
 	p_dmg = (rand() % 10) + 5;
 	n_dmg = (rand() % 8) + 2;
-	if (is_quest(p->quests, npc))
+	if (check_sword(p->inventory))
 		npc->hp -= p_dmg;
 	else
 	{
@@ -108,3 +106,19 @@ void	cmd_attack(t_player *p, char *arg, t_world *w)
 	}
 	resolve_combat(p, target, w);
 }
+
+/*
+** Logic for NPC counter-attack and broadcasting results.
+*/
+// static int	is_quest(const t_quest *list, const t_npc *npc)
+// {
+// 	while (list)
+// 	{
+// 		if (list->req_npc_death
+// 			&& (strcasecmp(list->req_npc_death, npc->name) == 0
+// 				|| strcmp(list->req_npc_death, npc->id) == 0))
+// 			return (1);
+// 		list = list->next;
+// 	}
+// 	return (0);
+// }
