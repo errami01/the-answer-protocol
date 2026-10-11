@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 12:18:07 by aberrami          #+#    #+#             */
-/*   Updated: 2026/09/15 16:28:01 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/10/11 21:25:56 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,26 @@ void	resolve_all_exits(t_room *head)
 		link_single_room(head, curr);
 		curr = curr->next;
 	}
+}
+
+t_world	*fill_world(t_room *head, t_world *world)
+{
+	t_room	*current;
+	int		i;
+
+	i = 0;
+	while (i < MAX_CLIENTS)
+	{
+		memset(&world->players[i], 0, sizeof(t_player));
+		i++;
+	}
+	current = head;
+	world->rooms = head;
+	world->room_count = 0;
+	while (current != 0)
+	{
+		current = current->next;
+		world->room_count++;
+	}
+	return (world);
 }

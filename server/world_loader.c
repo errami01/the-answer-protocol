@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/16 15:14:42 by aberrami          #+#    #+#             */
-/*   Updated: 2026/09/15 16:12:10 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/10/09 11:19:28 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ t_room	*load_world(char *filename)
 	jsmn_parser		p;
 	jsmntok_t		t[256];
 	int				r;
+	t_room			*head_room;
 
 	js = read_world_file(filename);
 	if (!js)
@@ -101,7 +102,9 @@ t_room	*load_world(char *filename)
 	r = jsmn_parse(&p, js, strlen(js), t, 256);
 	if (r < 0)
 		return (NULL);
-	return (load_rooms(js, t, r));
+	head_room = load_rooms(js, t, r);
+	free(js);
+	return (head_room);
 }
 
 // int	get_dir_index(const char *dir)

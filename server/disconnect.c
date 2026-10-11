@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/30 11:08:20 by aberrami          #+#    #+#             */
-/*   Updated: 2026/10/03 18:32:39 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/10/11 21:25:29 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	cleanup_client(struct pollfd *fds, int i)
 	fds[i].revents = 0;
 }
 
-static void	clean_player(t_player *p)
+void	clean_player(t_player *p)
 {
 	if (p->name)
 		free(p->name);

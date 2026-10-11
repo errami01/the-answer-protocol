@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/26 11:35:18 by aberrami          #+#    #+#             */
-/*   Updated: 2026/09/29 20:43:05 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/10/11 21:25:09 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,16 +57,19 @@ static void	parse_room_exits(const char *js, jsmntok_t *t, int *i, t_room *room)
 {
 	int		obj_size;
 	int		k;
+	char	*dir;
 
 	(*i)++;
 	obj_size = t[*i].size;
 	while (obj_size-- > 0)
 	{
 		(*i) += 2;
-		k = get_dir_index(strndup(js
-					+ t[(*i) - 1].start, t[(*i) - 1].end - t[(*i) - 1].start));
+		dir = strndup(js + t[(*i) - 1].start,
+				t[(*i) - 1].end - t[(*i) - 1].start);
+		k = get_dir_index(dir);
 		room->target_ids[k] = strndup(
 				js + t[*i].start, t[*i].end - t[*i].start);
+		free(dir);
 	}
 }
 

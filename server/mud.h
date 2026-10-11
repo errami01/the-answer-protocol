@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/15 21:58:05 by aberrami          #+#    #+#             */
-/*   Updated: 2026/10/04 15:07:32 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/10/09 21:08:21 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include "../libs/jsmn.h"
 # include "../shared/protocol.h"
 
-# define MAX_CLIENTS 128
 # define PORT 4242
 # define BUFFER_SIZE 1024
 # define MAX_CLIENTS 128
@@ -134,6 +133,9 @@ void		add_item(t_item **list, t_item *item);
 t_item		*remove_item(t_item **list, char *id_or_name);
 t_item		*find_item(t_item *list, char *name);
 t_room		*create_room(const char *js, jsmntok_t *t, int *i);
+void		cleanup_rooms(t_world *world);
+void		cleanup_client(struct pollfd *fds, int i);
+void		clean_player(t_player *p);
 t_item		*spawn_item(const char *js, jsmntok_t *t, int count, char *id);
 int			jsoneq(const char *json, jsmntok_t *tok, const char *s);
 

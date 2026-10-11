@@ -6,16 +6,21 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/08 12:34:17 by aberrami          #+#    #+#             */
-/*   Updated: 2026/09/29 21:05:08 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/10/11 21:24:11 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <arpa/inet.h>
 #include "mud.h"
 
-/*
-** Initializes the server socket with SO_REUSEADDR.
-*/
+static int	g_running = 1;
+
+void	handle_sigint(int sig)
+{
+	(void)sig;
+	g_running = 0;
+}
+
 int	init_server_socket(void)
 {
 	int					s_fd;
@@ -37,34 +42,31 @@ int	init_server_socket(void)
 	return (s_fd);
 }
 
-t_world	*fill_world(t_room *head, t_world *world)
+void	cleanup_server(t_world *world)
 {
-	t_room	*current;
-	int		i;
+	int	i;
 
 	i = 0;
+	printf("\nServer shutting down. Cleaning memory...\n");
+	cleanup_rooms(world);
 	while (i < MAX_CLIENTS)
 	{
-		memset(&world->players[i], 0, sizeof(t_player));
+		if (world->players[i].fd != -1)
+		{
+			close(world->players[i].fd);
+			free(world->players[i].name);
+		}
 		i++;
 	}
-	current = head;
-	world->rooms = head;
-	world->room_count = 0;
-	while (current != 0)
-	{
-		current = current->next;
-		world->room_count++;
-	}
-	return (world);
+	printf("Memory cleared. Goodbye!\n");
 }
 
 void	monitor_connection(struct pollfd *fds, int i, t_world *world,
 		int server_fd)
 {
-	while (1)
+	while (g_running)
 	{
-		if (poll(fds, MAX_CLIENTS, -1) < 0)
+		if (poll(fds, MAX_CLIENTS, 1000) < 0)
 			break ;
 		if (fds[0].revents & POLLIN)
 			strlcpy(world->incoming_ip, accept_new_client(server_fd, fds),
@@ -77,6 +79,7 @@ void	monitor_connection(struct pollfd *fds, int i, t_world *world,
 			i++;
 		}
 	}
+	cleanup_server(world);
 }
 
 int	main(void)
@@ -87,6 +90,7 @@ int	main(void)
 	t_room			*world_map;
 	t_world			world;
 
+	signal(SIGINT, handle_sigint);
 	server_fd = init_server_socket();
 	if (server_fd < 0)
 		return (1);
