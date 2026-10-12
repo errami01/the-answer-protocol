@@ -1,3 +1,4 @@
+#include "game_utils.h"
 #include "npc.h"
 
 void talk(t_game *game, const char *npc)
@@ -30,8 +31,12 @@ void quest(t_game *game, const char *npc)
         npc
     );
 
+    game->npc_response[0] = '\0';
+
     if (client_send(game->manager->client, cmd) < 0)
         return ;
+
+    game->state = GAME_WAIT_QUEST;
 }
 
 void attack(t_game *game, const char *npc)
@@ -47,4 +52,14 @@ void attack(t_game *game, const char *npc)
 
     if (client_send(game->manager->client, cmd) < 0)
         return ;
+}
+
+int parse_quest(const char *response, t_game *game)
+{
+    if (extract_json_string(response, "desc", game->npc_response, sizeof(game->npc_response)) < 0)
+    {
+        strncpy(game->npc_response, response, sizeof(game->npc_response));
+        game->npc_response[sizeof(game->npc_response) - 1] =  '\0';
+    }
+    return (0);
 }

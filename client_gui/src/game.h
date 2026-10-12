@@ -2,8 +2,10 @@
 # define GAME_H
 
 #include "client.h"
+#include "quests.h"
 
 #define MAX_INVENTORY 32
+#define MAX_QUESTS 10
 
 typedef struct s_room {
     char name[128];
@@ -28,6 +30,8 @@ typedef enum e_game_state {
     GAME_WAIT_TAKE,
     GAME_WAIT_INVENTORY,
     GAME_WAIT_TALK,
+    GAME_WAIT_QUEST,
+    GAME_WAIT_QUESTS,
 } t_game_state;
 
 typedef struct s_game {
@@ -42,9 +46,15 @@ typedef struct s_game {
     int npc_open;
     char selected_npc[128];
     char npc_response[512];
+
     int quests_open;
+    int quest_count;
+    t_quest quests[MAX_QUESTS];
 } t_game;
 
 t_scene *game_create(t_manager *manager, const char *look_init);
+
+void draw_quests(t_game *game);
+int parse_quests(const char *response, t_game *game);
 
 #endif

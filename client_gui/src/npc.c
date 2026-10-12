@@ -24,17 +24,6 @@ static void draw_text_field(t_game *game, Rectangle dialog)
         90
     };
     
-    DrawRectangleRec(
-        text_field,
-        (Color){245, 245, 245, 255}
-    );
-    
-    DrawRectangleLinesEx(
-        text_field,
-        1,
-        DARKGRAY
-    );
-    
     if (game->npc_response[0] != '\0')
     {
         DrawText(
@@ -43,16 +32,6 @@ static void draw_text_field(t_game *game, Rectangle dialog)
             text_field.y + 10,
             18,
             BLACK
-        );
-    }
-    else
-    {
-        DrawText(
-            "Select an action...",
-            text_field.x + 10,
-            text_field.y + 10,
-            18,
-            GRAY
         );
     }
 }
@@ -230,6 +209,7 @@ void handle_npc_dialog(t_game *game)
     if (CheckCollisionPointRec(mouse, close_btn))
     {
         game->npc_open = false;
+        game->npc_response[0] = '\0';
         return ;
     }
 
@@ -242,7 +222,6 @@ void handle_npc_dialog(t_game *game)
     if (CheckCollisionPointRec(mouse, quest_btn))
     {
         quest(game, game->selected_npc);
-        game->npc_open = false;
         return ;
     }
 

@@ -32,6 +32,14 @@ static void game_update(t_scene *scene)
             return ;
         }
 
+        if (IsKeyPressed(KEY_Q))
+        {
+            if (game->quests_open)
+                game->quests_open = 0;
+            else
+                quests(game);
+        }
+
         if (game->npc_open)
         {
             handle_npc_dialog(game);
@@ -102,11 +110,31 @@ static void game_update(t_scene *scene)
         return ;
     }
 
+    if (game->state == GAME_WAIT_QUESTS)
+    {
+        if (parse_quests(buf, game) < 0)
+        {
+            game->state = GAME_IDLE;
+            return ;
+        }
+
+        game->quests_open = 1;
+        game->state = GAME_IDLE;
+        return ;
+    }
+
     if (game->state == GAME_WAIT_TALK)
     {
         strncpy(game->npc_response, buf + 3, sizeof(game->npc_response) - 1);
         game->npc_response[sizeof(game->npc_response) - 1] = '\0';
 
+        game->state = GAME_IDLE;
+        return ;
+    }
+
+    if (game->state == GAME_WAIT_QUEST)
+    {
+        parse_quest(buf, game);
         game->state = GAME_IDLE;
         return ;
     }
@@ -187,6 +215,9 @@ static void game_draw(t_scene *scene)
 
     if (game->npc_open)
         draw_npc_dialog(game);
+
+    if (game->quests_open)
+        draw_quests(game);
 }
 
 static void game_destroy(t_scene *scene)

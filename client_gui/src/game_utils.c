@@ -1,6 +1,6 @@
 #include "game_utils.h"
 
-static int extract_json_string(const char *json, const char *key, char *dst, size_t dst_size)
+int extract_json_string(const char *json, const char *key, char *dst, size_t dst_size)
 {
     const char  *pos;
     const char  *start;

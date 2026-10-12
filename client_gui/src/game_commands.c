@@ -59,3 +59,11 @@ void inventory(t_game *game)
 
     game->state = GAME_WAIT_INVENTORY;
 }
+
+void quests(t_game *game)
+{
+    if (client_send(game->manager->client, "QUESTS\n") < 0)
+        return ;
+
+    game->state = GAME_WAIT_QUESTS;
+}
