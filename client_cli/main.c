@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 18:21:17 by aberrami          #+#    #+#             */
-/*   Updated: 2026/10/04 21:01:29 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/10/13 14:11:27 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,14 @@
 /*
 ** Performs the RFC 42TAP Handshake
 */
+static int	g_running = 1;
+
+void	handle_sigint(int sig)
+{
+	(void)sig;
+	g_running = 0;
+}
+
 static int	log_in(char *buf, char *name, int sock_fd)
 {
 	int		bytes;
@@ -57,13 +65,23 @@ static int	handle_handshake(int sock_fd)
 
 void	read_socket(struct pollfd *fds, int sock_fd)
 {
-	while (poll(fds, 2, -1) > 0)
+	int	ret;
+
+	while(g_running)
 	{
+		ret = poll(fds, 2, 1000);
+		if (ret < 0)
+        	break;
+		if (ret == 0)
+        	continue;
 		if (fds[1].revents & POLLIN)
 			read_server(sock_fd);
 		if (fds[0].revents & POLLIN)
-			read_keyboard(sock_fd);
+			read_keyboard(sock_fd);	
 	}
+	close(fds[1].fd);
+	if (fds[0].fd != 0)
+		close(fds[0].fd);
 }
 
 int	main(int ac, char **av)
@@ -74,6 +92,7 @@ int	main(int ac, char **av)
 
 	if (ac < 3)
 		return (printf("Usage: ./client <ip> <port>\n"), 1);
+	signal(SIGINT, handle_sigint);
 	sock_fd = socket(AF_INET, SOCK_STREAM, 0);
 	serv_addr.sin_family = AF_INET;
 	serv_addr.sin_port = htons(atoi(av[2]));
