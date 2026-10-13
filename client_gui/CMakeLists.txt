@@ -1,13 +1,11 @@
 cmake_minimum_required(VERSION 3.20)
 
-project(my_game C)
+project(client_gui C)
 
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
-find_package(raylib REQUIRED)
-
-add_executable(my_game
+add_executable(client_gui
     src/main.c
     src/manager.c
     src/login.c
@@ -20,16 +18,35 @@ add_executable(my_game
     src/game_components.c
     src/game_components_utils.c
     src/inventory.c
+    src/npc.c
+    src/npc_actions.c
+    src/quests.c
+    
 )
 
-target_link_libraries(my_game PRIVATE raylib)
+target_include_directories(client_gui PRIVATE
+    ${CMAKE_SOURCE_DIR}/lib/raylib/install/include
+)
 
-target_compile_options(my_game PRIVATE
+target_link_directories(client_gui PRIVATE
+    ${CMAKE_SOURCE_DIR}/lib/raylib/install/lib
+)
+
+target_link_libraries(client_gui PRIVATE
+	raylib
+	X11
+	m
+	pthread
+	dl
+	rt
+)
+
+target_compile_options(client_gui PRIVATE
     -g
     -fsanitize=address
     -fno-omit-frame-pointer
 )
 
-target_link_options(my_game PRIVATE
+target_link_options(client_gui PRIVATE
     -fsanitize=address
 )
