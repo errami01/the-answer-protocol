@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 18:21:17 by aberrami          #+#    #+#             */
-/*   Updated: 2026/10/13 14:11:27 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/10/15 00:56:59 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,21 +67,19 @@ void	read_socket(struct pollfd *fds, int sock_fd)
 {
 	int	ret;
 
-	while(g_running)
+	while (g_running)
 	{
 		ret = poll(fds, 2, 1000);
 		if (ret < 0)
-        	break;
+			break ;
 		if (ret == 0)
-        	continue;
+			continue ;
 		if (fds[1].revents & POLLIN)
 			read_server(sock_fd);
 		if (fds[0].revents & POLLIN)
-			read_keyboard(sock_fd);	
+			read_keyboard(sock_fd);
 	}
 	close(fds[1].fd);
-	if (fds[0].fd != 0)
-		close(fds[0].fd);
 }
 
 int	main(int ac, char **av)
@@ -94,6 +92,7 @@ int	main(int ac, char **av)
 		return (printf("Usage: ./client <ip> <port>\n"), 1);
 	signal(SIGINT, handle_sigint);
 	sock_fd = socket(AF_INET, SOCK_STREAM, 0);
+	memset(&serv_addr, 0, sizeof(serv_addr));
 	serv_addr.sin_family = AF_INET;
 	serv_addr.sin_port = htons(atoi(av[2]));
 	inet_pton(AF_INET, av[1], &serv_addr.sin_addr);
@@ -101,6 +100,7 @@ int	main(int ac, char **av)
 		return (perror("Connect failed"), 1);
 	if (handle_handshake(sock_fd) < 0)
 		return (printf("Handshake failed\n"), 1);
+	signal(SIGINT, handle_sigint);
 	fds[0].fd = 0;
 	fds[0].events = POLLIN;
 	fds[1].fd = sock_fd;
