@@ -9,6 +9,7 @@
 #include "game_utils.h"
 #include "inventory.h"
 #include "npc.h"
+#include "hp.h"
 
 static void game_update(t_scene *scene)
 {
@@ -97,6 +98,13 @@ static void game_update(t_scene *scene)
         game->state = GAME_IDLE;
     }
 
+    if (game->state == GAME_WAIT_STATUS)
+    {
+        if (parse_status(buf, game) < 0)
+            return ;
+        game->state = GAME_IDLE;
+    }
+
     if (game->state == GAME_WAIT_INVENTORY)
     {
         if (parse_inventory(buf, game) < 0)
@@ -168,6 +176,7 @@ static void game_draw(t_scene *scene)
         DARKGRAY
     );
 
+    draw_hp_bar(game);
     draw_items(game);
     draw_npcs(game);
 
@@ -252,6 +261,10 @@ t_scene *game_create(t_manager *manager, const char *look_init)
 
     game->current = room;
     game->npc_response[0] = '\0';
+
+    status(game);
+
+    printf("%d %d", game->hp, game->max_hp);
 
     return ((t_scene *)game);
 }

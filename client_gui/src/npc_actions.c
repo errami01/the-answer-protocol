@@ -50,7 +50,7 @@ int	parse_quest(const char *response, t_game *game)
 			"desc", game->npc_response,
 			sizeof(game->npc_response)) < 0)
 	{
-		strncpy(game->npc_response, response, sizeof(game->npc_response));
+		strncpy(game->npc_response, response + 3, sizeof(game->npc_response));
 		game->npc_response[sizeof(game->npc_response) - 1] = '\0';
 	}
 	return (0);

@@ -21,6 +21,7 @@ add_executable(client_gui
     src/npc.c
     src/npc_actions.c
     src/quests.c
+    src/hp.c
     
 )
 

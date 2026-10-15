@@ -1,5 +1,70 @@
 #include "npc.h"
 
+static void draw_text_wrapped(
+    const char *text,
+    Rectangle bounds,
+    int font_size,
+    Color color)
+{
+    char word[128];
+    int word_len;
+    int i;
+    float x;
+    float y;
+    float space_width;
+
+    x = bounds.x;
+    y = bounds.y;
+    i = 0;
+    space_width = MeasureText(" ", font_size);
+
+    while (text[i] != '\0')
+    {
+        while (text[i] == ' ')
+            i++;
+
+        if (text[i] == '\0')
+            break ;
+
+        word_len = 0;
+
+        while (
+            text[i] != '\0'
+            && text[i] != ' '
+            && word_len < (int)sizeof(word) - 1
+        )
+        {
+            word[word_len++] = text[i++];
+        }
+
+        word[word_len] = '\0';
+
+        float word_width = MeasureText(word, font_size);
+
+        if (
+            x != bounds.x
+            && x + word_width > bounds.x + bounds.width
+        )
+        {
+            x = bounds.x;
+            y += font_size + 4;
+        }
+
+        if (y + font_size > bounds.y + bounds.height)
+            break ;
+
+        DrawText(
+            word,
+            x,
+            y,
+            font_size,
+            color
+        );
+
+        x += word_width + space_width;
+    }
+}
+
 static Rectangle get_npc_dialog(void)
 {
     const int width = 500;
@@ -16,20 +81,24 @@ static Rectangle get_npc_dialog(void)
 static void draw_text_field(t_game *game, Rectangle dialog)
 {
     Rectangle text_field;
-    
+
     text_field = (Rectangle){
         dialog.x + 30,
         dialog.y + 170,
         dialog.width - 60,
         90
     };
-    
+
     if (game->npc_response[0] != '\0')
     {
-        DrawText(
+        draw_text_wrapped(
             game->npc_response,
-            text_field.x + 10,
-            text_field.y + 10,
+            (Rectangle){
+                text_field.x + 10,
+                text_field.y + 10,
+                text_field.width - 20,
+                text_field.height - 20
+            },
             18,
             BLACK
         );
