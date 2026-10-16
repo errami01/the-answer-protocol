@@ -33,6 +33,7 @@ typedef enum e_game_state {
     GAME_WAIT_TALK,
     GAME_WAIT_QUEST,
     GAME_WAIT_QUESTS,
+    GAME_WAIT_ATTACK,
 } t_game_state;
 
 typedef struct s_game {
@@ -54,6 +55,9 @@ typedef struct s_game {
 
     int hp;
     int max_hp;
+
+    char notification[256];
+    double notification_time;
 } t_game;
 
 t_scene *game_create(t_manager *manager, const char *look_init);

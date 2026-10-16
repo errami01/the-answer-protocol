@@ -5,5 +5,6 @@
 
 void draw_hp_bar(t_game *game);
 int parse_status(char *response, t_game *game);
+int extract_json_int(const char *json, const char *key, int *value);
 
 #endif

@@ -1,6 +1,7 @@
 #include <raylib.h>
 #include <string.h>
 #include "game.h"
+#include "attack.h"
 #include "client.h"
 #include "game_arrows.h"
 #include "game_commands.h"
@@ -8,8 +9,10 @@
 #include "game_components.h"
 #include "game_utils.h"
 #include "inventory.h"
+#include "notification.h"
 #include "npc.h"
 #include "hp.h"
+#include "quest.h"
 
 static void game_update(t_scene *scene)
 {
@@ -141,11 +144,10 @@ static void game_update(t_scene *scene)
     }
 
     if (game->state == GAME_WAIT_QUEST)
-    {
-        parse_quest(buf, game);
-        game->state = GAME_IDLE;
-        return ;
-    }
+        quest_state(game, buf);
+
+    if (game->state == GAME_WAIT_ATTACK)
+        attack_state(game, buf);
 }
 
 static void game_draw(t_scene *scene)
@@ -179,6 +181,7 @@ static void game_draw(t_scene *scene)
     draw_hp_bar(game);
     draw_items(game);
     draw_npcs(game);
+    draw_notification(game);
 
     int center_x = GetScreenWidth() / 2;
     int center_y = GetScreenHeight() / 2;

@@ -1,11 +1,7 @@
 #include "hp.h"
-#include "game_utils.h"
 #include <stdlib.h>
 
-static int extract_json_int(
-    const char *json,
-    const char *key,
-    int *value)
+int extract_json_int(const char *json, const char *key, int *value)
 {
     const char  *pos;
 
