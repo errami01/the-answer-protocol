@@ -1,10 +1,13 @@
 #ifndef HP_H
 # define HP_H
 
-#include "game.h"
+# define BAR_WIDTH 220
+# define BAR_HEIGHT 24
+# define MARGIN 20
 
-void draw_hp_bar(t_game *game);
-int parse_status(char *response, t_game *game);
-int extract_json_int(const char *json, const char *key, int *value);
+# include "game.h"
+
+int		parse_status(char *response, t_game *game);
+void	draw_hp_bar(t_game *game);
 
 #endif

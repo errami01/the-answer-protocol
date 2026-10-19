@@ -49,9 +49,9 @@ void	quests(t_game *game)
 	game->state = GAME_WAIT_QUESTS;
 }
 
-void status(t_game *game)
+void	status(t_game *game)
 {
-    if (client_send(game->manager->client, "STATUS\n") < 0)
-        return ;
-    game->state = GAME_WAIT_STATUS; 
+	if (client_send(game->manager->client, "STATUS\n") < 0)
+		return ;
+	game->state = GAME_WAIT_STATUS;
 }

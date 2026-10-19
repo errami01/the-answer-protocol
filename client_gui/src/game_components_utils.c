@@ -12,9 +12,9 @@
 
 #include "game_arrow_buttons.h"
 #include "game_commands.h"
-#include "game_components_utils.h"
+#include "game_components.h"
 
-static Rectangle	get_item_button(int index)
+Rectangle	get_item_button(int index)
 {
 	int	width;
 	int	height;
@@ -98,4 +98,14 @@ void	handle_movement_buttons(t_game *game)
 	directions[2] = get_west_button();
 	directions[3] = get_east_button();
 	move_directions(game, mouse, directions);
+}
+
+int	get_npc_start_y(t_game *game)
+{
+	int	items_start_y;
+	int	items_height;
+
+	items_start_y = 50;
+	items_height = game->current->item_count * (LIST_HEIGHT + LIST_SPACING);
+	return (items_start_y + items_height + 30);
 }

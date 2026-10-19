@@ -1,303 +1,77 @@
 #include "npc.h"
 
-static void draw_text_wrapped(
-    const char *text,
-    Rectangle bounds,
-    int font_size,
-    Color color)
+Rectangle	get_npc_dialog(void)
 {
-    char word[128];
-    int word_len;
-    int i;
-    float x;
-    float y;
-    float space_width;
+	int	width;
+	int	height;
 
-    x = bounds.x;
-    y = bounds.y;
-    i = 0;
-    space_width = MeasureText(" ", font_size);
-
-    while (text[i] != '\0')
-    {
-        while (text[i] == ' ')
-            i++;
-
-        if (text[i] == '\0')
-            break ;
-
-        word_len = 0;
-
-        while (
-            text[i] != '\0'
-            && text[i] != ' '
-            && word_len < (int)sizeof(word) - 1
-        )
-        {
-            word[word_len++] = text[i++];
-        }
-
-        word[word_len] = '\0';
-
-        float word_width = MeasureText(word, font_size);
-
-        if (
-            x != bounds.x
-            && x + word_width > bounds.x + bounds.width
-        )
-        {
-            x = bounds.x;
-            y += font_size + 4;
-        }
-
-        if (y + font_size > bounds.y + bounds.height)
-            break ;
-
-        DrawText(
-            word,
-            x,
-            y,
-            font_size,
-            color
-        );
-
-        x += word_width + space_width;
-    }
+	width = 500;
+	height = 300;
+	return ((Rectangle){
+		(GetScreenWidth() - width) / 2,
+		(GetScreenHeight() - height) / 2,
+		width,
+		height
+	});
 }
 
-static Rectangle get_npc_dialog(void)
+static Rectangle	get_npc_close_button(Rectangle dialog)
 {
-    const int width = 500;
-    const int height = 300;
-
-    return ((Rectangle){
-        (GetScreenWidth() - width) / 2,
-        (GetScreenHeight() - height) / 2,
-        width,
-        height
-    });
+	return ((Rectangle){
+		dialog.x + dialog.width - 40,
+		dialog.y + 10,
+		30,
+		30
+	});
 }
 
-static void draw_text_field(t_game *game, Rectangle dialog)
+static Rectangle	get_npc_action_button(Rectangle dialog, int index)
 {
-    Rectangle text_field;
-
-    text_field = (Rectangle){
-        dialog.x + 30,
-        dialog.y + 170,
-        dialog.width - 60,
-        90
-    };
-
-    if (game->npc_response[0] != '\0')
-    {
-        draw_text_wrapped(
-            game->npc_response,
-            (Rectangle){
-                text_field.x + 10,
-                text_field.y + 10,
-                text_field.width - 20,
-                text_field.height - 20
-            },
-            18,
-            BLACK
-        );
-    }
+	return ((Rectangle){
+		dialog.x + 30 + index * 130,
+		dialog.y + 100,
+		100,
+		40
+	});
 }
 
-void draw_npc_dialog(t_game *game)
+static void	handle_npc_action(t_game *game, int index)
 {
-    Rectangle dialog;
-    Rectangle talk_btn;
-    Rectangle quest_btn;
-    Rectangle attack_btn;
-    Rectangle close_btn;
-
-    Vector2 mouse;
-
-    dialog = get_npc_dialog();
-    mouse = GetMousePosition();
-
-    DrawRectangle(
-        0,
-        0,
-        GetScreenWidth(),
-        GetScreenHeight(),
-        Fade(BLACK, 0.55f)
-    );
-
-    DrawRectangleRec(dialog, RAYWHITE);
-    DrawRectangleLinesEx(dialog, 2, DARKGRAY);
-
-    DrawText(
-        game->selected_npc,
-        dialog.x + 20,
-        dialog.y + 20,
-        24,
-        BLACK
-    );
-
-    close_btn = (Rectangle){
-        dialog.x + dialog.width - 40,
-        dialog.y + 10,
-        30,
-        30
-    };
-
-    DrawRectangleRec(
-        close_btn,
-        CheckCollisionPointRec(mouse, close_btn)
-            ? LIGHTGRAY
-            : RAYWHITE
-    );
-
-    DrawText(
-        "X",
-        close_btn.x + 8,
-        close_btn.y + 4,
-        20,
-        BLACK
-    );
-
-    talk_btn = (Rectangle){
-        dialog.x + 30,
-        dialog.y + 100,
-        100,
-        40
-    };
-
-    quest_btn = (Rectangle){
-        dialog.x + 160,
-        dialog.y + 100,
-        100,
-        40
-    };
-
-    attack_btn = (Rectangle){
-        dialog.x + 290,
-        dialog.y + 100,
-        100,
-        40
-    };
-
-    DrawRectangleRec(
-        talk_btn,
-        CheckCollisionPointRec(mouse, talk_btn)
-            ? GRAY
-            : LIGHTGRAY
-    );
-
-    DrawRectangleRec(
-        quest_btn,
-        CheckCollisionPointRec(mouse, quest_btn)
-            ? GRAY
-            : LIGHTGRAY
-    );
-
-    DrawRectangleRec(
-        attack_btn,
-        CheckCollisionPointRec(mouse, attack_btn)
-            ? GRAY
-            : LIGHTGRAY
-    );
-
-    DrawRectangleLinesEx(talk_btn, 1, DARKGRAY);
-    DrawRectangleLinesEx(quest_btn, 1, DARKGRAY);
-    DrawRectangleLinesEx(attack_btn, 1, DARKGRAY);
-
-    DrawText(
-        "Talk",
-        talk_btn.x + 28,
-        talk_btn.y + 10,
-        18,
-        BLACK
-    );
-
-    DrawText(
-        "Quest",
-        quest_btn.x + 23,
-        quest_btn.y + 10,
-        18,
-        BLACK
-    );
-
-    DrawText(
-        "Attack",
-        attack_btn.x + 18,
-        attack_btn.y + 10,
-        18,
-        BLACK
-    );
-
-    draw_text_field(game, dialog);
+	if (index == 0)
+		talk(game, game->selected_npc);
+	else if (index == 1)
+		quest(game, game->selected_npc);
+	else if (index == 2)
+	{
+		attack(game, game->selected_npc);
+		game->npc_open = false;
+	}
 }
 
-void handle_npc_dialog(t_game *game)
+void	handle_npc_dialog(t_game *game)
 {
-    Rectangle dialog;
-    Rectangle talk_btn;
-    Rectangle quest_btn;
-    Rectangle attack_btn;
-    Rectangle close_btn;
-    Vector2 mouse;
+	Rectangle	dialog;
+	Vector2		mouse;
+	int			i;
 
-    dialog = get_npc_dialog();
-    mouse = GetMousePosition();
-
-    close_btn = (Rectangle){
-        dialog.x + dialog.width - 40,
-        dialog.y + 10,
-        30,
-        30
-    };
-
-    talk_btn = (Rectangle){
-        dialog.x + 30,
-        dialog.y + 100,
-        100,
-        40
-    };
-
-    quest_btn = (Rectangle){
-        dialog.x + 160,
-        dialog.y + 100,
-        100,
-        40
-    };
-
-    attack_btn = (Rectangle){
-        dialog.x + 290,
-        dialog.y + 100,
-        100,
-        40
-    };
-
-    if (!IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-        return ;
-
-    if (CheckCollisionPointRec(mouse, close_btn))
-    {
-        game->npc_open = false;
-        game->npc_response[0] = '\0';
-        return ;
-    }
-
-    if (CheckCollisionPointRec(mouse, talk_btn))
-    {
-        talk(game, game->selected_npc);
-        return ;
-    }
-
-    if (CheckCollisionPointRec(mouse, quest_btn))
-    {
-        quest(game, game->selected_npc);
-        return ;
-    }
-
-    if (CheckCollisionPointRec(mouse, attack_btn))
-    {
-        attack(game, game->selected_npc);
-        game->npc_open = false;
-        return ;
-    }
+	if (!IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+		return ;
+	dialog = get_npc_dialog();
+	mouse = GetMousePosition();
+	if (CheckCollisionPointRec(mouse, get_npc_close_button(dialog)))
+	{
+		game->npc_open = false;
+		game->npc_response[0] = '\0';
+		return ;
+	}
+	i = 0;
+	while (i < 3)
+	{
+		if (CheckCollisionPointRec(mouse, get_npc_action_button(dialog, i)))
+		{
+			handle_npc_action(game, i);
+			return ;
+		}
+		i++;
+	}
 }

@@ -45,7 +45,5 @@ void	attack(t_game *game, const char *npc)
 	snprintf(cmd, sizeof(cmd), "ATTACK %s\n", npc);
 	if (client_send(game->manager->client, cmd) < 0)
 		show_notification(game, "Failed to attack.");
-    game->state = GAME_WAIT_ATTACK;
+	game->state = GAME_WAIT_ATTACK;
 }
-
-
