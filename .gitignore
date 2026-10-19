@@ -4,3 +4,5 @@ a.out
 server_app
 ToFree.txt
 server.log
+
+client_gui/build
