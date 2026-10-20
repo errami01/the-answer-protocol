@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   quests_parser.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: msturma <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/20 11:22:31 by msturma           #+#    #+#             */
+/*   Updated: 2026/10/20 11:22:32 by msturma          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "quests.h"
 #include "game.h"
 #include "json_parser.h"
@@ -7,6 +19,8 @@ static int	extract_quest_object(const char **pos, char *object, size_t size)
 	const char	*end;
 	size_t		len;
 
+	while (**pos == ' ' || **pos == '\t' || **pos == ',')
+		(*pos)++;
 	if (**pos != '{')
 		return (-1);
 	end = strchr(*pos, '}');
@@ -55,7 +69,6 @@ int	parse_quests(const char *response, t_game *game)
 
 	if (handle_parse_err(response, game, &pos) < 0)
 		return (-1);
-	pos++;
 	count = 0;
 	while (*pos && *pos != ']' && count < MAX_QUESTS)
 	{
