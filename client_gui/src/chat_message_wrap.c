@@ -6,48 +6,68 @@
 /*   By: msturma <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/20 17:40:21 by msturma           #+#    #+#             */
-/*   Updated: 2026/10/20 17:41:37 by msturma          ###   ########.fr       */
+/*   Updated: 2026/10/20 19:09:44 by msturma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "chat.h"
 
-int	draw_chat_message(const char *text, int x, int y, int max_width, bool draw)
+static void	draw_chat_line(t_chat_text *chat)
 {
-	char	line[CHAT_MESSAGE_LEN];
-	int		i;
-	int		len;
-	int		height;
+	chat->line[chat->len] = '\0';
+	if (chat->draw)
+		DrawText(chat->line, chat->pos.x,
+			chat->pos.y + chat->height, 14, BLACK);
+	chat->height += 18;
+	chat->len = 0;
+}
 
+static void	process_chat_char(t_chat_text *chat, char c)
+{
+	if (c == '\n')
+	{
+		draw_chat_line(chat);
+		return ;
+	}
+	chat->line[chat->len] = c;
+	chat->line[chat->len + 1] = '\0';
+	if (chat->len > 0
+		&& MeasureText(chat->line, 14) > chat->max_width)
+	{
+		chat->line[chat->len] = '\0';
+		draw_chat_line(chat);
+		chat->line[0] = c;
+		chat->line[1] = '\0';
+		chat->len = 1;
+		return ;
+	}
+	chat->len++;
+}
+
+int	draw_chat_message(const char *text, Vector2 pos,
+		int max_width, bool draw)
+{
+	t_chat_text	chat;
+	int			i;
+
+	if (!text)
+		return (0);
+	chat = (t_chat_text){
+		.len = 0,
+		.height = 0,
+		.max_width = max_width,
+		.pos = pos,
+		.draw = draw
+	};
 	i = 0;
-	len = 0;
-	height = 0;
 	while (text[i])
 	{
-		if (text[i] == '\n'
-			|| (len > 0 && MeasureText(line, 14) > max_width))
-		{
-			line[len] = '\0';
-			if (draw)
-				DrawText(line, x, y + height, 14, BLACK);
-			height += 18;
-			len = 0;
-			if (text[i] == '\n')
-			{
-				i++;
-				continue ;
-			}
-		}
-		if (len >= CHAT_MESSAGE_LEN - 1)
-			break ;
-		line[len++] = text[i++];
-		line[len] = '\0';
+		if (chat.len >= CHAT_MESSAGE_LEN - 2)
+			draw_chat_line(&chat);
+		process_chat_char(&chat, text[i]);
+		i++;
 	}
-	if (len > 0)
-	{
-		if (draw)
-			DrawText(line, x, y + height, 14, BLACK);
-		height += 18;
-	}
-	return (height);
+	if (chat.len > 0)
+		draw_chat_line(&chat);
+	return (chat.height);
 }

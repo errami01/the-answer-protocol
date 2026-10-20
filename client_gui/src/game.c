@@ -6,7 +6,7 @@
 /*   By: msturma <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/20 11:18:59 by msturma           #+#    #+#             */
-/*   Updated: 2026/10/20 17:39:21 by msturma          ###   ########.fr       */
+/*   Updated: 2026/10/20 18:47:20 by msturma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ static void	game_update(t_scene *scene)
 	if (game->current == NULL)
 		return ;
 	handle_chat(game);
+	handle_chat_scroll(game);
 	game_idle(game, buf);
 	while (1)
 	{

@@ -6,7 +6,7 @@
 /*   By: msturma <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/20 11:18:05 by msturma           #+#    #+#             */
-/*   Updated: 2026/10/20 12:24:45 by msturma          ###   ########.fr       */
+/*   Updated: 2026/10/20 18:46:45 by msturma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,6 @@ void	draw_chat(t_game *game)
 	DrawRectangleRec(chat, RAYWHITE);
 	DrawRectangleLinesEx(chat, 1, DARKGRAY);
 	draw_chat_tabs(game);
-	i = 0;
-	y = chat.y + 45;
-	while (i < game->chat_count)
-	{
-		DrawText(game->chat[i], chat.x + 10, y, 14, BLACK);
-		y += 20;
-		i++;
-	}
+	draw_chat_messages(game);
 	draw_chat_input(game);
 }

@@ -8,6 +8,11 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 add_executable(client_gui
     src/attack.c
     src/chat.c
+    src/chat_handler.c
+    src/chat_input.c
+    src/chat_message_wrap.c
+    src/chat_scroll.c
+    src/chat_tab.c
     src/client.c
     src/game_actions.c
     src/game_arrow_buttons.c
