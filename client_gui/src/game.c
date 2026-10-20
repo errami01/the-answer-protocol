@@ -6,7 +6,7 @@
 /*   By: msturma <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/20 11:18:59 by msturma           #+#    #+#             */
-/*   Updated: 2026/10/20 11:19:00 by msturma          ###   ########.fr       */
+/*   Updated: 2026/10/20 11:48:23 by msturma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,13 @@ static void	game_draw(t_scene *scene)
 	center_x = GetScreenWidth() / 2;
 	center_y = GetScreenHeight() / 2;
 	draw_arrows(game, center_x, center_y);
+	draw_chat(game);
 	if (game->inventory_open)
 		draw_inventory(game->inventory);
 	if (game->npc_open)
 		draw_npc_dialog(game);
 	if (game->quests_open)
 		draw_quests(game);
-	draw_chat(game);
 }
 
 static void	game_destroy(t_scene *scene)

@@ -6,7 +6,7 @@
 /*   By: msturma <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/20 11:20:13 by msturma           #+#    #+#             */
-/*   Updated: 2026/10/20 11:20:13 by msturma          ###   ########.fr       */
+/*   Updated: 2026/10/20 11:49:27 by msturma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,50 +14,52 @@
 #include "inventory.h"
 #include "game.h"
 
-static void	init_panel(int *panel, int *panel_pos)
+static Rectangle	get_inventory_panel(void)
 {
-	panel[0] = 400;
-	panel[1] = 350;
-	panel_pos[0] = (panel[0] - 400) / 2;
-	panel_pos[1] = (panel[1] - 350) / 2;
+	int	width;
+	int	height;
+
+	width = 400;
+	height = 350;
+	return ((Rectangle){
+		(GetScreenWidth() - width) / 2,
+		(GetScreenHeight() - height) / 2,
+		width,
+		height
+	});
 }
 
-static void	inventory_label(int *panel, int *panel_pos, char **items)
+static void	inventory_label(Rectangle panel, char **items)
 {
 	DrawText("Inventory",
-		panel_pos[0] + (panel[0] - MeasureText("Inventory", 28)) / 2,
-		panel_pos[1] + 20, 28, BLACK);
+		panel.x + (panel.width - MeasureText("Inventory", 28)) / 2,
+		panel.y + 20, 28, BLACK);
 	if (items == NULL || items[0] == NULL)
 	{
 		DrawText("Inventory is empty",
-			panel_pos[0] + (panel[0]
+			panel.x + (panel.width
 				- MeasureText("Inventory is empty", 18)) / 2,
-			panel_pos[1] + 100, 18, GRAY);
+			panel.y + 100, 18, GRAY);
 		return ;
 	}
 }
 
 void	draw_inventory(char **items)
 {
-	int	screen_width;
-	int	screen_height;
-	int	panel[2];
-	int	panel_pos[2];
-	int	i;
+	Rectangle	panel;
+	int			i;
 
-	screen_width = GetScreenWidth();
-	screen_height = GetScreenHeight();
-	DrawRectangle(0, 0, screen_width, screen_height, Fade(BLACK, 0.55f));
-	init_panel(panel, panel_pos);
-	DrawRectangle(panel_pos[0], panel_pos[1], panel[0], panel[1], RAYWHITE);
-	DrawRectangleLinesEx((Rectangle){panel_pos[0], panel_pos[1],
-		panel[0], panel[1]}, 2, DARKGRAY);
-	inventory_label(panel, panel_pos, items);
+	panel = get_inventory_panel();
+	DrawRectangle(0, 0, GetScreenWidth(),
+		GetScreenHeight(), Fade(BLACK, 0.55f));
+	DrawRectangleRec(panel, RAYWHITE);
+	DrawRectangleLinesEx(panel, 2, RAYWHITE);
+	inventory_label(panel, items);
 	i = 0;
 	while (items[i] != NULL)
 	{
-		DrawText(items[i], panel_pos[0] + 30,
-			panel_pos[1] + 80 + i * 30, 20, BLACK);
+		DrawText(items[i], panel.x + 30,
+			panel.y + 80 + i * 30, 20, BLACK);
 		i++;
 	}
 }
