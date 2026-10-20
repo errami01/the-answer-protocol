@@ -6,7 +6,7 @@
 /*   By: msturma <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/20 11:18:59 by msturma           #+#    #+#             */
-/*   Updated: 2026/10/20 12:36:06 by msturma          ###   ########.fr       */
+/*   Updated: 2026/10/20 17:39:21 by msturma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,5 +113,6 @@ t_scene	*game_create(t_manager *manager, const char *look_init)
 	game->chat_count = 0;
 	memset(game->chat, 0, sizeof(game->chat));
 	init_chat_input(game);
+	init_chat_scroll(game);
 	return ((t_scene *)game);
 }
