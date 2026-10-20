@@ -6,7 +6,7 @@
 /*   By: msturma <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/20 11:18:10 by msturma           #+#    #+#             */
-/*   Updated: 2026/10/20 11:18:11 by msturma          ###   ########.fr       */
+/*   Updated: 2026/10/20 12:38:10 by msturma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,15 @@
 
 # include "game.h"
 
-void	add_chat_message(t_game *game, const char *message);
-void	draw_chat(t_game *game);
+void		add_chat_message(t_game *game, const char *message);
+void		draw_chat(t_game *game);
+
+void		init_chat_input(t_game *game);
+Rectangle	get_chatbox(void);
+Rectangle	get_chat_input(void);
+Rectangle	get_chat_tab(int index);
+void		draw_chat_tabs(t_game *game);
+void		draw_chat_input(t_game *game);
+void		handle_chat(t_game *game);
 
 #endif

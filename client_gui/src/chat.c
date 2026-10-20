@@ -6,7 +6,7 @@
 /*   By: msturma <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/20 11:18:05 by msturma           #+#    #+#             */
-/*   Updated: 2026/10/20 11:18:06 by msturma          ###   ########.fr       */
+/*   Updated: 2026/10/20 12:24:45 by msturma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,20 +37,21 @@ void	add_chat_message(t_game *game, const char *message)
 
 void	draw_chat(t_game *game)
 {
-	int	x;
-	int	y;
-	int	i;
+	Rectangle	chat;
+	int			i;
+	int			y;
 
-	x = GetScreenWidth() - WIDTH - MARGIN;
-	y = GetScreenHeight() - HEIGHT - MARGIN;
-	DrawRectangle(x, y, WIDTH, HEIGHT, Fade(RAYWHITE, 0.9f));
-	DrawRectangleLines(x, y, WIDTH, HEIGHT, DARKGRAY);
-	DrawText("Chat", x + PADDING, y + PADDING, 18, BLACK);
+	chat = get_chatbox();
+	DrawRectangleRec(chat, RAYWHITE);
+	DrawRectangleLinesEx(chat, 1, DARKGRAY);
+	draw_chat_tabs(game);
 	i = 0;
+	y = chat.y + 45;
 	while (i < game->chat_count)
 	{
-		DrawText(game->chat[i], x + PADDING,
-			y + 40 + i * LINE_HEIGHT, FONT_SIZE, DARKGRAY);
+		DrawText(game->chat[i], chat.x + 10, y, 14, BLACK);
+		y += 20;
 		i++;
 	}
+	draw_chat_input(game);
 }

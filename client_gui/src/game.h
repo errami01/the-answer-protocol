@@ -6,7 +6,7 @@
 /*   By: msturma <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/20 11:19:39 by msturma           #+#    #+#             */
-/*   Updated: 2026/10/20 11:19:40 by msturma          ###   ########.fr       */
+/*   Updated: 2026/10/20 12:03:10 by msturma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 
 # define MAX_INVENTORY 32
 # define MAX_QUESTS 10
+
+# define CHAT_INPUT_SIZE 256
 
 typedef struct s_room
 {
@@ -50,6 +52,12 @@ typedef enum e_game_state
 	GAME_WAIT_ATTACK,
 }	t_game_state;
 
+typedef enum e_chat_mode
+{
+	CHAT_MODE_GLOBAL,
+	CHAT_MODE_ROOM
+}	t_chat_mode;
+
 typedef struct s_game
 {
 	t_scene			base;
@@ -76,6 +84,11 @@ typedef struct s_game
 
 	char			chat[8][32];
 	int				chat_count;
+
+	char			chat_input[CHAT_INPUT_SIZE];
+	int				chat_input_len;
+	int				chat_input_active;
+	t_chat_mode		chat_mode;
 }	t_game;
 
 t_scene	*game_create(t_manager *manager, const char *look_init);

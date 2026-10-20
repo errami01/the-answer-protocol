@@ -6,7 +6,7 @@
 /*   By: msturma <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/20 11:18:59 by msturma           #+#    #+#             */
-/*   Updated: 2026/10/20 11:48:23 by msturma          ###   ########.fr       */
+/*   Updated: 2026/10/20 12:36:06 by msturma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static void	game_update(t_scene *scene)
 	game = (t_game *)scene;
 	if (game->current == NULL)
 		return ;
+	handle_chat(game);
 	game_idle(game, buf);
 	while (1)
 	{
@@ -111,5 +112,6 @@ t_scene	*game_create(t_manager *manager, const char *look_init)
 	status(game);
 	game->chat_count = 0;
 	memset(game->chat, 0, sizeof(game->chat));
+	init_chat_input(game);
 	return ((t_scene *)game);
 }
