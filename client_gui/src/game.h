@@ -6,7 +6,7 @@
 /*   By: msturma <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/20 11:19:39 by msturma           #+#    #+#             */
-/*   Updated: 2026/10/20 12:03:10 by msturma          ###   ########.fr       */
+/*   Updated: 2026/10/20 17:37:07 by msturma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,9 @@ typedef struct s_game
 	int				chat_input_len;
 	int				chat_input_active;
 	t_chat_mode		chat_mode;
+
+	float			chat_scroll;
+	int				chat_auto_scroll;
 }	t_game;
 
 t_scene	*game_create(t_manager *manager, const char *look_init);
