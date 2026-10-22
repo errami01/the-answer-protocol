@@ -38,10 +38,7 @@ static void	game_update(t_scene *scene)
 		if (bytes <= 0)
 			return ;
 		if (strncmp(buf, "EVT ", 4) == 0)
-		{
 			add_chat_message(game, buf + 4);
-			return ;
-		}
 		wait_take(game, buf);
 		wait_status(game, buf);
 		wait_move(game, buf);

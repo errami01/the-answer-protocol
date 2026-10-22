@@ -75,4 +75,5 @@ void	login_draw(t_scene *scene)
 	mouse = GetMousePosition();
 	ClearBackground(RAYWHITE);
 	draw_button(button, mouse);
+	draw_login_error(login);
 }

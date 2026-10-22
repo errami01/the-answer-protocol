@@ -63,8 +63,9 @@ static void	handle_chat_typing(t_game *game)
 
 static void	send_chat_message(t_game *game)
 {
-	char	cmd[CHAT_INPUT_SIZE + 32];
-	char	*channel;
+	char		cmd[CHAT_INPUT_SIZE + 32];
+	char		message[CHAT_INPUT_SIZE + 32];
+	const char	*channel;
 
 	if (game->chat_input_len == 0)
 		return ;
@@ -72,12 +73,15 @@ static void	send_chat_message(t_game *game)
 		channel = "GLOBAL";
 	else
 		channel = "ROOM";
-	snprintf(cmd, sizeof(cmd), "CHAT %s %s\n", channel, game->chat_input);
+	snprintf(cmd, sizeof(cmd),
+		"CHAT %s %s\n", channel, game->chat_input);
 	if (client_send(game->manager->client, cmd) < 0)
 	{
 		show_notification(game, "Failed to send message.");
 		return ;
 	}
+	snprintf(message, sizeof(message), "You: %s", game->chat_input);
+	add_chat_message(game, message);
 	game->chat_input[0] = '\0';
 	game->chat_input_len = 0;
 }

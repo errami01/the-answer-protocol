@@ -48,5 +48,6 @@ void		login_draw(t_scene *scene);
 void		login_update(t_scene *scene);
 void		handle_username_input(t_login *login);
 void		login_submit(t_login *login);
+void		draw_login_error(t_login *login);
 
 #endif

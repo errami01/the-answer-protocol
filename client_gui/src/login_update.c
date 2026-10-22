@@ -17,7 +17,10 @@
 static void	login_idle(t_login *login)
 {
 	if (IsKeyPressed(KEY_ENTER))
+    {
+        client_disconnect(login->manager->client);
 		login_submit(login);
+    }
 }
 
 static void	login_wait_hello(t_login *login)
@@ -98,7 +101,7 @@ void	login_update(t_scene *scene)
 
 	login = (t_login *)scene;
 	handle_username_input(login);
-	if (login->state == LOGIN_IDLE)
+	if (login->state == LOGIN_IDLE || login->state == LOGIN_ERROR)
 		login_idle(login);
 	if (login->state == LOGIN_WAIT_HELLO)
 		login_wait_hello(login);

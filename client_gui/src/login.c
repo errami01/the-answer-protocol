@@ -44,10 +44,12 @@ void	login_submit(t_login *login)
 {
 	if (login->username_len == 0)
 		return ;
+	login->error[0] = '\0';
 	if (client_connect(login->manager->client, "127.0.0.1", 4242) < 0)
 	{
 		login->state = LOGIN_ERROR;
-		strcpy(login->error, "Could not connect to server");
+		snprintf(login->error, sizeof(login->error),
+			"Could not connect to server.");
 		return ;
 	}
 	login->state = LOGIN_WAIT_HELLO;
@@ -80,4 +82,18 @@ t_scene	*login_create(t_manager *manager)
 		.input_active = 0
 	};
 	return ((t_scene *)login);
+}
+
+void	draw_login_error(t_login *login)
+{
+	int	x;
+	int	y;
+	int	width;
+
+	if (login->error[0] == '\0')
+		return ;
+	width = MeasureText(login->error, 18);
+	x = (GetScreenWidth() - width) / 2;
+	y = GetScreenHeight() / 2 + 110;
+	DrawText(login->error, x, y, 18, RED);
 }

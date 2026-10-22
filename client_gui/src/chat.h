@@ -24,7 +24,7 @@
 
 typedef struct s_chat_text
 {
-	char	line[CHAT_MESSAGE_LEN];
+	char	line[256];
 	int		len;
 	int		height;
 	int		max_width;

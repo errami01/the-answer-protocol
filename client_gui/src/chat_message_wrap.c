@@ -62,7 +62,7 @@ int	draw_chat_message(const char *text, Vector2 pos,
 	i = 0;
 	while (text[i])
 	{
-		if (chat.len >= CHAT_MESSAGE_LEN - 2)
+		if (chat.len >= 254)
 			draw_chat_line(&chat);
 		process_chat_char(&chat, text[i]);
 		i++;
