@@ -4,5 +4,5 @@ a.out
 server_app
 ToFree.txt
 server.log
-
+.vscode/
 client_gui/build

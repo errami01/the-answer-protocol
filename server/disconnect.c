@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/30 11:08:20 by aberrami          #+#    #+#             */
-/*   Updated: 2026/10/11 21:25:29 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/10/24 21:25:13 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	clean_player(t_player *p)
 	if (p->name)
 		free(p->name);
 	close(p->fd);
+	p->fd = -1;
 }
 
 static void	log_discon(t_player *p, char *msg)

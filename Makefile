@@ -8,7 +8,7 @@ SERVER_SRC = server/main.c server/world_loader.c server/world_linker.c \
 			server/cmd_quest.c server/cmd_quests_list.c server/logger.c \
 			server/disconnect.c server/abuse_monitor.c server/cmd_talk.c \
 			server/group_utils.c server/cmd_group.c server/client_utils.c \
-			server/cmd_connect.c server/room_cleanup.c
+			server/cmd_connect.c server/room_cleanup.c server/cmd_who.c
 
 SERVER_OBJ = $(SERVER_SRC:.c=.o)
 SERVER_NAME = server_app

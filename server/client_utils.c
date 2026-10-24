@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/03 20:29:20 by aberrami          #+#    #+#             */
-/*   Updated: 2026/10/04 15:01:16 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/10/24 15:59:28 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,11 @@ static int	handle_conn_msg(struct pollfd *fds, int i, char *buf,
 		return (cmd_quit(fds, i, world));
 	else if (!p && strncasecmp(buf, "CONNECT ", 8) == 0)
 		return (cmd_connect(fds, i, buf, world));
+	else if (p && strncasecmp(buf, "WHO", 3) == 0)
+	{
+		cmd_who(p, world);
+		return (1);
+	}
 	return (handle_other_cmd(p, buf, world));
 }
 

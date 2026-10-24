@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/15 21:58:05 by aberrami          #+#    #+#             */
-/*   Updated: 2026/10/09 21:08:21 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/10/24 15:50:25 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ void		broadcast_to_room(t_world *world, t_room *room, char *msg,
 void		cmd_move(t_player *p, char *arg, t_world *world);
 int			get_dir_index(const char *dir);
 void		broadcast_global(t_world *world, char *msg, int exclude_fd);
+void		cmd_who(t_player *p, t_world *w);
 void		cmd_chat(t_player *p, char *arg, t_world *world);
 void		cmd_take(t_player *p, char *arg, t_world *w);
 void		cmd_drop(t_player *p, char *arg, t_world *w);

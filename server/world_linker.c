@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 12:18:07 by aberrami          #+#    #+#             */
-/*   Updated: 2026/10/11 21:25:56 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/10/24 21:12:20 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ t_world	*fill_world(t_room *head, t_world *world)
 	while (i < MAX_CLIENTS)
 	{
 		memset(&world->players[i], 0, sizeof(t_player));
+		world->players[i].fd = -1;
 		i++;
 	}
 	current = head;
