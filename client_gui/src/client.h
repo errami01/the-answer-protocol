@@ -42,9 +42,13 @@ typedef struct s_manager
 {
 	t_scene		*current;
 	t_client	*client;
+
+	char		*ip;
+	int			port;
 }		t_manager;
 
-void	scene_manager_init(t_manager *manager, t_client *client);
+void	scene_manager_init(t_manager *manager, t_client *client,
+			char *ip, int port);
 void	scene_manager_set(t_manager *manager, t_scene *scene);
 void	scene_manager_update(t_manager *manager);
 void	scene_manager_draw(t_manager *manager);

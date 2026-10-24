@@ -21,6 +21,13 @@ all: $(SERVER_NAME) client
 client: $(CLIENT_OBJ)
 	$(CC) $(CFLAGS) $(CLIENT_OBJ) -o $(CLIENT_NAME)
 
+raylib:
+	@./client_gui/install.sh
+
+client_gui: raylib
+	@cmake -S client_gui -B client_gui/build
+	@cmake --build client_gui/build --parallel 4
+
 $(SERVER_NAME): $(SERVER_OBJ)
 	$(CC) $(CFLAGS) $(SERVER_OBJ) -lbsd -o $(SERVER_NAME)
 

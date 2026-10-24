@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.20)
 
-project(client_gui C)
+project(client_app_gui C)
 
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
-add_executable(client_gui
+add_executable(client_app_gui
     src/attack.c
     src/chat.c
     src/chat_handler.c
@@ -43,15 +43,19 @@ add_executable(client_gui
     src/quests_parser.c
 )
 
-target_include_directories(client_gui PRIVATE
+set_target_properties(client_app_gui PROPERTIES
+	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/.."
+)
+
+target_include_directories(client_app_gui PRIVATE
     ${CMAKE_SOURCE_DIR}/lib/raylib/install/include
 )
 
-target_link_directories(client_gui PRIVATE
+target_link_directories(client_app_gui PRIVATE
     ${CMAKE_SOURCE_DIR}/lib/raylib/install/lib
 )
 
-target_link_libraries(client_gui PRIVATE
+target_link_libraries(client_app_gui PRIVATE
 	raylib
 	X11
 	m
@@ -60,12 +64,12 @@ target_link_libraries(client_gui PRIVATE
 	rt
 )
 
-target_compile_options(client_gui PRIVATE
+target_compile_options(client_app_gui PRIVATE
     -g
     -fsanitize=address
     -fno-omit-frame-pointer
 )
 
-target_link_options(client_gui PRIVATE
+target_link_options(client_app_gui PRIVATE
     -fsanitize=address
 )

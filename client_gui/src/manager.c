@@ -12,10 +12,13 @@
 
 #include "client.h"
 
-void	scene_manager_init(t_manager *manager, t_client *client)
+void	scene_manager_init(t_manager *manager, t_client *client,
+		char *ip, int port)
 {
 	manager->current = NULL;
 	manager->client = client;
+	manager->ip = ip;
+	manager->port = port;
 }
 
 void	scene_manager_set(t_manager *manager, t_scene *scene)

@@ -45,7 +45,8 @@ void	login_submit(t_login *login)
 	if (login->username_len == 0)
 		return ;
 	login->error[0] = '\0';
-	if (client_connect(login->manager->client, "127.0.0.1", 4242) < 0)
+	if (client_connect(login->manager->client, login->manager->ip,
+			login->manager->port) < 0)
 	{
 		login->state = LOGIN_ERROR;
 		snprintf(login->error, sizeof(login->error),
