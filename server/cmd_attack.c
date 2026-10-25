@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 11:37:57 by aberrami          #+#    #+#             */
-/*   Updated: 2026/10/09 17:17:59 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/10/25 09:46:06 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,11 @@ t_npc	*find_npc(t_npc *list, char *name)
 static int	check_sword(t_item *inventory)
 {
 	t_item	*curr;
-	
+
 	curr = inventory;
-	while(curr)
+	while (curr)
 	{
-		if(strcasecmp(curr->id, "item.sword") == 0)
+		if (strcasecmp(curr->id, "item.sword") == 0)
 			return (1);
 		curr = curr->next;
 	}
