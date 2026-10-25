@@ -41,7 +41,7 @@
                     "dialogue": "I have a quest for you!",
                     "quest": {
                         "id": "q.kill_goblin",
-                        "desc": "Defeat the goblin in the alley and bring the goblin power item.",
+                        "desc": "Defeat the goblin in the alley and bring the goblin power item.You will need a sword!",
                         "req_npc_death": "npc.goblin",
                         "req_item_id": "item.goblin_power",
                         "reward_item": "item.medal"
