@@ -14,6 +14,7 @@ add_executable(client_app_gui
     src/chat_scroll.c
     src/chat_tab.c
     src/client.c
+    src/client_update.c
     src/game_actions.c
     src/game_arrow_buttons.c
     src/game_arrows.c

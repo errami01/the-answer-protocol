@@ -14,7 +14,11 @@
 # define CLIENT_H
 
 # include "../../shared/protocol.h"
+
 # define BUFFER_SIZE 1024
+# define MAX_COMMANDS 64
+# define MAX_COMMAND_SIZE 512
+# define COMMAND_INTERVAL 0.25
 
 typedef struct s_scene	t_scene;
 
@@ -30,6 +34,11 @@ typedef struct s_client
 	int		socket;
 	int		connected;
 	char	recv_buffer[BUFFER_SIZE];
+
+	char	pending[MAX_COMMANDS][MAX_COMMAND_SIZE];
+	int		pending_count;
+
+	double	last_send_time;
 }		t_client;
 
 void	client_init(t_client *client);
@@ -37,6 +46,7 @@ int		client_connect(t_client *client, const char *ip, int port);
 int		client_send(t_client *client, const char *message);
 int		client_receive(t_client *client, char *buf, size_t size);
 void	client_disconnect(t_client *client);
+void	client_update(t_client *client);
 
 typedef struct s_manager
 {

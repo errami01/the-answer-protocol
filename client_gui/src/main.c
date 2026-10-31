@@ -15,10 +15,11 @@
 #include "client.h"
 #include "login.h"
 
-void	game_loop(t_manager *manager)
+void	game_loop(t_manager *manager, t_client *client)
 {
 	while (!WindowShouldClose())
 	{
+		client_update(client);
 		scene_manager_update(manager);
 		BeginDrawing();
 		scene_manager_draw(manager);
@@ -66,7 +67,7 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	scene_manager_set(&manager, scene);
-	game_loop(&manager);
+	game_loop(&manager, &client);
 	scene_manager_destroy(&manager);
 	client_disconnect(&client);
 	CloseWindow();
