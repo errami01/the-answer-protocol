@@ -24,6 +24,7 @@ void	client_init(t_client *client)
 	client->socket = -1;
 	client->connected = 0;
 	client->recv_buffer[0] = '\0';
+	client->last_send_time = -COMMAND_INTERVAL;
 }
 
 int	client_connect(t_client *client, const char *ip, int port)
@@ -57,14 +58,17 @@ int	client_connect(t_client *client, const char *ip, int port)
 
 int	client_send(t_client *client, const char *message)
 {
-	ssize_t		bytes;
+	size_t	len;
 
-	bytes = send(client->socket, message, strlen(message), MSG_NOSIGNAL);
-	if (bytes < 0)
-	{
-		perror("send");
+	if (!client || !message || client->socket < 0)
 		return (-1);
-	}
+	len = strlen(message);
+	if (len == 0 || len >= MAX_COMMAND_SIZE)
+		return (-1);
+	if (client->pending_count >= MAX_COMMANDS)
+		return (-1);
+	memcpy(client->pending[client->pending_count], message, len + 1);
+	client->pending_count++;
 	return (0);
 }
 
@@ -97,4 +101,6 @@ void	client_disconnect(t_client *client)
 		close(client->socket);
 	client->socket = -1;
 	client->connected = 0;
+	client->pending_count = 0;
+	client->last_send_time = -COMMAND_INTERVAL;
 }
