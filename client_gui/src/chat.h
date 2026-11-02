@@ -6,7 +6,7 @@
 /*   By: msturma <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/20 11:18:10 by msturma           #+#    #+#             */
-/*   Updated: 2026/10/20 19:10:15 by msturma          ###   ########.fr       */
+/*   Updated: 2026/11/02 08:46:08 by msturma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,10 @@ void		init_chat_input(t_game *game);
 Rectangle	get_chatbox(void);
 Rectangle	get_chat_input(void);
 Rectangle	get_chat_tab(int index);
+Rectangle	get_chat_messages_rect(void);
 void		draw_chat_tabs(t_game *game);
 void		draw_chat_input(t_game *game);
+int			get_chat_content_height(t_game *game, int width);
 void		handle_chat(t_game *game);
 void		init_chat_scroll(t_game *game);
 int			draw_chat_message(const char *text, Vector2 pos,

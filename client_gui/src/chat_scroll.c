@@ -6,7 +6,7 @@
 /*   By: msturma <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/20 17:37:43 by msturma           #+#    #+#             */
-/*   Updated: 2026/10/20 19:09:09 by msturma          ###   ########.fr       */
+/*   Updated: 2026/11/02 08:45:54 by msturma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	init_chat_scroll(t_game *game)
 	game->chat_auto_scroll = 0;
 }
 
-static Rectangle	get_chat_messages_rect(void)
+Rectangle	get_chat_messages_rect(void)
 {
 	Rectangle	chat;
 
@@ -31,7 +31,7 @@ static Rectangle	get_chat_messages_rect(void)
 	});
 }
 
-static int	get_chat_content_height(t_game *game, int width)
+int	get_chat_content_height(t_game *game, int width)
 {
 	int	height;
 	int	i;
@@ -50,37 +50,6 @@ static int	get_chat_content_height(t_game *game, int width)
 		i++;
 	}
 	return (height);
-}
-
-void	draw_chat_messages(t_game *game)
-{
-	Rectangle	area;
-	int			content_height;
-	int			max_scroll;
-	int			y;
-	int			i;
-
-	area = get_chat_messages_rect();
-	content_height = get_chat_content_height(game, area.width);
-	max_scroll = content_height - area.height;
-	if (max_scroll < 0)
-		max_scroll = 0;
-	if (game->chat_auto_scroll)
-		game->chat_scroll = 0;
-	if (game->chat_scroll > max_scroll)
-		game->chat_scroll = max_scroll;
-	y = (int)area.y - max_scroll + (int)game->chat_scroll;
-	BeginScissorMode((int)area.x, (int)area.y,
-		(int)area.width, (int)area.height);
-	i = 0;
-	while (i < game->chat_count)
-	{
-		y += draw_chat_message(game->chat[i],
-				(Vector2){area.x, y}, area.width, true);
-		y += 4;
-		i++;
-	}
-	EndScissorMode();
 }
 
 void	handle_chat_scroll(t_game *game)

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   client_update.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: msturma <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/11/02 08:34:59 by msturma           #+#    #+#             */
+/*   Updated: 2026/11/02 08:35:00 by msturma          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <errno.h>
 #include <raylib.h>
 #include <sys/socket.h>
@@ -9,7 +21,7 @@ static bool	client_can_send(t_client *client)
 
 	if (client->socket < 0 || client->pending_count == 0)
 		return (false);
-	now = get_time();
+	now = GetTime();
 	if (now - client->last_send_time < COMMAND_INTERVAL)
 		return (false);
 	return (true);
@@ -45,7 +57,7 @@ static void	client_send_pending(t_client *client)
 		client_disconnect(client);
 		return ;
 	}
-	client->last_send_time = get_time();
+	client->last_send_time = GetTime();
 	client_remove_pending(client);
 }
 

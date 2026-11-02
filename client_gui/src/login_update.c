@@ -6,7 +6,7 @@
 /*   By: msturma <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/20 11:20:57 by msturma           #+#    #+#             */
-/*   Updated: 2026/10/20 11:20:57 by msturma          ###   ########.fr       */
+/*   Updated: 2026/11/02 08:35:35 by msturma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@
 static void	login_idle(t_login *login)
 {
 	if (IsKeyPressed(KEY_ENTER))
-    {
-        client_disconnect(login->manager->client);
+	{
+		client_disconnect(login->manager->client);
 		login_submit(login);
-    }
+	}
 }
 
 static void	login_wait_hello(t_login *login)

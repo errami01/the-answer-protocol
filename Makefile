@@ -16,7 +16,7 @@ CLIENT_NAME = client_app
 CLIENT_SRC = client_cli/main.c client_cli/read_utils.c
 CLIENT_OBJ = $(CLIENT_SRC:.c=.o)
 
-all: $(SERVER_NAME) client
+all: $(SERVER_NAME) client client_gui
 
 client: $(CLIENT_OBJ)
 	$(CC) $(CFLAGS) $(CLIENT_OBJ) -o $(CLIENT_NAME)

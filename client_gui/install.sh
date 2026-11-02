@@ -4,7 +4,7 @@ set -e
 
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 RAYLIB_DIR="$ROOT_DIR/client_gui/lib/raylib"
-INSTALL_DIR="$RAYLIB_DIR/client_gui/install"
+INSTALL_DIR="$RAYLIB_DIR/install"
 
 if [ -f "$INSTALL_DIR/include/raylib.h" ] && \
    [ -f "$INSTALL_DIR/lib/libraylib.a" ]; then
