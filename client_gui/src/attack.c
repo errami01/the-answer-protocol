@@ -37,6 +37,7 @@ void	attack_state(t_game *game, char *buf)
 	if (parse_attack_response(buf, &attacker_hp, &target_hp, &damage) < 0)
 	{
 		show_notification(game, "Failed to attack.");
+		game->state = GAME_IDLE;
 		return ;
 	}
 	game->hp = attacker_hp;
