@@ -6,7 +6,7 @@
 /*   By: msturma <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/13 16:44:14 by msturma           #+#    #+#             */
-/*   Updated: 2026/11/02 09:11:20 by msturma          ###   ########.fr       */
+/*   Updated: 2026/11/02 13:49:51 by msturma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,15 @@ int	main(int argc, char **argv)
 	t_scene		*scene;
 	t_manager	manager;
 	t_client	client;
+	char		*end;
 
 	if (!validate_args(argc, argv))
 		return (1);
 	InitWindow(1200, 800, "The Answer Protocol");
 	SetTargetFPS(60);
 	client_init(&client);
-	scene_manager_init(&manager, &client, argv[1], (int)argv[2]);
+	scene_manager_init(&manager, &client, argv[1],
+		(int)strtol(argv[2], &end, 10));
 	scene = login_create(&manager);
 	if (!scene)
 	{
