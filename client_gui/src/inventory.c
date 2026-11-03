@@ -61,6 +61,7 @@ void	draw_inventory(char **items)
 		DrawText(items[i], panel.x + 30,
 			panel.y + 80 + i * 30, 20, BLACK);
 		i++;
+        drop_button(get_drop_button(panel, i));
 	}
 }
 

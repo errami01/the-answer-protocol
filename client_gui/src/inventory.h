@@ -15,6 +15,8 @@
 
 # include "game.h"
 
+void drop_button(Rectangle button);
+Rectangle get_drop_button(Rectangle panel, int i);
 void	draw_inventory(char **items);
 int		parse_inventory(const char *response, t_game *game);
 void	clear_inventory(t_game *game);
