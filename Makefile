@@ -36,6 +36,7 @@ clean:
 	rm -f $(SERVER_OBJ) $(CLIENT_OBJ)
 
 fclean: clean 
-	rm -f $(SERVER_NAME) $(CLIENT_NAME)
+	rm -f $(SERVER_NAME) $(CLIENT_NAME) client_app_gui
+	rm -rf client_gui/build
 
 re: fclean all
