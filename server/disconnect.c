@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/30 11:08:20 by aberrami          #+#    #+#             */
-/*   Updated: 2026/11/03 16:25:58 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/04 15:08:14 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,16 +43,19 @@ static void	log_discon(t_player *p, char *msg)
 	log_event("INFO", user, msg, p->ip);
 }
 
-void	drop_all_player_items(t_player *p)
+void	drop_all_player_items(t_player *p, t_world *w)
 {
 	t_item	*curr;
 	t_item	*next;
+	char	out[256];
 
 	curr = p->inventory;
 	while (curr)
 	{
 		next = curr->next;
 		add_item(&p->current_room->items, curr);
+		snprintf(out, sizeof(out), "EVT ROOM ITEM DROP %s\n", curr->id);
+		broadcast_to_room(w, p->current_room, out, p->fd);
 		curr = next;
 	}
 	p->inventory = NULL;
@@ -69,7 +72,7 @@ void	handle_disconnect(t_world *world, int i, struct pollfd *fds)
 	{
 		if (p->name && p->current_room)
 		{
-			drop_all_player_items(p);
+			drop_all_player_items(p, world);
 			snprintf(msg, sizeof(msg), "EVT ROOM PRESENCE LEAVE %s\n", p->name);
 			broadcast_to_room(world, p->current_room, msg, p->fd);
 			msg[strlen(msg)-1] = '\0';

@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/25 21:59:19 by aberrami          #+#    #+#             */
-/*   Updated: 2026/10/03 20:21:52 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/04 14:58:26 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ void	cmd_take(t_player *p, char *arg, t_world *w)
 	write(p->fd, out, strlen(out));
 	out[strlen(out)-1] = '\0';
 	log_event("INFO", p->name, out, NULL);
+	snprintf(out, sizeof(out), "EVT ROOM ITEM TAKE %s\n", item->id);
+	broadcast_to_room(w, p->current_room, out, p->fd);
 }
 
 void	cmd_drop(t_player *p, char *arg, t_world *w)
@@ -54,6 +56,8 @@ void	cmd_drop(t_player *p, char *arg, t_world *w)
 	write(p->fd, out, strlen(out));
 	out[strlen(out)-1] = '\0';
 	log_event("INFO", p->name, out, NULL);
+	snprintf(out, sizeof(out), "EVT ROOM ITEM DROP %s\n", item->id);
+	broadcast_to_room(w, p->current_room, out, p->fd);
 }
 
 void	cmd_inventory(t_player *p)
