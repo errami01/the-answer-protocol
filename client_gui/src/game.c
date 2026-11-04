@@ -15,9 +15,8 @@
 #include "game.h"
 #include "client.h"
 #include "game_commands.h"
-#include "game_utils.h"
+#include "game_init.h"
 #include "inventory.h"
-#include "npc.h"
 #include "chat.h"
 
 static void	game_update(t_scene *scene)
@@ -37,8 +36,7 @@ static void	game_update(t_scene *scene)
 		bytes = client_receive(game->manager->client, buf, sizeof(buf));
 		if (bytes <= 0)
 			return ;
-		if (strncmp(buf, "EVT ", 4) == 0)
-			add_chat_message(game, buf + 4);
+		dispatch_evt(game, buf);
 		wait_take(game, buf);
 		wait_status(game, buf);
 		wait_move(game, buf);
@@ -68,12 +66,7 @@ static void	game_draw(t_scene *scene)
 	center_y = GetScreenHeight() / 2;
 	draw_arrows(game, center_x, center_y);
 	draw_chat(game);
-	if (game->inventory_open)
-		draw_inventory(game->inventory);
-	if (game->npc_open)
-		draw_npc_dialog(game);
-	if (game->quests_open)
-		draw_quests(game);
+	draw_actions(game);
 }
 
 static void	game_destroy(t_scene *scene)
@@ -99,17 +92,11 @@ t_scene	*game_create(t_manager *manager, const char *look_init)
 	game->base.draw = game_draw;
 	game->base.destroy = game_destroy;
 	game->manager = manager;
-	room = malloc(sizeof(*room));
-	if (parse_look(look_init, room) < 0)
-	{
-		printf("Failed to parse look.");
+	if (!init_room(game, look_init))
 		return (NULL);
-	}
-	game->current = room;
 	game->npc_response[0] = '\0';
 	status(game);
-	game->chat_count = 0;
-	memset(game->chat, 0, sizeof(game->chat));
+	init_chat(game);
 	init_chat_input(game);
 	init_chat_scroll(game);
 	return ((t_scene *)game);

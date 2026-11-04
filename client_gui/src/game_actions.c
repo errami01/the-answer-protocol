@@ -16,6 +16,7 @@
 #include "inventory.h"
 #include "game_utils.h"
 #include "hp.h"
+#include "players.h"
 
 void	wait_npc_action(t_game *game, char *buf)
 {
@@ -55,6 +56,8 @@ void	wait_menus(t_game *game, char *buf)
 		game->quests_open = 1;
 		game->state = GAME_IDLE;
 	}
+	if (game->state == GAME_WAIT_WHO)
+		wait_who(game, buf);
 }
 
 void	wait_move(t_game *game, char *buf)

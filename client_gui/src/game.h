@@ -19,6 +19,9 @@
 # define MAX_INVENTORY 32
 # define MAX_QUESTS 10
 
+# define MAX_ROOM_PLAYERS 64
+# define MAX_PLAYER_NAME 128
+
 # define CHAT_INPUT_SIZE 256
 
 typedef struct s_room
@@ -51,6 +54,7 @@ typedef enum e_game_state
 	GAME_WAIT_QUESTS,
 	GAME_WAIT_ATTACK,
 	GAME_WAIT_DROP,
+	GAME_WAIT_WHO,
 }	t_game_state;
 
 typedef enum e_chat_mode
@@ -93,6 +97,11 @@ typedef struct s_game
 
 	float			chat_scroll;
 	int				chat_auto_scroll;
+
+	int				players_open;
+	char			room_players[MAX_ROOM_PLAYERS][MAX_PLAYER_NAME];
+	int				room_player_count;
+	int				server_player_count;
 }	t_game;
 
 t_scene	*game_create(t_manager *manager, const char *look_init);
@@ -109,5 +118,8 @@ void	game_idle(t_game *game, char *buf);
 
 void	draw_arrows(t_game *game, int center_x, int center_y);
 void	draw_game_utils(t_game *game);
+void	draw_actions(t_game *game);
+
+void	dispatch_evt(t_game *game, char *buf);
 
 #endif
