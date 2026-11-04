@@ -14,7 +14,7 @@
 #include "inventory.h"
 #include "game.h"
 
-static Rectangle	get_inventory_panel(void)
+Rectangle	get_inventory_panel(void)
 {
 	int	width;
 	int	height;
@@ -47,6 +47,7 @@ static void	inventory_label(Rectangle panel, char **items)
 void	draw_inventory(char **items)
 {
 	Rectangle	panel;
+	Rectangle	drop;
 	int			i;
 
 	panel = get_inventory_panel();
@@ -58,10 +59,11 @@ void	draw_inventory(char **items)
 	i = 0;
 	while (items[i] != NULL)
 	{
+		drop = get_drop_button(panel, i);
 		DrawText(items[i], panel.x + 30,
-			panel.y + 80 + i * 30, 20, BLACK);
+			drop.y + (drop.height - 20) / 2, 20, BLACK);
+		drop_button(drop);
 		i++;
-        drop_button(get_drop_button(panel, i));
 	}
 }
 

@@ -43,6 +43,8 @@ void	wait_menus(t_game *game, char *buf)
 		game->inventory_open = 1;
 		game->state = GAME_IDLE;
 	}
+	if (game->state == GAME_WAIT_DROP)
+		wait_drop(game, buf);
 	if (game->state == GAME_WAIT_QUESTS)
 	{
 		if (parse_quests(buf, game) < 0)

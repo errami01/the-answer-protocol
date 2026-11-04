@@ -50,6 +50,7 @@ typedef enum e_game_state
 	GAME_WAIT_QUEST,
 	GAME_WAIT_QUESTS,
 	GAME_WAIT_ATTACK,
+	GAME_WAIT_DROP,
 }	t_game_state;
 
 typedef enum e_chat_mode
