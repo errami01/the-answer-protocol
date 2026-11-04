@@ -17,6 +17,7 @@ add_executable(client_app_gui
     src/client.c
     src/client_update.c
     src/drop.c
+    src/evt_dispatcher.c
     src/game_actions.c
     src/game_arrow_buttons.c
     src/game_arrows.c
@@ -26,6 +27,7 @@ add_executable(client_app_gui
     src/game_components_utils.c
     src/game_draw.c
     src/game_idle.c
+    src/game_init.c
     src/game_utils.c
     src/hp.c
     src/inventory.c
@@ -41,6 +43,9 @@ add_executable(client_app_gui
     src/npc.c
     src/npc_dialog_draw.c
     src/npc_text_wrap.c
+    src/players.c
+    src/players_draw.c
+    src/players_evt.c
     src/quest.c
     src/quests_draw.c
     src/quests_parser.c
