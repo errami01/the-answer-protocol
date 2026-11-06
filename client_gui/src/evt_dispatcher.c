@@ -1,5 +1,6 @@
 #include "chat.h"
 #include "game.h"
+#include "group.h"
 #include "players.h"
 
 static void	evt_chat(t_game *game, char *buf)
@@ -26,8 +27,15 @@ static void	evt_players(t_game *game, char *buf)
 		remove_player(game, buf + 24);
 }
 
+static void	evt_group(t_game *game, char *buf)
+{
+	if (strncmp(buf, "EVT GROUP INVITE ", 17) == 0)
+		group_invite_receive(game, buf);
+}
+
 void	dispatch_evt(t_game *game, char *buf)
 {
 	evt_chat(game, buf);
 	evt_players(game, buf);
+	evt_group(game, buf);
 }

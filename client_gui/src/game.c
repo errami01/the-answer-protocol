@@ -11,13 +11,13 @@
 /* ************************************************************************** */
 
 #include <raylib.h>
-#include <string.h>
 #include "game.h"
 #include "client.h"
 #include "game_commands.h"
 #include "game_init.h"
 #include "inventory.h"
 #include "chat.h"
+#include "group.h"
 
 static void	game_update(t_scene *scene)
 {
@@ -30,6 +30,7 @@ static void	game_update(t_scene *scene)
 		return ;
 	handle_chat(game);
 	handle_chat_scroll(game);
+	handle_group_invite(game);
 	game_idle(game, buf);
 	while (1)
 	{
@@ -42,6 +43,7 @@ static void	game_update(t_scene *scene)
 		wait_move(game, buf);
 		wait_menus(game, buf);
 		wait_npc_action(game, buf);
+		wait_invite_accept(game, buf);
 	}
 }
 
@@ -67,6 +69,7 @@ static void	game_draw(t_scene *scene)
 	draw_arrows(game, center_x, center_y);
 	draw_chat(game);
 	draw_actions(game);
+	draw_group_invite(game);
 }
 
 static void	game_destroy(t_scene *scene)

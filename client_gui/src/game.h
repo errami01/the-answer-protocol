@@ -55,6 +55,7 @@ typedef enum e_game_state
 	GAME_WAIT_ATTACK,
 	GAME_WAIT_DROP,
 	GAME_WAIT_WHO,
+	GAME_WAIT_GROUP_INVITE_ACCEPT,
 }	t_game_state;
 
 typedef enum e_chat_mode
@@ -102,6 +103,9 @@ typedef struct s_game
 	char			room_players[MAX_ROOM_PLAYERS][MAX_PLAYER_NAME];
 	int				room_player_count;
 	int				server_player_count;
+
+	int				group_invite_open;
+	char			group_invite_sender[MAX_PLAYER_NAME];
 }	t_game;
 
 t_scene	*game_create(t_manager *manager, const char *look_init);

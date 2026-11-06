@@ -29,6 +29,9 @@ add_executable(client_app_gui
     src/game_idle.c
     src/game_init.c
     src/game_utils.c
+    src/group_invite.c
+    src/group_invite_buttons.c
+    src/group_invite_draw.c
     src/hp.c
     src/inventory.c
     src/inventory_parser.c
