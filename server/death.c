@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 11:49:39 by aberrami          #+#    #+#             */
-/*   Updated: 2026/10/03 18:35:54 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/07 20:44:03 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	handle_death(t_player *p, t_npc *npc, t_world *w)
 	{
 		item = find_item(p->current_room->items, "item.goblin_power");
 		item->is_visible = 1;
-		npc->dialogue = "OK ....";
+		npc->dialogue = "....";
 	}
 	if (p->hp <= 0)
 	{

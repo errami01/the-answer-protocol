@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/15 21:58:05 by aberrami          #+#    #+#             */
-/*   Updated: 2026/11/07 11:41:53 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/07 16:53:18 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ typedef struct s_player
 	t_room			*current_room;
 	t_item			*inventory;
 	int				hp;
+	int				is_defending;
 	char			ip[INET_ADDRSTRLEN];
 	t_quest			*quests;
 	long			last_msg_time;
@@ -132,7 +133,7 @@ void		cmd_chat(t_player *p, char *arg, t_world *world);
 void		cmd_take(t_player *p, char *arg, t_world *w);
 void		cmd_drop(t_player *p, char *arg, t_world *w);
 void		cmd_inventory(t_player *p);
-
+void		cmd_use_item(t_player *p, char *arg);
 /* Linked List Helpers */
 void		add_item(t_item **list, t_item *item);
 t_item		*remove_item(t_item **list, char *id_or_name);

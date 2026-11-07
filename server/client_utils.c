@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/03 20:29:20 by aberrami          #+#    #+#             */
-/*   Updated: 2026/10/24 15:59:28 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/07 16:55:45 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,8 @@ void	handle_client_msg(struct pollfd *fds, int i, t_world *world)
 		cmd_talk(p, buf + 5);
 	else if (p && strncasecmp(buf, "GROUP ", 6) == 0)
 		cmd_group(p, buf + 6, world);
+	else if (p && strncasecmp(buf, "USE_ITEM ", 9) == 0)
+		cmd_use_item(p, buf + 9);
 	else
 		write(fds[i].fd, "ERR 400 UNKNOWN_COMMAND\n", 24);
 }

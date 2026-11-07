@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 11:37:57 by aberrami          #+#    #+#             */
-/*   Updated: 2026/10/25 09:46:06 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/07 21:49:08 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,13 @@ t_npc	*find_npc(t_npc *list, char *name)
 	return (NULL);
 }
 
-static int	check_sword(t_item *inventory)
+static int	log_npc_death(t_npc *npc, t_player *p)
 {
-	t_item	*curr;
-
-	curr = inventory;
-	while (curr)
+	if (!npc->hp)
 	{
-		if (strcasecmp(curr->id, "item.sword") == 0)
-			return (1);
-		curr = curr->next;
+		write(p->fd, "OK The Goblin is dead.\n", 24);
+		log_event("INFO", p->name, "OK The Goblin is dead.", NULL);
+		return (1);
 	}
 	return (0);
 }
@@ -61,26 +58,25 @@ static void	resolve_combat(t_player *p, t_npc *npc, t_world *w)
 	int		p_dmg;
 	int		n_dmg;
 
-	if (!npc->hp)
-	{
-		write(p->fd, "OK The Goblin is dead.\n", 24);
-		log_event("INFO", p->name, "OK The Goblin is dead.", NULL);
+	if (log_npc_death(npc, p))
 		return ;
-	}
 	p_dmg = (rand() % 10) + 5;
-	n_dmg = (rand() % 8) + 2;
-	if (check_sword(p->inventory))
-		npc->hp -= p_dmg;
-	else
-	{
-		write(p->fd, "OK You need a Quest to defeat the enemy.\n", 41);
-		log_event("INFO", p->name,
-			"OK You need a Quest to defeat the enemy.", NULL);
-	}
+	n_dmg = (rand() % 10) + 5;
+	if (!find_item(p->inventory, "item.sword"))
+		p_dmg = 0;
+	npc->hp -= p_dmg;
 	if (npc->hp > 0)
+	{
+		if (p->is_defending)
+		{
+			n_dmg = (rand() % 3) + 2;
+			p->is_defending = 0;
+		}
 		p->hp -= n_dmg;
+	}
 	else
 		npc->hp = 0;
+	log_npc_death(npc, p);
 	combat_log(p, npc, w, p_dmg);
 	handle_death(p, npc, w);
 }
