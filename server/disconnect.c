@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/30 11:08:20 by aberrami          #+#    #+#             */
-/*   Updated: 2026/11/04 15:08:14 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/07 11:42:23 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,20 +65,20 @@ void	handle_disconnect(t_world *world, int i, struct pollfd *fds)
 {
 	t_player	*p;
 	char		msg[256];
+	char		name[100];
 
 	p = &world->players[i];
 	log_discon(p, msg);
 	if (p->fd != -1)
 	{
-		if (p->name && p->current_room)
-		{
-			drop_all_player_items(p, world);
-			snprintf(msg, sizeof(msg), "EVT ROOM PRESENCE LEAVE %s\n", p->name);
-			broadcast_to_room(world, p->current_room, msg, p->fd);
-			msg[strlen(msg)-1] = '\0';
-			log_event("INFO", p->name, msg, NULL);
-		}
+		strcpy(name, p->name);
 		clean_player(p);
+		drop_all_player_items(p, world);
+		snprintf(msg, sizeof(msg), "EVT ROOM PRESENCE LEAVE %s\n", name);
+		broadcast_to_room(world, p->current_room, msg, p->fd);
+		broadcast_stats(world, p->current_room, NULL, 1);
+		msg[strlen(msg)-1] = '\0';
+		log_event("INFO", name, msg, NULL);
 	}
 	memset(p, 0, sizeof(t_player));
 	p->fd = -1;

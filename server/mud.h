@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/15 21:58:05 by aberrami          #+#    #+#             */
-/*   Updated: 2026/10/24 15:50:25 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/07 11:41:53 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,10 +120,14 @@ t_player	*get_player_by_fd(t_world *world, int fd);
 /* Add these to mud.h */
 void		broadcast_to_room(t_world *world, t_room *room, char *msg,
 				int exclude_fd);
+void		broadcast_stats(t_world *world, t_room *new_room, t_room *old_room,
+				int in_or_out);
 void		cmd_move(t_player *p, char *arg, t_world *world);
 int			get_dir_index(const char *dir);
 void		broadcast_global(t_world *world, char *msg, int exclude_fd);
 void		cmd_who(t_player *p, t_world *w);
+int			build_room_list(t_player *p, t_world *w, char *out);
+int			count_total_players(t_world *w);
 void		cmd_chat(t_player *p, char *arg, t_world *world);
 void		cmd_take(t_player *p, char *arg, t_world *w);
 void		cmd_drop(t_player *p, char *arg, t_world *w);

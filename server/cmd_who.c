@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/24 15:48:10 by aberrami          #+#    #+#             */
-/*   Updated: 2026/10/25 10:07:02 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/06 23:57:08 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,15 @@
 /*
 ** Builds the JSON list of players in the same room.
 */
-static void	build_room_list(t_player *p, t_world *w, char *out)
+int	build_room_list(t_player *p, t_world *w, char *out)
 {
 	int		i;
 	int		first;
+	int		total;
 
-	strlcat(out, "\"room\": [", 1024);
+	strlcat(out, "\"players\": [", 1024);
 	i = 0;
+	total = 0;
 	first = 1;
 	while (i < MAX_CLIENTS)
 	{
@@ -36,30 +38,40 @@ static void	build_room_list(t_player *p, t_world *w, char *out)
 			strlcat(out, "\"", 1024);
 			strlcat(out, w->players[i].name, 1024);
 			strlcat(out, "\"", 1024);
+			total ++;
 			first = 0;
 		}
 		i++;
 	}
 	strlcat(out, "]", 1024);
+	return (total);
 }
 
-void	cmd_who(t_player *p, t_world *w)
+int	count_total_players(t_world *w)
 {
-	char	out[1024];
-	int		total;
-	int		i;
+	int	i;
+	int	total;
 
-	memset(out, 0, 1024);
-	strlcpy(out, "OK { ", 1024);
-	build_room_list(p, w, out);
-	total = 0;
 	i = 0;
+	total = 0;
 	while (i < MAX_CLIENTS)
 	{
 		if (w->players[i].fd != -1)
 			total++;
 		i++;
 	}
+	return (total);
+}
+
+void	cmd_who(t_player *p, t_world *w)
+{
+	char	out[1024];
+	int		total;
+
+	memset(out, 0, 1024);
+	strlcpy(out, "OK { ", 1024);
+	build_room_list(p, w, out);
+	total = count_total_players(w);
 	snprintf(out + strlen(out), 1024 - strlen(out),
 		", \"server\": %d }\n", total);
 	write(p->fd, out, strlen(out));

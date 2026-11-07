@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/04 14:43:23 by aberrami          #+#    #+#             */
-/*   Updated: 2026/10/25 10:43:27 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/07 11:43:32 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,10 @@ int	cmd_connect(struct pollfd *fds, int i, char *buf, t_world *world)
 	if (is_name_taken(buf + 8, world->players, fds[i].fd))
 		return (1);
 	if (init_player(&world->players[i], fds[i].fd, buf + 8, world->rooms))
+	{
 		broad_player_presence(world, i);
+		broadcast_stats(world, world->players[i].current_room, NULL, 1);
+	}
 	return (1);
 }
 
