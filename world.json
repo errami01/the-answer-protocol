@@ -17,6 +17,13 @@
             "name": "goblin power",
             "desc": "Kill the goblin to get his power.",
             "is_visible": false
+        },
+        {
+            "id": "item.shield", 
+            "name": "Iron Shield",
+            "desc": "A sturdy piece of defensive gear.",
+            "is_visible": true
+    
         }
 
     ],
@@ -108,7 +115,10 @@
             "exits": {
                 "west": "square",
                 "north": "gate"
-            }
+            },
+             "items": [
+                "item.shield"
+            ]
         },
         {
             "id": "gate",
