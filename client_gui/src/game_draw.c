@@ -18,6 +18,7 @@
 #include "inventory.h"
 #include "npc.h"
 #include "players.h"
+#include "group.h"
 
 void	draw_arrows(t_game *game, int center_x, int center_y)
 {
@@ -49,4 +50,6 @@ void	draw_actions(t_game *game)
 		draw_quests(game);
 	if (game->players_open)
 		draw_players(game);
+	if (game->group_window_open)
+		draw_group_window(game);
 }

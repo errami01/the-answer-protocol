@@ -30,7 +30,7 @@ static void	game_update(t_scene *scene)
 		return ;
 	handle_chat(game);
 	handle_chat_scroll(game);
-	handle_group_invite(game);
+	handle_group_actions(game);
 	game_idle(game, buf);
 	while (1)
 	{
@@ -44,6 +44,7 @@ static void	game_update(t_scene *scene)
 		wait_menus(game, buf);
 		wait_npc_action(game, buf);
 		wait_invite_accept(game, buf);
+		wait_group_create(game, buf);
 	}
 }
 
@@ -102,5 +103,6 @@ t_scene	*game_create(t_manager *manager, const char *look_init)
 	init_chat(game);
 	init_chat_input(game);
 	init_chat_scroll(game);
+	init_group_window(game);
 	return ((t_scene *)game);
 }

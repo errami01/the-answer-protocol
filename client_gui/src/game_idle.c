@@ -16,6 +16,7 @@
 #include "game_components.h"
 #include "inventory.h"
 #include "players.h"
+#include "group.h"
 
 static void	handle_inventory(t_game *game)
 {
@@ -60,6 +61,7 @@ void	game_idle(t_game *game, char *buf)
 		handle_inventory(game);
 		handle_players(game);
 		handle_quests(game);
+		handle_group_window(game);
 		if (game->npc_open)
 			handle_npc_dialog(game);
 		if (game->inventory_open || game->players_open
