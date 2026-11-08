@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/08 12:34:17 by aberrami          #+#    #+#             */
-/*   Updated: 2026/10/11 21:24:11 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/08 12:14:45 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,16 +48,17 @@ void	cleanup_server(t_world *world)
 
 	i = 0;
 	printf("\nServer shutting down. Cleaning memory...\n");
-	cleanup_rooms(world);
 	while (i < MAX_CLIENTS)
 	{
 		if (world->players[i].fd != -1)
 		{
+			drop_all_player_items(&world->players[i], world, 1);
 			close(world->players[i].fd);
 			free(world->players[i].name);
 		}
 		i++;
 	}
+	cleanup_rooms(world);
 	printf("Memory cleared. Goodbye!\n");
 }
 

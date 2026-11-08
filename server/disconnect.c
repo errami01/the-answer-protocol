@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/30 11:08:20 by aberrami          #+#    #+#             */
-/*   Updated: 2026/11/07 11:42:23 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/08 12:26:46 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static void	log_discon(t_player *p, char *msg)
 	log_event("INFO", user, msg, p->ip);
 }
 
-void	drop_all_player_items(t_player *p, t_world *w)
+void	drop_all_player_items(t_player *p, t_world *w, int server_down)
 {
 	t_item	*curr;
 	t_item	*next;
@@ -54,8 +54,11 @@ void	drop_all_player_items(t_player *p, t_world *w)
 	{
 		next = curr->next;
 		add_item(&p->current_room->items, curr);
-		snprintf(out, sizeof(out), "EVT ROOM ITEM DROP %s\n", curr->id);
-		broadcast_to_room(w, p->current_room, out, p->fd);
+		if (!server_down)
+		{
+			snprintf(out, sizeof(out), "EVT ROOM ITEM DROP %s\n", curr->id);
+			broadcast_to_room(w, p->current_room, out, p->fd);
+		}
 		curr = next;
 	}
 	p->inventory = NULL;
@@ -73,7 +76,7 @@ void	handle_disconnect(t_world *world, int i, struct pollfd *fds)
 	{
 		strcpy(name, p->name);
 		clean_player(p);
-		drop_all_player_items(p, world);
+		drop_all_player_items(p, world, 0);
 		snprintf(msg, sizeof(msg), "EVT ROOM PRESENCE LEAVE %s\n", name);
 		broadcast_to_room(world, p->current_room, msg, p->fd);
 		broadcast_stats(world, p->current_room, NULL, 1);
