@@ -78,6 +78,8 @@ static void	login_wait_look(t_login *login)
 	bytes = client_receive(login->manager->client, buf, sizeof(buf));
 	if (bytes > 0)
 	{
+		if (strncmp(buf, "EVT", 3) == 0)
+			return ;
 		if (strncmp(buf, "OK ", 3))
 		{
 			login->state = LOGIN_ERROR;
