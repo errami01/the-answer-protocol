@@ -2,6 +2,7 @@
 #include "game.h"
 #include "group.h"
 #include "players.h"
+#include "json_parser.h"
 
 static void	evt_chat(t_game *game, char *buf)
 {
@@ -21,6 +22,11 @@ static void	evt_chat(t_game *game, char *buf)
 
 static void	evt_players(t_game *game, char *buf)
 {
+	char	*stats;
+
+	stats = strstr(buf, "EVT STATS");
+	if (stats)
+		extract_int(stats + 18, "server", &game->server_player_count);
 	if (strncmp(buf, "EVT ROOM PRESENCE ENTER ", 24) == 0)
 		add_player(game, buf + 24);
 	else if (strncmp(buf, "EVT ROOM PRESENCE LEAVE ", 24) == 0)

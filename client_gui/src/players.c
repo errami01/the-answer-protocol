@@ -74,7 +74,7 @@ int	parse_who(t_game *game, const char *buf)
 
 	if (strncmp(buf, "OK ", 3) != 0)
 		return (-1);
-	room = strstr(buf, "\"room\"");
+	room = strstr(buf, "\"players\"");
 	server = strstr(buf, "\"server\"");
 	if (!room || !server)
 		return (-1);
