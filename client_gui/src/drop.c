@@ -47,10 +47,15 @@ void	handle_inventory_drop(t_game *game)
 
 void	wait_drop(t_game *game, char *buf)
 {
+	char	item[128];
+
 	if (game->state != GAME_WAIT_DROP)
 		return ;
 	if (strncmp(buf, "OK ", 3) == 0)
 	{
+		strcpy(item, buf + 11);
+		item[strlen(item) - 1] = '\0';
+		add_item(game, item);
 		client_send(game->manager->client, "INVENTORY\n");
 		game->state = GAME_WAIT_INVENTORY;
 		return ;

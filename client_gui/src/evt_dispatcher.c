@@ -39,9 +39,28 @@ static void	evt_group(t_game *game, char *buf)
 		group_invite_receive(game, buf);
 }
 
+static void	evt_items(t_game *game, char *buf)
+{
+	char	item[128];
+
+	if (strncmp(buf, "EVT ROOM ITEM TAKE", 18) == 0)
+	{
+		strcpy(item, buf + 19);
+		item[strlen(item) - 1] = '\0';
+		remove_item(game, item);
+	}
+	else if (strncmp(buf, "EVT ROOM ITEM DROP", 18) == 0)
+	{
+		strcpy(item, buf + 19);
+		item[strlen(item) - 1] = '\0';
+		add_item(game, item);
+	}
+}
+
 void	dispatch_evt(t_game *game, char *buf)
 {
 	evt_chat(game, buf);
 	evt_players(game, buf);
 	evt_group(game, buf);
+	evt_items(game, buf);
 }

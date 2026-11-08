@@ -39,6 +39,7 @@ add_executable(client_app_gui
     src/hp.c
     src/inventory.c
     src/inventory_parser.c
+    src/items_evt.c
     src/json_parser.c
     src/login.c
     src/login_draw.c

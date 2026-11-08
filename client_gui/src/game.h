@@ -129,6 +129,8 @@ void	draw_arrows(t_game *game, int center_x, int center_y);
 void	draw_game_utils(t_game *game);
 void	draw_actions(t_game *game);
 
+void	add_item(t_game *game, char *item);
+void	remove_item(t_game *game, char *item);
 void	dispatch_evt(t_game *game, char *buf);
 
 #endif
