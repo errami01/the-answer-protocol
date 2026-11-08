@@ -24,6 +24,8 @@ void	wait_invite_accept(t_game *game, char *buf)
 	if (strncmp(buf, "OK", 2) == 0)
 	{
 		game->group_invite_open = 0;
+		game->group_joined = 1;
+		strcpy(game->group_leader, game->group_invite_sender);
 		game->group_invite_sender[0] = '\0';
 		game->state = GAME_IDLE;
 		return ;
