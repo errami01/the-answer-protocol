@@ -6,7 +6,7 @@ static Rectangle	get_leave_button(Rectangle panel)
 {
 	return ((Rectangle){
 		panel.x + (panel.width - 190) / 2,
-		panel.y + ((panel.height - 76) / 2) + 38,
+		(panel.y + (panel.height - 122) / 2) + 84,
 		190,
 		38
 	});
@@ -22,7 +22,9 @@ void	draw_in_group(t_game *game, Rectangle panel)
 	mouse = GetMousePosition();
 	snprintf(text, sizeof(text), "%s's group", game->group_leader);
 	DrawText(text, (GetScreenWidth()
-			- MeasureText(text, 18)) / 2, panel.y + 60, 18, DARKGRAY);
+			- MeasureText(text, 18)) / 2,
+		panel.y + (panel.height - 122) / 2, 18, DARKGRAY);
+	draw_group_input(game, panel);
 	if (CheckCollisionPointRec(mouse, leave))
 		DrawRectangleRec(leave, DARKGRAY);
 	else

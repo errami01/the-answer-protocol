@@ -96,6 +96,7 @@ t_scene	*game_create(t_manager *manager, const char *look_init)
 	game->base.draw = game_draw;
 	game->base.destroy = game_destroy;
 	game->manager = manager;
+	game->group_invite_username_len = 0;
 	if (!init_room(game, look_init))
 		return (NULL);
 	game->npc_response[0] = '\0';

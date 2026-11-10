@@ -34,9 +34,6 @@ void	handle_username_input(t_login *login)
 		login->username_len--;
 		login->username[login->username_len] = '\0';
 	}
-	input_y = (GetScreenHeight() - 40) / 2 - 30;
-	button = (Rectangle){(GetScreenWidth() - BUTTON_WIDTH) / 2,
-		input_y + 40 + 20, BUTTON_WIDTH, BUTTON_HEIGHT};
 }
 
 void	login_submit(t_login *login)
