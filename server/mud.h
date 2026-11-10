@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/15 21:58:05 by aberrami          #+#    #+#             */
-/*   Updated: 2026/11/08 12:12:10 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/08 21:25:42 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ typedef struct s_player
 	int				msg_count;
 	char			*group_id;
 	char			*invited_by;
+	char			recv_buf[BUFFER_SIZE];
+    int				buf_len;
 }	t_player;
 
 typedef struct s_world
@@ -123,6 +125,7 @@ void		broadcast_to_room(t_world *world, t_room *room, char *msg,
 				int exclude_fd);
 void		broadcast_stats(t_world *world, t_room *new_room, t_room *old_room,
 				int in_or_out);
+void    	process_command(struct pollfd *fds, int i, t_world *world, char *buf);
 void		cmd_move(t_player *p, char *arg, t_world *world);
 int			get_dir_index(const char *dir);
 void		broadcast_global(t_world *world, char *msg, int exclude_fd);
