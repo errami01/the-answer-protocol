@@ -4,14 +4,19 @@
 
 static void	draw_not_in_content(Rectangle panel, Rectangle create, char *text)
 {
-	int	content_height;
-	int	start_y;
+	int		content_height;
+	int		start_y;
+	Vector2	mouse;
 
+	mouse = GetMousePosition();
 	content_height = create.height + 38;
 	start_y = panel.y + (panel.height - content_height) / 2;
 	DrawText(text, panel.x + (panel.width
 			- MeasureText(text, 18)) / 2, start_y, 18, DARKGRAY);
-	DrawRectangleRec(create, LIGHTGRAY);
+	if (CheckCollisionPointRec(mouse, create))
+		DrawRectangleRec(create, DARKGRAY);
+	else
+		DrawRectangleRec(create, LIGHTGRAY);
 	DrawText("Create", create.x + (create.width
 			- MeasureText("Create", 18)) / 2,
 		create.y + (create.height - 18) / 2, 18, BLACK);
@@ -34,6 +39,8 @@ void	handle_group_create(t_game *game)
 	Vector2		mouse;
 
 	if (!game->group_window_open || !IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+		return ;
+	if (game->group_joined)
 		return ;
 	panel = get_group_window_panel();
 	create = get_group_create_button(panel);

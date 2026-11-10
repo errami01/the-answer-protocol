@@ -44,7 +44,7 @@ static void	game_update(t_scene *scene)
 		wait_menus(game, buf);
 		wait_npc_action(game, buf);
 		wait_invite_accept(game, buf);
-		wait_group_create(game, buf);
+		wait_group(game, buf);
 	}
 }
 

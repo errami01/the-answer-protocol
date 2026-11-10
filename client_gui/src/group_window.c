@@ -40,4 +40,11 @@ void	handle_group_actions(t_game *game)
 {
 	handle_group_invite(game);
 	handle_group_create(game);
+	handle_group_leave(game);
+}
+
+void	wait_group(t_game *game, char *buf)
+{
+	wait_group_create(game, buf);
+	wait_group_leave(game, buf);
 }
