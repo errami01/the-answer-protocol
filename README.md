@@ -34,6 +34,22 @@ CONNECT bob
 ```
 You can then use other commands like ```LOOK```, ```MOVE north```...
 
+### Connect using the GUI client
+You can also connect to the server using a GUI client by executing:
+```bash
+./client_app_gui 127.0.0.1 4242
+```
+After logging in, you can move using the arrows by left-clicking on them, pick up items, interact with NPCs or do other various actions using the controls below:
+
+Controls:
+
+| Key | Action |
+|---|---|
+| I | open inventory |
+| Q | open a list of active/completed quests |
+| TAB | open a list of players |
+| G | open group menu |
+
 ## Architecture
 - **Concurrency Model**: The server uses I/O Multiplexing via the poll() system call. This allows a single-threaded process to handle up to 128 simultaneous connections without the overhead of threads or processes.
 - **Request Handling**: We implemented a Dispatcher pattern. Incoming strings are parsed and routed to specific command handlers (e.g., cmd_look, cmd_move) to ensure code maintainability and Norminette compliance.
