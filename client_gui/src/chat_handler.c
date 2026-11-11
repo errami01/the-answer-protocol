@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "chat.h"
+#include "game.h"
 #include "notification.h"
 
 static void	handle_chat_click(t_game *game)
@@ -26,7 +27,7 @@ static void	handle_chat_click(t_game *game)
 			get_chat_input()
 			);
 	i = 0;
-	while (i < 2)
+	while (i < 3)
 	{
 		if (CheckCollisionPointRec(mouse, get_chat_tab(i)))
 		{
@@ -71,8 +72,10 @@ static void	send_chat_message(t_game *game)
 		return ;
 	if (game->chat_mode == CHAT_MODE_GLOBAL)
 		channel = "GLOBAL";
-	else
+	else if (game->chat_mode == CHAT_MODE_ROOM)
 		channel = "ROOM";
+	else
+		channel = "GROUP";
 	snprintf(cmd, sizeof(cmd),
 		"CHAT %s %s\n", channel, game->chat_input);
 	if (client_send(game->manager->client, cmd) < 0)

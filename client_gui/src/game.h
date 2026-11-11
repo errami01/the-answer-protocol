@@ -65,7 +65,8 @@ typedef enum e_game_state
 typedef enum e_chat_mode
 {
 	CHAT_MODE_GLOBAL,
-	CHAT_MODE_ROOM
+	CHAT_MODE_ROOM,
+	CHAT_MODE_GROUP
 }	t_chat_mode;
 
 typedef struct s_game
