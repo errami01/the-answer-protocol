@@ -28,13 +28,17 @@ void		handle_group_create(t_game *game);
 void		handle_group_leave(t_game *game);
 void		handle_group_input_pointer(t_game *game);
 void		handle_group_input(t_game *game);
+void		handle_group_invite_submit(t_game *game);
 Rectangle	get_invite_panel(void);
 Rectangle	get_accept_button(Rectangle panel);
 Rectangle	get_decline_button(Rectangle panel);
+Rectangle	get_input_widget(Rectangle panel);
+Rectangle	get_input_button(Rectangle panel);
 void		wait_group_create(t_game *game, char *buf);
 void		wait_group_leave(t_game *game, char *buf);
 void		handle_group_actions(t_game *game);
 void		wait_group(t_game *game, char *buf);
+void		wait_group_invite_submit(t_game *game, char *buf);
 
 Rectangle	get_group_window_panel(void);
 Rectangle	get_group_create_button(Rectangle panel);

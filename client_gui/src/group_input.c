@@ -1,23 +1,15 @@
 #include "game.h"
 #include "group.h"
-#include <raylib.h>
-
-static Rectangle	get_input_widget(Rectangle panel)
-{
-	return ((Rectangle){
-		panel.x + (panel.width - 260) / 2,
-		(panel.y + (panel.height - 122) / 2) + 32,
-		260,
-		38
-	});
-}
+#include "notification.h"
 
 void	draw_group_input(t_game *game, Rectangle panel)
 {
 	Rectangle	input;
+	Rectangle	button;
 	Vector2		mouse;
 
 	input = get_input_widget(panel);
+	button = get_input_button(panel);
 	mouse = GetMousePosition();
 	if (CheckCollisionPointRec(mouse, input))
 		DrawRectangleLines(input.x, input.y, input.width, input.height, BLUE);
@@ -26,6 +18,12 @@ void	draw_group_input(t_game *game, Rectangle panel)
 			input.height, DARKGRAY);
 	DrawText(game->group_invite_username, input.x + 10,
 		input.y + (input.height - 18) / 2, 18, DARKGRAY);
+	if (CheckCollisionPointRec(mouse, button))
+		DrawRectangleRec(button, DARKBLUE);
+	else
+		DrawRectangleRec(button, BLUE);
+	DrawText("Invite", button.x + (button.width - MeasureText("Invite", 18))
+		/ 2, button.y + (button.height - 18) / 2, 18, BLACK);
 }
 
 void	handle_group_input_pointer(t_game *game)
@@ -76,4 +74,43 @@ void	handle_group_input(t_game *game)
 		game->group_invite_username_len--;
 		game->group_invite_username[game->group_invite_username_len] = '\0';
 	}
+}
+
+void	handle_group_invite_submit(t_game *game)
+{
+	Rectangle	panel;
+	Rectangle	button;
+	Vector2		mouse;
+	char		cmd[64];
+
+	if (!game->group_window_open || !game->group_joined)
+		return ;
+	if (!IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+		return ;
+	panel = get_group_window_panel();
+	button = get_input_button(panel);
+	mouse = GetMousePosition();
+	if (CheckCollisionPointRec(mouse, button))
+	{
+		snprintf(cmd, sizeof(cmd), "GROUP INVITE %s\n",
+			game->group_invite_username);
+		client_send(game->manager->client, cmd);
+		game->state = GAME_WAIT_GROUP_INVITE_SUBMIT;
+	}
+}
+
+void	wait_group_invite_submit(t_game *game, char *buf)
+{
+	if (game->state != GAME_WAIT_GROUP_INVITE_SUBMIT)
+		return ;
+	if (strncmp(buf, "OK", 2) == 0)
+	{
+		game->group_invite_username[0] = '\0';
+		game->group_invite_username_len = 0;
+		game->state = GAME_IDLE;
+		show_notification(game, "Invite sent.");
+		return ;
+	}
+	game->state = GAME_IDLE;
+	show_notification(game, "Failed to send an invite.");
 }

@@ -43,10 +43,12 @@ void	handle_group_actions(t_game *game)
 	handle_group_input_pointer(game);
 	handle_group_leave(game);
 	handle_group_input(game);
+	handle_group_invite_submit(game);
 }
 
 void	wait_group(t_game *game, char *buf)
 {
 	wait_group_create(game, buf);
 	wait_group_leave(game, buf);
+	wait_group_invite_submit(game, buf);
 }

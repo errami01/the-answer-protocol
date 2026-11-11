@@ -29,3 +29,26 @@ Rectangle	get_group_invite_button(Rectangle panel)
 		38
 	});
 }
+
+Rectangle	get_input_widget(Rectangle panel)
+{
+	return ((Rectangle){
+		panel.x + (panel.width - 330) / 2,
+		(panel.y + (panel.height - 122) / 2) + 32,
+		260,
+		38
+	});
+}
+
+Rectangle	get_input_button(Rectangle panel)
+{
+	Rectangle	input;
+
+	input = get_input_widget(panel);
+	return ((Rectangle){
+		input.x + input.width + 8,
+		input.y,
+		62,
+		input.height
+	});
+}
