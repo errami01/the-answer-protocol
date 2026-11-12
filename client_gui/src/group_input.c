@@ -16,8 +16,13 @@ void	draw_group_input(t_game *game, Rectangle panel)
 	else
 		DrawRectangleLines(input.x, input.y, input.width,
 			input.height, DARKGRAY);
-	DrawText(game->group_invite_username, input.x + 10,
-		input.y + (input.height - 18) / 2, 18, DARKGRAY);
+	if (game->group_invite_username_len < 27)
+		DrawText(game->group_invite_username, input.x + 10,
+			input.y + (input.height - 18) / 2, 18, DARKGRAY);
+	else
+		DrawText(game->group_invite_username + (game->group_invite_username_len
+				- 27), input.x + 10,
+			input.y + (input.height - 18) / 2, 18, DARKGRAY);
 	if (CheckCollisionPointRec(mouse, button))
 		DrawRectangleRec(button, DARKBLUE);
 	else

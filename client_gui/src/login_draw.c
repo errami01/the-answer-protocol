@@ -20,7 +20,11 @@ static void	draw_input(t_login *login, int screen_width, int screen_height)
 	input_x = (screen_width - INPUT_WIDTH) / 2;
 	input_y = (screen_height - INPUT_HEIGHT) / 2 - 30;
 	DrawRectangleLines(input_x, input_y, INPUT_WIDTH, INPUT_HEIGHT, DARKGRAY);
-	DrawText(login->username, input_x + 10, input_y + 10, 20, BLACK);
+	if (login->username_len < 27)
+		DrawText(login->username, input_x + 10, input_y + 10, 20, BLACK);
+	else
+		DrawText(login->username + (login->username_len - 27),
+			input_x + 10, input_y + 10, 20, BLACK);
 }
 
 static Rectangle	get_button(int screen_width, int screen_height)
