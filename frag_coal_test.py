@@ -19,3 +19,5 @@ s.send(b"bob\n")
 # 4. Check for response
 print("Server response:", s.recv(1024).decode())
 s.close()
+
+# CHAT GLOBAL \033[2J\n

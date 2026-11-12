@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/08 20:11:47 by aberrami          #+#    #+#             */
-/*   Updated: 2026/11/09 01:27:31 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/12 16:29:15 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ static int	handle_conn_msg(struct pollfd *fds, int i, char *buf,
 	t_player	*p;
 	char		*name;
 
-	// p = &world->players[i];
 	p = get_player_by_fd(world, fds[i].fd);
 	name = "Unkown";
 	if (world->players[i].name)
@@ -64,13 +63,45 @@ static int	handle_conn_msg(struct pollfd *fds, int i, char *buf,
 	return (handle_other_cmd(p, buf, world));
 }
 
+int	contains_control_chars(const char *str, t_world *world, int i,
+	struct pollfd *fds)
+{
+	unsigned char	*s;
+	char			*name;
+	t_player		*p;
+
+	s = (unsigned char *)str;
+	p = &world->players[i];
+	while (*s)
+	{
+		if (*s == '\n' || *s == '\t')
+		{
+			s++;
+			continue ;
+		}
+		if (*s < 32 || *s == 127)
+		{
+			name = "Unknown";
+			if (p->name)
+				name = p->name;
+			write(fds[i].fd, "ERR 400 MALICIOUS_INPUT\n", 24);
+			log_event("WARN", name, "ERR 400 MALICIOUS_INPUT", p->ip);
+			return (1);
+		}
+		s++;
+	}
+	return (0);
+}
+
 void	process_command(struct pollfd *fds, int i, t_world *world, char *buf)
 {
-    t_player	*p;
+	t_player	*p;
 
-    p = &world->players[i];
-    if (check_flooding(&world->players[i]))
+	p = &world->players[i];
+	if (check_flooding(&world->players[i], fds, i))
 		return (handle_disconnect(world, i, fds));
+	if (contains_control_chars(buf, world, i, fds))
+		return ;
 	if (handle_conn_msg(fds, i, buf, world))
 		return ;
 	else if (p && strncasecmp(buf, "QUESTS", 6) == 0)

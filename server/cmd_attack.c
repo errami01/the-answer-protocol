@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 11:37:57 by aberrami          #+#    #+#             */
-/*   Updated: 2026/11/07 21:49:08 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/12 16:50:42 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,11 @@ void	cmd_attack(t_player *p, char *arg, t_world *w)
 	t_npc	*target;
 
 	if (!arg || strlen(arg) == 0)
+	{
+		write(p->fd, "ERR 400 MISSING_ARGUMENT\n", 25);
+		log_event("WARN", p->name, "ERR 400 MISSING_ARGUMENT", NULL);
 		return ;
+	}
 	target = find_npc(p->current_room->npcs, arg);
 	if (!target)
 	{

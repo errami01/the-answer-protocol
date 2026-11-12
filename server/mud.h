@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/15 21:58:05 by aberrami          #+#    #+#             */
-/*   Updated: 2026/11/08 21:25:42 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/12 15:56:32 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ typedef struct s_player
 	char			*group_id;
 	char			*invited_by;
 	char			recv_buf[BUFFER_SIZE];
-    int				buf_len;
+	int				buf_len;
 }	t_player;
 
 typedef struct s_world
@@ -125,7 +125,8 @@ void		broadcast_to_room(t_world *world, t_room *room, char *msg,
 				int exclude_fd);
 void		broadcast_stats(t_world *world, t_room *new_room, t_room *old_room,
 				int in_or_out);
-void    	process_command(struct pollfd *fds, int i, t_world *world, char *buf);
+void		process_command(struct pollfd *fds, int i, t_world *world,
+				char *buf);
 void		cmd_move(t_player *p, char *arg, t_world *world);
 int			get_dir_index(const char *dir);
 void		broadcast_global(t_world *world, char *msg, int exclude_fd);
@@ -161,7 +162,7 @@ void		handle_disconnect(t_world *world, int i, struct pollfd *fds);
 void		drop_all_player_items(t_player *p, t_world *w, int server_down);
 void		log_event(const char *level, const char *player, const char *action,
 				const char *ip);
-int			check_flooding(t_player *p);
+int			check_flooding(t_player *p, struct pollfd *fds, int i);
 void		cmd_talk(t_player *p, char *arg);
 void		cmd_group(t_player *p, char *arg, t_world *w);
 void		broadcast_group(t_world *w, char *group_id, char *msg,

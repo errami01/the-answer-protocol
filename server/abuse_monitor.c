@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/31 20:26:01 by aberrami          #+#    #+#             */
-/*   Updated: 2026/09/06 21:50:57 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/12 14:21:48 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 ** Monitoring logic: Max 5 commands per second.
 ** Returns 1 if flooding is detected, 0 otherwise.
 */
-int	check_flooding(t_player *p)
+int	check_flooding(t_player *p, struct pollfd *fds, int i)
 {
 	long	now;
 	char	*name;
@@ -36,9 +36,8 @@ int	check_flooding(t_player *p)
 		name = "Unknown";
 		if (p->name)
 			name = p->name;
-		log_event(
-			"WARN", name,
-			"Potential command flooding detected", p->ip);
+		write(fds[i].fd, "ERR 426 TOO MANY REQUESTS\n", 26);
+		log_event("WARN", name, "ERR 426 TOO MANY REQUESTS", p->ip);
 		return (1);
 	}
 	return (0);

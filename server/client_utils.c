@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/03 20:29:20 by aberrami          #+#    #+#             */
-/*   Updated: 2026/11/10 11:46:01 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/12 15:50:46 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,6 @@ char	*accept_new_client(int server_fd, struct pollfd *fds)
 	return (NULL);
 }
 
-/*
-** Reads client message. For now, we only handle CONNECT and QUIT.
-*/
-
-
 void	handle_client_msg(struct pollfd *fds, int i, t_world *world)
 {
 	char		tmp[BUFFER_SIZE];
@@ -67,20 +62,21 @@ void	handle_client_msg(struct pollfd *fds, int i, t_world *world)
 	int			remaining;
 
 	bytes = recv(fds[i].fd, tmp, BUFFER_SIZE - 1, 0);
-	
 	if (bytes <= 0)
 		return (handle_disconnect(world, i, fds));
 	p = &world->players[i];
 	memcpy(p->recv_buf + p->buf_len, tmp, bytes);
 	p->buf_len += bytes;
-    p->recv_buf[p->buf_len] = '\0';
+	p->recv_buf[p->buf_len] = '\0';
 	strlcpy(world->players[i].ip, world->incoming_ip, INET_ADDRSTRLEN);
-	while ((newline = strchr(p->recv_buf, '\n')) != NULL) 
+	newline = strchr(p->recv_buf, '\n');
+	while (newline != NULL)
 	{
 		*newline = '\0';
 		process_command(fds, i, world, p->recv_buf);
 		remaining = p->buf_len - (newline - p->recv_buf + 1);
 		memmove(p->recv_buf, newline + 1, remaining);
 		p->buf_len = remaining;
+		newline = strchr(p->recv_buf, '\n');
 	}
 }
