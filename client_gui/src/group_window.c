@@ -6,7 +6,7 @@
 /*   By: msturma <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/13 14:37:45 by msturma           #+#    #+#             */
-/*   Updated: 2026/11/13 14:37:46 by msturma          ###   ########.fr       */
+/*   Updated: 2026/11/13 14:53:18 by msturma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,9 @@ void	draw_group_window(t_game *game)
 
 void	handle_group_window(t_game *game)
 {
+	if (game->inventory_open || game->quests_open
+		|| game->players_open || game->npc_open)
+		return ;
 	if (IsKeyPressed(KEY_G))
 	{
 		if (game->group_window_open)

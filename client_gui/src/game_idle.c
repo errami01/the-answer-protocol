@@ -6,7 +6,7 @@
 /*   By: msturma <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/20 11:19:46 by msturma           #+#    #+#             */
-/*   Updated: 2026/10/20 11:19:47 by msturma          ###   ########.fr       */
+/*   Updated: 2026/11/13 14:54:52 by msturma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@
 
 static void	handle_inventory(t_game *game)
 {
+	if (game->quests_open || game->players_open
+		|| game->group_window_open || game->npc_open)
+		return ;
 	if (game->inventory_open)
 		handle_inventory_drop(game);
 	if (IsKeyPressed(KEY_I))
@@ -34,6 +37,9 @@ static void	handle_inventory(t_game *game)
 
 static void	handle_players(t_game *game)
 {
+	if (game->quests_open || game->inventory_open
+		|| game->group_window_open || game->npc_open)
+		return ;
 	if (IsKeyPressed(KEY_TAB))
 	{
 		if (game->players_open)
@@ -45,6 +51,9 @@ static void	handle_players(t_game *game)
 
 static void	handle_quests(t_game *game)
 {
+	if (game->inventory_open || game->players_open
+		|| game->group_window_open || game->npc_open)
+		return ;
 	if (IsKeyPressed(KEY_Q))
 	{
 		if (game->quests_open)
@@ -65,7 +74,7 @@ void	game_idle(t_game *game, char *buf)
 		if (game->npc_open)
 			handle_npc_dialog(game);
 		if (game->inventory_open || game->players_open
-			|| game->quests_open || game->npc_open)
+			|| game->quests_open || game->npc_open || game->group_window_open)
 			return ;
 		handle_movement_buttons(game);
 		handle_item_clicks(game);
