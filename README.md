@@ -62,7 +62,7 @@ Our implementation strictly adheres to RFC 42TAP.
 - **Deviations**: No major deviations were made. However, for the ```LOOK``` command, we provide a compact JSON format to minimize network packet fragmentation.
 
 ## Combat System
-- **Mechanics**: We use an Instant Exchange turn-based system. When a player uses the ```ATTACK``` command, the server calculates player damage and immediately triggers an NPC counter-attack.
+- **Mechanics**: We use an Instant Exchange turn-based system. When a player uses the ```ATTACK``` command, the server calculates player damage and immediately triggers an NPC counter-attack. The player can defend using ```item.shield``` with the command ```USE_ITEM``` if it exists in his inventory
 - **Formulas**:
     - Player Damage: (rand() % 10) + 5
     - NPC Damage: (rand() % 8) + 2
@@ -73,7 +73,7 @@ Our implementation strictly adheres to RFC 42TAP.
 - Rewards: Completing a quest currently restores the player to 100 HP and removes the quest item from the world to maintain uniqueness.
 ## World Design
 - Layout: The world consists of 8 interconnected rooms including a central "Village Square," a "Bakery," and a "Dark Alley."
-- Connections: The map contains one primary loop (Square -> Armory -> Gate -> Bakery -> Square) and one optional branch leading to the "Deep Woods."
+- Connections: The map contains one primary loop (Square -> Bakery -> Alley -> Tavern -> Square) and one optional branch leading to the "Deep Woods."
 - Distribution: Items like the "Rusty Sword" and "Healing Herbs" are placed strategically to encourage exploration and quest completion.
 
 ## Server Logging
