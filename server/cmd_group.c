@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/03 20:26:06 by aberrami          #+#    #+#             */
-/*   Updated: 2026/10/03 20:26:58 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/14 12:51:15 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,13 @@ static void	group_join(t_player *p, char *leader_name, t_world *w)
 		log_event("ERR", p->name, "ERR 403 NO_INVITE_FROM_LEADER", NULL);
 		return ;
 	}
+	if (p->group_id && strcmp(p->group_id, leader_name) == 0)
+	{
+		write(p->fd, "ERR 402 ALREADY_IN_GROUP\n", 25);
+		log_event("WARN", p->name, "ERR 402 ALREADY_IN_GROUP", NULL);
+		return;
+		
+	}
 	p->group_id = strdup(leader_name);
 	snprintf(evt, sizeof(evt), "EVT GROUP JOIN %s\n", p->name);
 	broadcast_group(w, p->group_id, evt, p->fd);
@@ -76,23 +83,33 @@ static void	group_join(t_player *p, char *leader_name, t_world *w)
 	log_event("INFO", p->name, evt, NULL);
 }
 
+static void leave_group(t_player *p, t_world *w)
+{
+	char	evt[256];
+	
+	if (p->group_id)
+	{
+		snprintf(evt, sizeof(evt), "EVT GROUP LEAVE %s\n", p->name);
+		broadcast_group(w, p->group_id, evt, p->fd);
+		log_event("INFO", p->name, "EVT GROUP LEAVE", NULL);
+		free(p->group_id);
+		p->group_id = NULL;
+		write(p->fd, "OK\n", 3);
+	}
+}
 void	cmd_group(t_player *p, char *arg, t_world *w)
 {
-	if (strncmp(arg, "CREATE", 6) == 0)
+	if (strncasecmp(arg, "CREATE", 6) == 0)
 		group_create(p);
-	else if (strncmp(arg, "INVITE ", 7) == 0)
+	else if (strncasecmp(arg, "INVITE ", 7) == 0)
 		group_invite(p, arg + 7, w);
-	else if (strncmp(arg, "JOIN ", 5) == 0)
+	else if (strncasecmp(arg, "JOIN ", 5) == 0)
 		group_join(p, arg + 5, w);
-	else if (strncmp(arg, "LEAVE", 5) == 0)
+	else if (strncasecmp(arg, "LEAVE", 5) == 0)
+		leave_group(p, w);
+	else
 	{
-		if (p->group_id)
-		{
-			broadcast_group(w, p->group_id, "EVT GROUP LEAVE\n", p->fd);
-			log_event("INFO", p->name, "EVT GROUP LEAVE", NULL);
-			free(p->group_id);
-			p->group_id = NULL;
-			write(p->fd, "OK\n", 3);
-		}
+		write(p->fd, "ERR 400 INVALID_ARGUMENT\n", 25);
+		log_event("WARN", p->name, "ERR 400 INVALID_ARGUMENT", NULL);
 	}
 }

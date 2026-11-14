@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/25 21:19:15 by aberrami          #+#    #+#             */
-/*   Updated: 2026/10/06 17:42:12 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/13 21:00:26 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@ static void	broad_log(t_player *p, char *scope, char *msg_text, t_world *w)
 {
 	char	evt[1024];
 
-	if (strncmp(scope, "GLOBAL", 6) == 0)
+	if (strncasecmp(scope, "GLOBAL", 6) == 0)
 	{
 		snprintf(evt, sizeof(evt), "EVT GLOBAL CHAT %s %s", p->name, msg_text);
 		broadcast_global(w, evt, p->fd);
 		log_event("INFO", p->name, evt, NULL);
 	}
-	else if (strncmp(scope, "ROOM", 4) == 0)
+	else if (strncasecmp(scope, "ROOM", 4) == 0)
 	{
 		snprintf(evt, sizeof(evt), "EVT ROOM CHAT %s %s", p->name, msg_text);
 		broadcast_to_room(w, p->current_room, evt, p->fd);
@@ -37,9 +37,10 @@ static void	process_chat(t_player *p, char *scope, char *msg_text, t_world *w)
 {
 	char	evt[1024];
 
-	if (strncmp(scope, "GLOBAL", 6) == 0 || strncmp(scope, "ROOM", 4) == 0)
+	if (strncasecmp(scope, "GLOBAL", 6) == 0
+		|| strncasecmp(scope, "ROOM", 4) == 0)
 		broad_log(p, scope, msg_text, w);
-	else if (strncmp(scope, "GROUP", 5) == 0)
+	else if (strncasecmp(scope, "GROUP", 5) == 0)
 	{
 		if (!p->group_id)
 			write(p->fd, "ERR 401 NOT_IN_GROUP\n", 21);
