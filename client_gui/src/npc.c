@@ -56,7 +56,7 @@ static void	handle_npc_action(t_game *game, int index)
 	else if (index == 2)
 	{
 		attack(game, game->selected_npc);
-		game->npc_open = false;
+		game->npc_open = 0;
 	}
 }
 
@@ -72,7 +72,7 @@ void	handle_npc_dialog(t_game *game)
 	mouse = GetMousePosition();
 	if (CheckCollisionPointRec(mouse, get_npc_close_button(dialog)))
 	{
-		game->npc_open = false;
+		game->npc_open = 0;
 		game->npc_response[0] = '\0';
 		return ;
 	}

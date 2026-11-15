@@ -6,7 +6,7 @@
 /*   By: msturma <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/20 11:17:55 by msturma           #+#    #+#             */
-/*   Updated: 2026/10/20 11:17:56 by msturma          ###   ########.fr       */
+/*   Updated: 2026/11/15 16:35:46 by msturma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,14 @@ void	attack_state(t_game *game, char *buf)
 	int		damage;
 	char	notification[256];
 
+	if (strstr(buf, "dead"))
+	{
+		show_notification(game, "Target is dead.");
+		if (client_send(game->manager->client, "LOOK\n") < 0)
+			return ;
+		game->state = GAME_WAIT_LOOK;
+		return ;
+	}
 	if (parse_attack_response(buf, &attacker_hp, &target_hp, &damage) < 0)
 	{
 		show_notification(game, "Failed to attack.");
@@ -44,12 +52,5 @@ void	attack_state(t_game *game, char *buf)
 	snprintf(notification, sizeof(notification),
 		"Dealt %d damage. Enemy HP: %d", damage, target_hp);
 	show_notification(game, notification);
-	if (target_hp <= 0)
-	{
-		if (client_send(game->manager->client, "LOOK\n") < 0)
-			return ;
-		game->state = GAME_WAIT_LOOK;
-		return ;
-	}
 	game->state = GAME_IDLE;
 }

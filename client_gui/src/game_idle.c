@@ -6,7 +6,7 @@
 /*   By: msturma <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/20 11:19:46 by msturma           #+#    #+#             */
-/*   Updated: 2026/11/13 14:54:52 by msturma          ###   ########.fr       */
+/*   Updated: 2026/11/15 17:06:42 by msturma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,18 +65,19 @@ static void	handle_quests(t_game *game)
 
 void	game_idle(t_game *game, char *buf)
 {
-	if (game->state == GAME_IDLE)
-	{
-		handle_inventory(game);
-		handle_players(game);
-		handle_quests(game);
-		handle_group_window(game);
-		if (game->npc_open)
-			handle_npc_dialog(game);
-		if (game->inventory_open || game->players_open
-			|| game->quests_open || game->npc_open || game->group_window_open)
-			return ;
-		handle_movement_buttons(game);
-		handle_item_clicks(game);
-	}
+	if (game->state != GAME_IDLE)
+		return ;
+	handle_inventory(game);
+	handle_players(game);
+	handle_quests(game);
+	handle_group_window(game);
+	if (game->npc_open)
+		handle_npc_dialog(game);
+	if (game->state != GAME_IDLE)
+		return ;
+	if (game->inventory_open || game->players_open
+		|| game->quests_open || game->npc_open || game->group_window_open)
+		return ;
+	handle_movement_buttons(game);
+	handle_item_clicks(game);
 }
