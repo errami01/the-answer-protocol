@@ -6,7 +6,7 @@
 /*   By: msturma <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/13 14:38:36 by msturma           #+#    #+#             */
-/*   Updated: 2026/11/13 14:38:37 by msturma          ###   ########.fr       */
+/*   Updated: 2026/11/15 17:10:39 by msturma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,11 @@ static void	evt_chat(t_game *game, char *buf)
 	else if (strncmp(buf, "EVT GLOBAL CHAT ", 16) == 0)
 	{
 		snprintf(message, sizeof(message), "[GLOBAL] %s", buf + 16);
+		add_chat_message(game, message);
+	}
+	else if (strncmp(buf, "EVT GROUP CHAT ", 15) == 0)
+	{
+		snprintf(message, sizeof(message), "[GROUP] %s", buf + 15);
 		add_chat_message(game, message);
 	}
 }
