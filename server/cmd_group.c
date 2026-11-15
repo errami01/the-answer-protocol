@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/03 20:26:06 by aberrami          #+#    #+#             */
-/*   Updated: 2026/11/14 12:51:15 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/14 16:51:22 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,10 @@ static void	group_invite(t_player *p, char *target_name, t_world *w)
 	t_player	*target;
 	char		evt[256];
 
-	if (!p->group_id)
+	if (!p->group_id || strcmp(p->group_id, p->name) != 0)
 	{
-		write(p->fd, "ERR 401 NOT_IN_GROUP\n", 21);
-		log_event("WARN", p->name, "ERR 401 NOT_IN_GROUP", NULL);
+		write(p->fd, "ERR 405 NOT_GROUP_LEADER\n", 25);
+		log_event("WARN", p->name, "ERR 405 NOT_GOUP_LEADER", NULL);
 		return ;
 	}
 	target = find_player_by_name(w, target_name);
