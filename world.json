@@ -126,7 +126,8 @@
             "desc": "The exit to the wild.",
             "exits": {
                 "south": "armory",
-                "east": "woods"
+                "east": "woods",
+                "west": "shop"
             }
         },
         {

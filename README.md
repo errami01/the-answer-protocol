@@ -72,8 +72,9 @@ Our implementation strictly adheres to RFC 42TAP.
 - Validation: Quests are validated by checking the player's ```t_item``` linked list for a specific ```req_item_id``` when they interact with the quest-giving NPC.
 - Rewards: Completing a quest currently restores the player to 100 HP and removes the quest item from the world to maintain uniqueness.
 ## World Design
+![World map](tap_world.svg)
 - Layout: The world consists of 8 interconnected rooms including a central "Village Square," a "Bakery," and a "Dark Alley."
-- Connections: The map contains one primary loop (Square -> Bakery -> Alley -> Tavern -> Square) and one optional branch leading to the "Deep Woods."
+- Connections: The map contains one primary loop (Square -> Armory -> Gate -> Shop -> Bakery -> Alley -> Tavern -> Square) and one optional branch leading to the "Deep Woods."
 - Distribution: Items like the "Rusty Sword" and "Healing Herbs" are placed strategically to encourage exploration and quest completion.
 
 ## Server Logging
