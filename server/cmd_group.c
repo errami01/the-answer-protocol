@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/03 20:26:06 by aberrami          #+#    #+#             */
-/*   Updated: 2026/11/14 16:51:22 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/16 16:02:32 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,7 @@ static void	group_join(t_player *p, char *leader_name, t_world *w)
 	{
 		write(p->fd, "ERR 402 ALREADY_IN_GROUP\n", 25);
 		log_event("WARN", p->name, "ERR 402 ALREADY_IN_GROUP", NULL);
-		return;
-		
+		return ;
 	}
 	p->group_id = strdup(leader_name);
 	snprintf(evt, sizeof(evt), "EVT GROUP JOIN %s\n", p->name);
@@ -83,10 +82,10 @@ static void	group_join(t_player *p, char *leader_name, t_world *w)
 	log_event("INFO", p->name, evt, NULL);
 }
 
-static void leave_group(t_player *p, t_world *w)
+static void	leave_group(t_player *p, t_world *w)
 {
 	char	evt[256];
-	
+
 	if (p->group_id)
 	{
 		snprintf(evt, sizeof(evt), "EVT GROUP LEAVE %s\n", p->name);
@@ -97,6 +96,7 @@ static void leave_group(t_player *p, t_world *w)
 		write(p->fd, "OK\n", 3);
 	}
 }
+
 void	cmd_group(t_player *p, char *arg, t_world *w)
 {
 	if (strncasecmp(arg, "CREATE", 6) == 0)

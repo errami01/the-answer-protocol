@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/15 21:58:05 by aberrami          #+#    #+#             */
-/*   Updated: 2026/11/12 15:56:32 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/16 15:44:59 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ int			cmd_quit(struct pollfd *fds, int i, t_world *world);
 void		cmd_look(t_player *player, t_world *world);
 int			init_player(t_player *player, int fd, char *name,
 				t_room *start_room);
-int			is_name_taken(const char *name, const t_player *players, int fd);
+int			is_name_taken(char *name, const t_player *players, int fd);
 
 /* Helper to find player by FD */
 t_player	*get_player_by_fd(t_world *world, int fd);

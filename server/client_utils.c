@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/03 20:29:20 by aberrami          #+#    #+#             */
-/*   Updated: 2026/11/16 15:20:01 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/16 16:04:26 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,11 @@ char	*accept_new_client(int server_fd, struct pollfd *fds)
 	return (NULL);
 }
 
-static int	validate_msg_length(int bytes, t_world *world, int i, struct pollfd *fds)
+static int	validate_msg_length(int bytes, t_world *world, int i,
+		struct pollfd *fds)
 {
-	t_player *p;
-	
+	t_player	*p;
+
 	p = &world->players[i];
 	if (bytes <= 0)
 	{
@@ -66,10 +67,12 @@ static int	validate_msg_length(int bytes, t_world *world, int i, struct pollfd *
 	if (bytes + p->buf_len > 1024)
 	{
 		write(fds[i].fd, "ERR 400 MESSAGE_TOO_LONG\n", 25);
+		log_event("ERROR", "SYSTEM", "ERR 400 MESSAGE_TOO_LONG", NULL);
 		return (0);
 	}
-	return 1;
+	return (1);
 }
+
 void	handle_client_msg(struct pollfd *fds, int i, t_world *world)
 {
 	char		tmp[BUFFER_SIZE];
@@ -78,6 +81,7 @@ void	handle_client_msg(struct pollfd *fds, int i, t_world *world)
 	int			bytes;
 	int			remaining;
 
+	newline = NULL;
 	bytes = recv(fds[i].fd, tmp, BUFFER_SIZE - 1, 0);
 	if (!validate_msg_length(bytes, world, i, fds))
 		return ;

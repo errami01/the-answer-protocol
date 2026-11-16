@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/21 22:11:24 by aberrami          #+#    #+#             */
-/*   Updated: 2026/10/25 10:38:11 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/16 15:44:11 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ static int	is_valid_name(char *str)
 
 	start = 0;
 	end = strlen(str) - 1;
+	if (end > 20)
+		return (0);
 	i = -1;
 	while (str[start] != '\0' && isspace((unsigned char)str[start]))
 		start++;
@@ -37,11 +39,17 @@ static int	is_valid_name(char *str)
 	return (0);
 }
 
-int	is_name_taken(const char *name, const t_player *players, int fd)
+int	is_name_taken(char *name, const t_player *players, int fd)
 {
 	int	i;
 
 	i = 0;
+	if (!is_valid_name(name))
+	{
+		write(fd, "ERR 201 INVALID_NAME\n", 21);
+		log_event("ERROR", "SYSTEM", "ERR 201 INVALID_NAME", NULL);
+		return (1);
+	}
 	while (i < MAX_CLIENTS)
 	{
 		if (players[i].name && strcmp(players[i].name, name) == 0)
