@@ -6,11 +6,25 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/01 11:07:19 by aberrami          #+#    #+#             */
-/*   Updated: 2026/10/03 18:38:18 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/17 21:35:51 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mud.h"
+
+static void	set_dialogue(t_npc *npc)
+{
+	if (npc->quest)
+	{
+		free(npc->dialogue);
+		if (npc->quest->status == Q_ACTIVE)
+			npc->dialogue = strndup("The quest has already been taken", 32);
+		else if (npc->quest->status == Q_COMPLETED)
+			npc->dialogue = strndup("The quest has already been completed", 36);
+		else
+			npc->dialogue = strndup("I have a Quest for you", 22);
+	}
+}
 
 static void	handle_talk_logic(t_player *p, t_npc *npc)
 {
@@ -20,6 +34,7 @@ static void	handle_talk_logic(t_player *p, t_npc *npc)
 	memset(dialogue, 0, 500);
 	if (npc->dialogue)
 	{
+		set_dialogue(npc);
 		len = strlen(npc->dialogue);
 		snprintf(dialogue, sizeof(dialogue), "OK %s", npc->dialogue);
 		len = strlen(dialogue);

@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 21:30:19 by aberrami          #+#    #+#             */
-/*   Updated: 2026/11/17 18:21:19 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/17 22:00:30 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,29 @@
 /*
 ** Logic to complete a quest if the player has the required item.
 */
-static void	complete_quest(t_player *p, t_quest *q, t_npc *npc)
+static void	complete_quest(t_player *p, t_quest *q)
 {
 	t_item	*item;
 
-	item = remove_item(&p->inventory, q->req_item_id);
-	if (item)
+	if (is_holding_quest(p, q))
 	{
-		q->status = Q_COMPLETED;
-		p->hp = 100;
-		free(item->id);
-		free(item->name);
-		free(item);
-		write(p->fd, "OK Quest Completed! Reward: Full HP.\n", 37);
-		log_event("INFO",
-			p->name, "OK Quest Completed! Reward: Full HP.", NULL);
+		item = remove_item(&p->inventory, q->req_item_id);
+		if (item)
+		{
+			q->status = Q_COMPLETED;
+			p->hp = 100;
+			free(item->id);
+			free(item->name);
+			free(item);
+			write(p->fd, "OK Quest Completed! Reward: Full HP.\n", 37);
+			log_event("INFO",
+				p->name, "OK Quest Completed! Reward: Full HP.", NULL);
+		}
+		else
+			remove_quest(p, q);
 	}
 	else
 	{
-		free(npc->dialogue);
-		npc->dialogue = strndup("The Quest is already active", 27);
 		write(p->fd, "OK The quest is already active.\n", 32);
 		log_event("INFO", p->name,
 			"OK The quest is already active.", NULL);
@@ -70,8 +73,6 @@ static void	handle_quest_logic(t_player *p, t_npc *npc)
 	q = set_quest(npc);
 	if (!q || q->status == Q_COMPLETED)
 	{
-		if (q && q->status == Q_COMPLETED)
-			npc->dialogue = "OK The Quest is already completed";
 		write(p->fd, "ERR 406 NO_QUEST_AVAILABLE\n", 27);
 		log_event("WARN", p->name, "ERR 406 NO_QUEST_AVAILABLE", NULL);
 	}
@@ -86,7 +87,7 @@ static void	handle_quest_logic(t_player *p, t_npc *npc)
 		log_event("INFO", p->name, out, NULL);
 	}
 	else if (q->status == Q_ACTIVE)
-		complete_quest(p, q, npc);
+		complete_quest(p, q);
 }
 
 void	cmd_quest(t_player *p, char *arg, t_world *w)

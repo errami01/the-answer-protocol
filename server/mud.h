@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/15 21:58:05 by aberrami          #+#    #+#             */
-/*   Updated: 2026/11/16 15:44:59 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/17 21:46:56 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,9 +157,13 @@ t_npc		*remove_npc(t_npc **list, char *name); // Optional: for XP/Loot
 void		parse_npc_array(const char *js, jsmntok_t *t, int *i, t_room *room);
 void		cmd_quest(t_player *p, char *arg, t_world *w);
 void		cmd_quests(t_player *p);
+void		remove_all_quests(t_player *p);
+void		remove_quest(t_player *p, t_quest *q);
+
 t_npc		*find_npc(t_npc *list, char *name);
 void		handle_disconnect(t_world *world, int i, struct pollfd *fds);
 void		drop_all_player_items(t_player *p, t_world *w, int server_down);
+int			is_holding_quest(t_player *p, t_quest *q);
 void		log_event(const char *level, const char *player, const char *action,
 				const char *ip);
 int			check_flooding(t_player *p, struct pollfd *fds, int i);
