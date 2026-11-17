@@ -7,7 +7,7 @@
             "is_visible": true
         },
         {
-            "id": "item.herb",
+            "id": "item.herbs",
             "name": "Healing Herb",
             "desc": "A green leaf that smells of mint.",
             "is_visible": true
@@ -65,9 +65,6 @@
                 "west": "alley",
                 "east": "shop"
             },
-            "items": [
-                "item.herb"
-            ],
             "npcs": [
                 {
                     "id": "npc.baker",
@@ -136,7 +133,10 @@
             "desc": "Trees everywhere.",
             "exits": {
                 "west": "gate"
-            }
+            },
+            "items": [
+                "item.herbs"
+            ]
         },
         {
             "id": "shop",
@@ -147,7 +147,6 @@
                 "east": "gate"
             },
             "items": [
-                "item.herb",
                 "item.sword"
             ],
             "npcs": [
@@ -159,8 +158,8 @@
                     "dialogue": "I have a quest for you!",
                     "quest": {
                         "id": "q.herbs",
-                        "desc": "Bring me the Medicinal Herbs from the bakery.",
-                        "req_item": "item.herbs",
+                        "desc": "Bring me the Medicinal Herbs from the woods.",
+                        "req_item_id": "item.herbs",
                         "reward_hp": 50
                     }
                 }

@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 21:30:19 by aberrami          #+#    #+#             */
-/*   Updated: 2026/10/03 20:05:41 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/17 18:21:19 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*
 ** Logic to complete a quest if the player has the required item.
 */
-static void	complete_quest(t_player *p, t_quest *q)
+static void	complete_quest(t_player *p, t_quest *q, t_npc *npc)
 {
 	t_item	*item;
 
@@ -33,9 +33,11 @@ static void	complete_quest(t_player *p, t_quest *q)
 	}
 	else
 	{
-		write(p->fd, "OK You still need the item for this quest.\n", 43);
+		free(npc->dialogue);
+		npc->dialogue = strndup("The Quest is already active", 27);
+		write(p->fd, "OK The quest is already active.\n", 32);
 		log_event("INFO", p->name,
-			"OK You still need the item for this quest.", NULL);
+			"OK The quest is already active.", NULL);
 	}
 }
 
@@ -69,12 +71,11 @@ static void	handle_quest_logic(t_player *p, t_npc *npc)
 	if (!q || q->status == Q_COMPLETED)
 	{
 		if (q && q->status == Q_COMPLETED)
-			npc->dialogue = "OK You did a good job";
+			npc->dialogue = "OK The Quest is already completed";
 		write(p->fd, "ERR 406 NO_QUEST_AVAILABLE\n", 27);
 		log_event("WARN", p->name, "ERR 406 NO_QUEST_AVAILABLE", NULL);
-		return ;
 	}
-	if (q->status == Q_AVAILABLE)
+	else if (q->status == Q_AVAILABLE)
 	{
 		q->status = Q_ACTIVE;
 		snprintf(out, sizeof(out), "OK {\"quest_id\": \"%s\", "
@@ -85,7 +86,7 @@ static void	handle_quest_logic(t_player *p, t_npc *npc)
 		log_event("INFO", p->name, out, NULL);
 	}
 	else if (q->status == Q_ACTIVE)
-		complete_quest(p, q);
+		complete_quest(p, q, npc);
 }
 
 void	cmd_quest(t_player *p, char *arg, t_world *w)
