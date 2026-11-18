@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 21:30:19 by aberrami          #+#    #+#             */
-/*   Updated: 2026/11/17 22:00:30 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/18 11:00:38 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ static void	complete_quest(t_player *p, t_quest *q)
 			p->hp = 100;
 			free(item->id);
 			free(item->name);
+			free(item->description);
 			free(item);
 			write(p->fd, "OK Quest Completed! Reward: Full HP.\n", 37);
 			log_event("INFO",
@@ -39,8 +40,7 @@ static void	complete_quest(t_player *p, t_quest *q)
 	else
 	{
 		write(p->fd, "OK The quest is already active.\n", 32);
-		log_event("INFO", p->name,
-			"OK The quest is already active.", NULL);
+		log_event("INFO", p->name, "OK The quest is already active.", NULL);
 	}
 }
 
