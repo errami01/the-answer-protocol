@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/04 20:30:05 by aberrami          #+#    #+#             */
-/*   Updated: 2026/10/04 21:03:43 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/18 11:54:45 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	read_server(int sock_fd)
 ** Reads from Keyboard and sends to Server
 */
 /* 
-** Simple translation logic to make the CLI feel like a real game
+** Simple translation logic to facilitate movements between rooms
 */
 void	read_keyboard(int sock_fd)
 {
@@ -49,10 +49,10 @@ void	read_keyboard(int sock_fd)
 		strcpy(cmd, "MOVE north\n");
 	else if (strcmp(buf, "s") == 0 || strcmp(buf, "south") == 0)
 		strcpy(cmd, "MOVE south\n");
-	else if (strcmp(buf, "l") == 0 || strcmp(buf, "look") == 0)
-		strcpy(cmd, "LOOK\n");
-	else if (strncmp(buf, "say ", 4) == 0)
-		snprintf(cmd, BUFFER_SIZE, "CHAT ROOM %s\n", buf + 4);
+	else if (strcmp(buf, "e") == 0 || strcmp(buf, "east") == 0)
+		strcpy(cmd, "MOVE east\n");
+	else if (strcmp(buf, "w") == 0 || strcmp(buf, "west") == 0)
+		strcpy(cmd, "MOVE west\n");
 	else
 	{
 		snprintf(tmp, sizeof(tmp), "%s\n", buf);
