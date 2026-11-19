@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/08 12:34:17 by aberrami          #+#    #+#             */
-/*   Updated: 2026/11/08 21:40:22 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/18 15:46:53 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ void	cleanup_server(t_world *world)
 			drop_all_player_items(&world->players[i], world, 1);
 			close(world->players[i].fd);
 			free(world->players[i].name);
+			free(world->players[i].invited_by);
+			free(world->players[i].group_id);
 		}
 		i++;
 	}

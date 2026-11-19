@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/30 11:08:20 by aberrami          #+#    #+#             */
-/*   Updated: 2026/11/17 21:30:21 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/18 15:45:50 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,11 @@ void	cleanup_client(struct pollfd *fds, int i)
 void	clean_player(t_player *p)
 {
 	if (p->name)
+	{
 		free(p->name);
+		free(p->invited_by);
+		free(p->group_id);
+	}
 	close(p->fd);
 	p->fd = -1;
 }
