@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/15 21:58:05 by aberrami          #+#    #+#             */
-/*   Updated: 2026/11/17 21:46:56 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/18 15:58:13 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,6 +169,7 @@ void		log_event(const char *level, const char *player, const char *action,
 int			check_flooding(t_player *p, struct pollfd *fds, int i);
 void		cmd_talk(t_player *p, char *arg);
 void		cmd_group(t_player *p, char *arg, t_world *w);
+int			is_target_in_group(t_player *target, t_player *grp_leader);
 void		broadcast_group(t_world *w, char *group_id, char *msg,
 				int exclude_fd);
 t_player	*find_player_by_name(t_world *w, char *name);

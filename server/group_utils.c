@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/03 17:38:16 by aberrami          #+#    #+#             */
-/*   Updated: 2026/10/03 17:38:19 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/18 15:57:36 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,17 @@ t_player	*find_player_by_name(t_world *w, char *name)
 		i++;
 	}
 	return (NULL);
+}
+
+int	is_target_in_group(t_player *target, t_player *grp_leader)
+{
+	if (target->group_id && strcmp(target->group_id, grp_leader->name) == 0)
+	{
+		write(grp_leader->fd, "ERR 402 ALREADY_IN_GROUP\n", 25);
+		log_event("WARN", grp_leader->name, "ERR 402 ALREADY_IN_GROUP", NULL);
+		return (1);
+	}
+	return (0);
 }
 
 void	broadcast_group(t_world *w, char *gid, char *msg, int exclude_fd)

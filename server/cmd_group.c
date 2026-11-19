@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/03 20:26:06 by aberrami          #+#    #+#             */
-/*   Updated: 2026/11/16 16:02:32 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/19 12:30:48 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ static void	group_invite(t_player *p, char *target_name, t_world *w)
 		log_event("WARN", p->name, "ERR 404 NAME_NOT_FOUND", NULL);
 		return ;
 	}
+	if (is_target_in_group(target, p))
+		return;
 	target->invited_by = strdup(p->name);
 	snprintf(evt, sizeof(evt), "EVT GROUP INVITE %s\n", p->name);
 	write(target->fd, evt, strlen(evt));
