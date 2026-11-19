@@ -87,6 +87,11 @@ Our implementation strictly adheres to RFC 42TAP.
 - **Combat**: Engage the "Goblin" in the "Dark Alley" and monitor the ```STATUS``` command to ensure HP decreases correctly.
 - **Quests**: Take the "Herbs" from the "Woods" and deliver them to the "Baker" using the ```QUEST``` command.
 
+# Group Contributions
 
+We used a structured approach to drive development:
+
+- aberrami: Focus on the server, the CLI client and the world design
+- msturma: Focus on the GUI client
 
 valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./server_app
