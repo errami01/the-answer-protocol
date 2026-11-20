@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/08 12:34:17 by aberrami          #+#    #+#             */
-/*   Updated: 2026/11/18 15:46:53 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/20 15:23:24 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	cleanup_server(t_world *world)
 	int	i;
 
 	i = 0;
-	printf("\nServer shutting down. Cleaning memory...\n");
+	printf("\nServer shutting down...\n");
 	while (i < MAX_CLIENTS)
 	{
 		if (world->players[i].fd != -1)
@@ -61,7 +61,7 @@ void	cleanup_server(t_world *world)
 		i++;
 	}
 	cleanup_rooms(world);
-	printf("Memory cleared. Goodbye!\n");
+	printf("Goodbye!\n");
 }
 
 void	monitor_connection(struct pollfd *fds, int i, t_world *world,
