@@ -21,7 +21,7 @@ static void	handle_input_active(t_game *game, Vector2 mouse)
 		game->chat_input_active = 1;
 		game->state = GAME_WAIT_CHAT_INPUT;
 	}
-	else
+	else if (game->chat_input_active)
 	{
 		game->chat_input_active = 0;
 		game->state = GAME_IDLE;
