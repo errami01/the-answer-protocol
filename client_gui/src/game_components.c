@@ -42,11 +42,7 @@ void	draw_items(t_game *game)
 		mouse = GetMousePosition();
 		color = LIGHTGRAY;
 		if (CheckCollisionPointRec(mouse, rect))
-		{
 			color = GRAY;
-			if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-				take(game, game->current->items[i]);
-		}
 		DrawRectangleRec(rect, color);
 		DrawRectangleLinesEx(rect, 1, DARKGRAY);
 		DrawText(game->current->items[i], rect.x + 10, rect.y + 8, 16, BLACK
