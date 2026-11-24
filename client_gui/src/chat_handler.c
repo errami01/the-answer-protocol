@@ -14,6 +14,20 @@
 #include "game.h"
 #include "notification.h"
 
+static void	handle_input_active(t_game *game, Vector2 mouse)
+{
+	if (CheckCollisionPointRec(mouse, get_chat_input()))
+	{
+		game->chat_input_active = 1;
+		game->state = GAME_WAIT_CHAT_INPUT;
+	}
+	else
+	{
+		game->chat_input_active = 0;
+		game->state = GAME_IDLE;
+	}
+}
+
 static void	handle_chat_click(t_game *game)
 {
 	Vector2	mouse;
@@ -22,10 +36,7 @@ static void	handle_chat_click(t_game *game)
 	if (!IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
 		return ;
 	mouse = GetMousePosition();
-	game->chat_input_active = CheckCollisionPointRec(
-			mouse,
-			get_chat_input()
-			);
+	handle_input_active(game, mouse);
 	i = 0;
 	while (i < 3)
 	{
