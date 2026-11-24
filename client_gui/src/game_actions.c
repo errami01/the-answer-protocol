@@ -96,6 +96,15 @@ void	wait_status(t_game *game, char *buf)
 			return ;
 		game->state = GAME_IDLE;
 	}
+	if (game->state == GAME_WAIT_RESPAWN)
+	{
+		if (parse_status(buf, game) < 0)
+			return ;
+		if (client_send(game->manager->client, "LOOK\n") < 0)
+			return ;
+		game->state = GAME_WAIT_LOOK;
+		return ;
+	}
 }
 
 void	wait_take(t_game *game, char *buf)

@@ -60,6 +60,7 @@ typedef enum e_game_state
 	GAME_WAIT_GROUP_LEAVE,
 	GAME_WAIT_GROUP_INPUT,
 	GAME_WAIT_GROUP_INVITE_SUBMIT,
+	GAME_WAIT_RESPAWN,
 }	t_game_state;
 
 typedef enum e_chat_mode

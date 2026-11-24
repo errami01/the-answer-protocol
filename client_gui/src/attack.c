@@ -12,6 +12,8 @@
 
 #include "attack.h"
 #include "client.h"
+#include "game.h"
+#include "hp.h"
 #include "notification.h"
 #include "json_parser.h"
 
@@ -25,6 +27,17 @@ int	parse_attack_response(const char *response, int *attacker_hp,
 	if (extract_int(response, "\"damage\"", damage) < 0)
 		return (-1);
 	return (0);
+}
+
+static void	death(t_game *game, char *buf)
+{
+	if (strstr(buf, "You died"))
+	{
+		client_send(game->manager->client, "STATUS\n");
+		game->state = GAME_WAIT_RESPAWN;
+		show_notification(game, "You died, respawning at Village Square.");
+		return ;
+	}
 }
 
 void	attack_state(t_game *game, char *buf)
@@ -52,5 +65,6 @@ void	attack_state(t_game *game, char *buf)
 	snprintf(notification, sizeof(notification),
 		"Dealt %d damage. Enemy HP: %d", damage, target_hp);
 	show_notification(game, notification);
+	death(game, buf);
 	game->state = GAME_IDLE;
 }

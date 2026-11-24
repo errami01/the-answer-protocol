@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <raylib.h>
+#include "attack.h"
 #include "game.h"
 #include "client.h"
 #include "game_commands.h"
