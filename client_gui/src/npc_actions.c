@@ -11,10 +11,8 @@
 /* ************************************************************************** */
 
 #include "client.h"
-#include "game_utils.h"
 #include "notification.h"
 #include "npc.h"
-#include <string.h>
 
 void	talk(t_game *game, const char *npc)
 {

@@ -13,7 +13,6 @@
 #include "attack.h"
 #include "client.h"
 #include "game.h"
-#include "hp.h"
 #include "notification.h"
 #include "json_parser.h"
 
@@ -40,13 +39,23 @@ static void	death(t_game *game, char *buf)
 	}
 }
 
+void	handle_damage(t_game *game, int attacker_hp, int target_hp, int damage)
+{
+	char	notification[256];
+
+	game->hp = attacker_hp;
+	snprintf(notification, sizeof(notification),
+		"Dealt %d damage. Enemy HP: %d", damage, target_hp);
+	show_notification(game, notification);
+}
+
 void	attack_state(t_game *game, char *buf)
 {
 	int		attacker_hp;
 	int		target_hp;
 	int		damage;
-	char	notification[256];
 
+	game->npc_response[0] = '\0';
 	if (strstr(buf, "dead"))
 	{
 		show_notification(game, "Target is dead.");
@@ -61,10 +70,7 @@ void	attack_state(t_game *game, char *buf)
 		game->state = GAME_IDLE;
 		return ;
 	}
-	game->hp = attacker_hp;
-	snprintf(notification, sizeof(notification),
-		"Dealt %d damage. Enemy HP: %d", damage, target_hp);
-	show_notification(game, notification);
+	handle_damage(game, attacker_hp, target_hp, damage);
 	death(game, buf);
 	game->state = GAME_IDLE;
 }
