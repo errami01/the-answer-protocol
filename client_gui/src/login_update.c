@@ -16,7 +16,14 @@
 
 static void	login_idle(t_login *login)
 {
-	if (IsKeyPressed(KEY_ENTER))
+	Vector2		mouse;
+	Rectangle	button;
+
+	mouse = GetMousePosition();
+	button = get_button(GetScreenWidth(), GetScreenHeight());
+	if (IsKeyPressed(KEY_ENTER)
+		|| (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)
+			&& CheckCollisionPointRec(mouse, button)))
 	{
 		client_disconnect(login->manager->client);
 		login_submit(login);

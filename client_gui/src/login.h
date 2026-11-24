@@ -49,5 +49,6 @@ void		login_update(t_scene *scene);
 void		handle_username_input(t_login *login);
 void		login_submit(t_login *login);
 void		draw_login_error(t_login *login);
+Rectangle	get_button(int screen_width, int screen_height);
 
 #endif

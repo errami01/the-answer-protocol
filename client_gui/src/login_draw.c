@@ -27,7 +27,7 @@ static void	draw_input(t_login *login, int screen_width, int screen_height)
 			input_x + 10, input_y + 10, 20, BLACK);
 }
 
-static Rectangle	get_button(int screen_width, int screen_height)
+Rectangle	get_button(int screen_width, int screen_height)
 {
 	int			button_x;
 	int			button_y;
