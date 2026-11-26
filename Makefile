@@ -16,6 +16,7 @@ SERVER_NAME = server_app
 CLIENT_NAME = client_app
 CLIENT_SRC = client_cli/main.c client_cli/read_utils.c
 CLIENT_OBJ = $(CLIENT_SRC:.c=.o)
+LINT_DIR = server client_cli client_gui/src
 
 all: $(SERVER_NAME) client client_gui
 
@@ -32,6 +33,17 @@ client_gui: raylib
 $(SERVER_NAME): $(SERVER_OBJ)
 	$(CC) $(CFLAGS) $(SERVER_OBJ) -lbsd -o $(SERVER_NAME)
 
+run-server:
+	./server_app
+
+run-client-cli:
+	./client_app localhost 4242
+
+run-client-gui:
+	./client_app_gui 127.0.0.1 4242
+
+lint:
+	norminette $(LINT_DIR)
 
 clean:
 	rm -f $(SERVER_OBJ) $(CLIENT_OBJ)
@@ -41,3 +53,5 @@ fclean: clean
 	rm -rf client_gui/build
 
 re: fclean all
+
+.PHONY: all clean fclean re run-server run-client-cli run-client-gui lint
