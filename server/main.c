@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/08 12:34:17 by aberrami          #+#    #+#             */
-/*   Updated: 2026/11/20 15:23:24 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/26 23:21:13 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,8 @@ void	monitor_connection(struct pollfd *fds, int i, t_world *world,
 		if (poll(fds, MAX_CLIENTS, 1000) < 0)
 			break ;
 		if (fds[0].revents & POLLIN)
-			strlcpy(world->incoming_ip, accept_new_client(server_fd, fds),
-				INET_ADDRSTRLEN);
+			strlcpy(world->incoming_ip,
+				accept_new_client(server_fd, fds, world), INET_ADDRSTRLEN);
 		i = 1;
 		while (i < MAX_CLIENTS)
 		{

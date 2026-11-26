@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/03 20:29:20 by aberrami          #+#    #+#             */
-/*   Updated: 2026/11/16 16:04:26 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/26 23:02:27 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	accept_new_fd(int server_fd, struct sockaddr_in *addr)
 	return (accept(server_fd, (struct sockaddr *)addr, &len));
 }
 
-char	*accept_new_client(int server_fd, struct pollfd *fds)
+char	*accept_new_client(int server_fd, struct pollfd *fds, t_world *w)
 {
 	int					new_fd;
 	int					i;
@@ -34,19 +34,19 @@ char	*accept_new_client(int server_fd, struct pollfd *fds)
 	new_fd = accept_new_fd(server_fd, &addr);
 	if (new_fd < 0)
 		return (NULL);
-	i = 1;
+	i = 0;
 	ip = inet_ntoa(addr.sin_addr);
-	while (i < MAX_CLIENTS)
+	while (++i < MAX_CLIENTS)
 	{
 		if (fds[i].fd == -1)
 		{
 			fds[i].fd = new_fd;
 			fds[i].events = POLLIN;
+			w->players[i].buf_len = 0;
 			write(new_fd, "OK hello proto=1\n", 17);
 			log_event("INFO", "SYSTEM", "New connection established", ip);
 			return (ip);
 		}
-		i++;
 	}
 	write(new_fd, "ERR 900 CONNECTION_FAILED\n", 26);
 	close(new_fd);
