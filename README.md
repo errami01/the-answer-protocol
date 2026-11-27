@@ -7,22 +7,22 @@ This project is a Multi-User Dungeon (MUD) server built in C. It implements the 
 
 ## Instructions
 ### Compilation
-To compile the server, use the provided Makefile:
+To install dependencies, use the provided Makefile:
 ```bash
-make server
+make
 ```
 
 ### Execution
-Start the server by specifying the port (defaulting to 4242 if not modified):
+Start the server:
 ```bash
-./server_app
+make run-server
 ```
 The server will load the world.json file automatically upon startup.
 
 ### Connect to the server using CLI client
 After starting the server, open a new terminal and connect to the server:
 ```bash
-./client_app localhost 4242
+make run-client
 ```
 
 Connect to the server following the protocol rfc provided with the project:
@@ -40,7 +40,7 @@ The CLI provides simple translation logic to facilitate the movements between ro
 ### Connect using the GUI client
 You can also connect to the server using a GUI client by executing:
 ```bash
-./client_app_gui 127.0.0.1 4242
+make run-client-gui
 ```
 After logging in, you can move using the arrows by left-clicking on them, pick up items, interact with NPCs or do other various actions using the controls below:
 

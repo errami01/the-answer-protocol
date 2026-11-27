@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/03 20:29:20 by aberrami          #+#    #+#             */
-/*   Updated: 2026/11/26 23:02:27 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/27 23:30:40 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,24 +28,24 @@ char	*accept_new_client(int server_fd, struct pollfd *fds, t_world *w)
 {
 	int					new_fd;
 	int					i;
-	char				*ip;
 	struct sockaddr_in	addr;
 
 	new_fd = accept_new_fd(server_fd, &addr);
 	if (new_fd < 0)
 		return (NULL);
 	i = 0;
-	ip = inet_ntoa(addr.sin_addr);
 	while (++i < MAX_CLIENTS)
 	{
 		if (fds[i].fd == -1)
 		{
 			fds[i].fd = new_fd;
 			fds[i].events = POLLIN;
-			w->players[i].buf_len = 0;
+			memset(&w->players[i], 0, sizeof(t_player));
+			w->players[i].fd = new_fd;
 			write(new_fd, "OK hello proto=1\n", 17);
-			log_event("INFO", "SYSTEM", "New connection established", ip);
-			return (ip);
+			log_event("INFO", "SYSTEM", "New connection established",
+				inet_ntoa(addr.sin_addr));
+			return (inet_ntoa(addr.sin_addr));
 		}
 	}
 	write(new_fd, "ERR 900 CONNECTION_FAILED\n", 26);
@@ -73,19 +73,17 @@ static int	validate_msg_length(int bytes, t_world *world, int i,
 	return (1);
 }
 
-void	handle_client_msg(struct pollfd *fds, int i, t_world *world)
+void	handle_client_msg(struct pollfd *fds, int i, t_world *world,
+		t_player *p)
 {
 	char		tmp[BUFFER_SIZE];
 	char		*newline;
-	t_player	*p;
 	int			bytes;
 	int			remaining;
 
-	newline = NULL;
 	bytes = recv(fds[i].fd, tmp, BUFFER_SIZE - 1, 0);
 	if (!validate_msg_length(bytes, world, i, fds))
 		return ;
-	p = &world->players[i];
 	memcpy(p->recv_buf + p->buf_len, tmp, bytes);
 	p->buf_len += bytes;
 	p->recv_buf[p->buf_len] = '\0';
@@ -95,6 +93,8 @@ void	handle_client_msg(struct pollfd *fds, int i, t_world *world)
 	{
 		*newline = '\0';
 		process_command(fds, i, world, p->recv_buf);
+		if (!*p->recv_buf)
+			return ;
 		remaining = p->buf_len - (newline - p->recv_buf + 1);
 		memmove(p->recv_buf, newline + 1, remaining);
 		p->buf_len = remaining;

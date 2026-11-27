@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/30 11:08:20 by aberrami          #+#    #+#             */
-/*   Updated: 2026/11/18 15:45:50 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/27 23:31:02 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,10 @@ void	handle_disconnect(t_world *world, int i, struct pollfd *fds)
 	log_discon(p, msg);
 	if (p->fd != -1)
 	{
-		strcpy(name, p->name);
+		if (p->name)
+			strcpy(name, p->name);
+		else
+			strcpy(name, "Unkown");
 		clean_player(p);
 		drop_all_player_items(p, world, 0);
 		remove_all_quests(p);

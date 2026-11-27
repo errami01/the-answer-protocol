@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/08 12:34:17 by aberrami          #+#    #+#             */
-/*   Updated: 2026/11/26 23:21:13 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/27 23:22:37 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	monitor_connection(struct pollfd *fds, int i, t_world *world,
 		while (i < MAX_CLIENTS)
 		{
 			if (fds[i].fd != -1 && (fds[i].revents & POLLIN))
-				handle_client_msg(fds, i, world);
+				handle_client_msg(fds, i, world, &world->players[i]);
 			i++;
 		}
 	}

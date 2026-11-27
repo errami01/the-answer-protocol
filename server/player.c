@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/21 22:11:24 by aberrami          #+#    #+#             */
-/*   Updated: 2026/11/16 15:44:11 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/27 10:04:34 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,21 +65,15 @@ int	is_name_taken(char *name, const t_player *players, int fd)
 
 int	init_player(t_player *player, int fd, char *name, t_room *start_room)
 {
-	char	*pl_name;
-
 	if (is_valid_name(name))
 	{
-		if (player)
-			pl_name = player->name;
-		else
-			pl_name = "UNAUTH";
 		player->fd = fd;
 		player->name = strdup(name);
 		player->current_room = start_room;
 		player->hp = 100;
 		player->inventory = NULL;
 		write(fd, "OK connected\n", 13);
-		log_event("INFO", pl_name, "OK connected", player->ip);
+		log_event("INFO", player->name, "OK connected", player->ip);
 		return (1);
 	}
 	write(fd, "ERR 201 INVALID_NAME\n", 21);
