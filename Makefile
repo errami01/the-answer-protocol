@@ -36,7 +36,7 @@ $(SERVER_NAME): $(SERVER_OBJ)
 run-server:
 	./server_app
 
-run-client-cli:
+run-client:
 	./client_app localhost 4242
 
 run-client-gui:

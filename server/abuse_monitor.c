@@ -6,7 +6,7 @@
 /*   By: aberrami <aberrami@student.42prague.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/31 20:26:01 by aberrami          #+#    #+#             */
-/*   Updated: 2026/11/12 14:21:48 by aberrami         ###   ########.fr       */
+/*   Updated: 2026/11/28 13:07:58 by aberrami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ int	check_flooding(t_player *p, struct pollfd *fds, int i)
 		name = "Unknown";
 		if (p->name)
 			name = p->name;
-		write(fds[i].fd, "ERR 426 TOO MANY REQUESTS\n", 26);
-		log_event("WARN", name, "ERR 426 TOO MANY REQUESTS", p->ip);
+		write(fds[i].fd, "ERR 903 TOO MANY REQUESTS\n", 26);
+		log_event("WARN", name, "ERR 903 TOO MANY REQUESTS", p->ip);
 		return (1);
 	}
 	return (0);
